@@ -3,6 +3,7 @@
 #include "Win.h"
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include <wrl.h>
 
 #include "Graphics/Vertex.h"
 #include "Graphics/Shader/VertexShader.h"
@@ -15,13 +16,13 @@
 
 class Graphics
 {
-public:
+private:
 	enum SAMPLE_LEVEL
 	{
-		LEVEL_NONE = 1,
-		LEVEL_4 = 4,
-		LEVEL_8 = 8,
-		LEVEL_16 = 16,
+		SAMPLE_LEVEL_NONE = 1,
+		SAMPLE_LEVEL_4 = 4,
+		SAMPLE_LEVEL_8 = 8,
+		SAMPLE_LEVEL_16 = 16,
 	} samplingLevel;
 public:
 	Graphics() = default;
@@ -41,7 +42,6 @@ public:
 
 	ID3D11Device* getDevice() { return pDevice; }
 	ID3D11DeviceContext* getContext() { return pContext; }
-
 	ID3D11SamplerState* const* getSamplerState() { return &pTexSamplerState; }
 public:
 	VertexShader vertexShader;

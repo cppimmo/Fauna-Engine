@@ -26,29 +26,38 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width, unsigne
 	{
 		this->isFullscreen = isFullscreen;
 		this->isVsync = isVsync;
-		this->samplingLevel = LEVEL_4;
+		this->samplingLevel = SAMPLE_LEVEL_4;
 		HRESULT hr = S_OK;
 
 		UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 	#if defined(_DEBUG)
 		creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
 	#endif
+		D3D_FEATURE_LEVEL featureLevels[] =
+		{
+			D3D_FEATURE_LEVEL_11_1,
+			D3D_FEATURE_LEVEL_11_0,
+			D3D_FEATURE_LEVEL_10_1,
+			D3D_FEATURE_LEVEL_10_0,
+			D3D_FEATURE_LEVEL_9_3,
+			D3D_FEATURE_LEVEL_9_2,
+			D3D_FEATURE_LEVEL_9_1,
+		};
 		D3D_FEATURE_LEVEL feature_level;
-
 		hr = D3D11CreateDevice(
 			nullptr,
 			D3D_DRIVER_TYPE_HARDWARE, 
 			nullptr,
 			creationFlags, 
-			nullptr, 
-			NULL,
+			featureLevels, 
+			std::size(featureLevels),
 			D3D11_SDK_VERSION,
 			&pDevice, 
 			&feature_level,
 			&pContext
 		);
 		THROW_IF_FAILED(hr, "Create device and swapchain failed");
-		if (feature_level < D3D_FEATURE_LEVEL_11_0) {
+		if ((feature_level != D3D_FEATURE_LEVEL_11_0) && (feature_level != D3D_FEATURE_LEVEL_11_1)) {
 			THROW_NORMAL("You must have DirectX 11 Compatible graphics card!");
 		}
 		hr = pDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, samplingLevel, &sampleQuality);
@@ -56,9 +65,8 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width, unsigne
 			THROW_NORMAL("Sampling level not supported");
 		}
 
-		//Create SwapChain
+		//Create SwapChain after device to allow for multisampling
 		DXGI_SWAP_CHAIN_DESC sd = {};
-
 		sd.BufferDesc.Width = width;
 		sd.BufferDesc.Height = height;
 		sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -90,38 +98,6 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width, unsigne
 		ReleaseCOM(dxgiFactory);
 
 		onSize(width, height);
-		/*//onSize(width, height);
-		ID3D11Texture2D* BackBuffer; //Create our BackBuffer
-		hr = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&BackBuffer));
-		THROW_IF_FAILED(hr, "GetBuffer failed");
-		//Create our Render Target
-		hr = pDevice->CreateRenderTargetView(BackBuffer, nullptr, &pRenderTarget);
-		ReleaseCOM(BackBuffer);//release backbuffer incase of exception
-		THROW_IF_FAILED(hr, "Create render target view failed");
-
-		D3D11_TEXTURE2D_DESC ds = {};
-		ds.Width = width;
-		ds.Height = height;
-		ds.MipLevels = 1;
-		ds.ArraySize = 1;
-		ds.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-		ds.SampleDesc.Count = samplingLevel;
-		ds.SampleDesc.Quality = sampleQuality - 1;
-		ds.Usage = D3D11_USAGE_DEFAULT;
-		ds.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-		ds.CPUAccessFlags = 0;
-		ds.MiscFlags = 0;
-
-		hr = pDevice->CreateTexture2D(&ds, nullptr, &pDepthStencilBuffer);
-		THROW_IF_FAILED(hr, "DepthStencilBuffer could not be created");
-		hr = pDevice->CreateDepthStencilView(pDepthStencilBuffer, nullptr, &pDepthStencilView);
-		THROW_IF_FAILED(hr, "DepthStencilView could not be created");
-		//Set our Render Target
-		pContext->OMSetRenderTargets(1, &pRenderTarget, pDepthStencilView);
-		
-		//viewport declared with C for constructor and convience 
-		CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, 1.0f);
-		pContext->RSSetViewports(1u, &viewport);*/
 
 		D3D11_RASTERIZER_DESC rsd = {};
 		rsd.FillMode = D3D11_FILL_WIREFRAME;
@@ -135,9 +111,7 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width, unsigne
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
-		UINT numElements = ARRAYSIZE(layout);
-
-		if (!vertexShader.init(pDevice, L"VertexShader.cso", layout, numElements))
+		if (!vertexShader.init(pDevice, L"VertexShader.cso", layout, std::size(layout)))
 			THROW_NORMAL("Vertex Shader failed to create");
 		if (!pixelShader.init(pDevice, L"PixelShader.cso"))
 			THROW_NORMAL("Pixel Shader failed to create");
@@ -147,9 +121,7 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width, unsigne
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
-		numElements = ARRAYSIZE(layout);
-
-		if (!vertexShaderColor.init(pDevice, L"VertexShaderColor.cso", layout2, numElements))
+		if (!vertexShaderColor.init(pDevice, L"VertexShaderColor.cso", layout2, std::size(layout2)))
 			THROW_NORMAL("Vertex Shader failed to create");
 		if (!pixelShaderColor.init(pDevice, L"PixelShaderColor.cso"))
 			THROW_NORMAL("Pixel Shader failed to create");*/
@@ -163,10 +135,8 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width, unsigne
 		tsd.ComparisonFunc = D3D11_COMPARISON_NEVER;
 		tsd.MinLOD = 0;
 		tsd.MaxLOD = D3D11_FLOAT32_MAX;
-
 		hr = pDevice->CreateSamplerState(&tsd, &pTexSamplerState);
 		THROW_IF_FAILED(hr, "Create sampler state failed");
-
 		//setup imgui
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -181,7 +151,6 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width, unsigne
 		return false;
 	}
 	return true;
-
 }
 
 void Graphics::onSize(unsigned int newWidth, unsigned int newHeight)
@@ -243,7 +212,7 @@ void Graphics::setWireframe(bool value)
 
 void Graphics::Begin(float r, float g, float b)
 {
-	float color[4] = { r, g, b, 1.0f };
+	const float color[4] = { r, g, b, 1.0f };
 	pContext->ClearRenderTargetView(pRenderTarget, color);
 	pContext->ClearDepthStencilView(pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	pContext->PSSetSamplers(0u, 1u, &pTexSamplerState);
