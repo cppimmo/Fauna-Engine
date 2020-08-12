@@ -39,16 +39,14 @@ struct Vertex
 
 struct VertexColor
 {
+private:
+	typedef unsigned char uchar;
+public:
 	VertexColor(float x, float y, float z,
-		float r, float g, float b, float a = 1.0f)
-		: pos(x, y, z), color{ r, g, b, a }
-	{
-	}
-	VertexColor(float x, float y, float z,
-		DirectX::XMVECTORF32 col)
-		: pos(x, y, z), color{ col }
+		uchar r, uchar g, uchar b, uchar a = 1.0f)
+		: pos(x, y, z), r(r), g(g), b(b), a(a)
 	{
 	}
 	DirectX::XMFLOAT3 pos;
-	DirectX::XMVECTORF32 color;
+	uchar r, g, b, a;
 };
