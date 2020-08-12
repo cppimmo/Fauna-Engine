@@ -1,11 +1,13 @@
-/********Fauna Engine: DELUXE EDITION*********
-ENGINE NAMES: Bruh Engine, 
+/*****************Fauna Engine - V1.0 ********************
+//ABOUT: Fauna Engine is a game engine under development
+//using the DirectX 11 API
+//AUTHOR: ImmortalityBH
+//FEATURES:
 //TODO: name engine and keep adding to abstractions,
-skybox, assimp, xaudio2, imgui, text drawing, color shaders,
-lighting, animation, blending states for alpha transparency,
-frustum culling, transform.h changes, abstract vertex and index
-buffers, load config function in window class
-
+//skybox, assimp, xaudio2, imgui, text drawing, color shaders,
+//lighting, animation, blending states for alpha transparency,
+//frustum culling, transform.h changes, abstract vertex and index
+//buffers, load config function in window class
 *********************************************************/
 #include "Game/Game.h"
 #include "Utility/Error.h"

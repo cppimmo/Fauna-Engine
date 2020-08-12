@@ -6,7 +6,7 @@
 using namespace DirectX;
 
 Window::Window()
-    : width(800), height(600), title(L"Fauna Engine : Deluxe Edition"), hWnd(nullptr),
+    : width(800), height(600), title(L"DirectX Dorito Simulator : Deluxe Edition"), hWnd(nullptr),
     mouse(), kbd(), gamepad(1)
 {
 }

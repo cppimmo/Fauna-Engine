@@ -4,12 +4,16 @@
 class Timer
 {
 public:
-	Timer();
-	float Reset();
+	Timer();	
 	float getElapsed() const;
-
+	float Reset();
+	void Stop();
+	void Start();
+	bool isPaused() const { return paused; }
 private:
-	std::chrono::steady_clock::time_point last;
+	bool paused;
+	std::chrono::time_point<std::chrono::steady_clock> start;
+	std::chrono::time_point<std::chrono::steady_clock> stop;
 };
 
-//credit ChiliTomatoNoodle
+//credit ChiliTomatoNoodle and Jpres

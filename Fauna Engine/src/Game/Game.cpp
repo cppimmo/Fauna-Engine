@@ -191,8 +191,11 @@ void Game::update()
 	//std::wstring title =  L"Elapsed Time: " + std::to_wstring(elapsedTimer.Peek()) + L", Delta Time: " + std::to_wstring(dTime);
 	//std::wstring forito = L"X: " + std::to_wstring(dorito->transform.position.x) + L", Y:" + std::to_wstring(dorito->transform.position.y);
 	//wnd.setTitle(forito.c_str());
+	std::wstring title = L"Time elapsed: ";
+	title.append(std::to_wstring(elapsedTimer.getElapsed()));
+	//wnd.setTitle(title.c_str());
 
-	camera.update(elapsedTimer.getElapsed(), wnd);
+	camera.update(dTime, wnd);
 	//model->resetMatrix();
 	if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_W) || wnd.kbd.isKeyPressed(VK_UP))
 	{
@@ -446,6 +449,7 @@ void Game::draw()
 	ImGui::End();*/
 	
 	ImGui::Begin("Debug");
+	
 	float currentTime = fpsTimer.Reset();
 	float framerate = 1.0f / currentTime;
 	ImGui::Text(std::to_string(std::stoi(std::to_string(round((framerate))))).c_str());
