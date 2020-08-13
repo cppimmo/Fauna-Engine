@@ -1,7 +1,7 @@
 #include "Graphics/Texture.h"
 #include <DDSTextureLoader.h>
 #include "Utility/Error.h"
-#include "Utility/d3dUtil.h"
+#include "Utility/Util.h"
 
 using namespace DirectX;
 

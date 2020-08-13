@@ -3,7 +3,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <string>
-#include "Utility/d3dUtil.h"
+#include "Utility/Util.h"
 
 class Shader //virutal class
 {

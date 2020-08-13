@@ -1,6 +1,6 @@
 #include "Model.h"
 #include "Utility/Error.h"
-#include "Utility/d3dUtil.h"
+#include "Utility/Util.h"
 
 using namespace DirectX;
 
@@ -159,12 +159,12 @@ void Model::draw()
 
 void Model::bind(VertexShader& vs, PixelShader& ps, Texture& tex)
 {
-	const UINT offset = 0;
+	//const UINT offset = 0;
 	pContext->VSSetShader(vs.getVertexShader(), nullptr, 0u);
 	pContext->PSSetShader(ps.getPixelShader(), nullptr, 0u);
 	pContext->PSSetShaderResources(0, 1, tex.getTexture());
 	//pContext->PSSetSamplers(0, 1, pGfx->getSamplerState());
-	pContext->IASetVertexBuffers(0u, 1u, vertexBuffer.getBuffer(), vertexBuffer.getStridePtr(), &offset);
+	pContext->IASetVertexBuffers(0u, 1u, vertexBuffer.getBuffer(), vertexBuffer.getStridePtr(), &Model::offset);
 	if (isIndexed) pContext->IASetIndexBuffer(indexBuffer.getBuffer(), DXGI_FORMAT_R32_UINT, 0u);
 	pContext->IASetInputLayout(vs.getInputLayout());
 	pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

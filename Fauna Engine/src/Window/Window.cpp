@@ -16,79 +16,76 @@ Window::~Window()
     DestroyWindow(hWnd);
 }
 
-bool Window::init(HINSTANCE hInstance)
+bool Window::init(HINSTANCE hInstance) try
 {
-    try
-    {
-        bool isFullscreen, isVsync;
-        if (!load_config("config.ini", isFullscreen, this->width, this->height, isVsync))
-            THROW_NORMAL("Failed to load config.ini file. Please reinstall.");
+    bool isFullscreen, isVsync;
+    if (!load_config("config.ini", isFullscreen, this->width, this->height, isVsync))
+        THROW_NORMAL("Failed to load config.ini file. Please reinstall.");
 
-        HRESULT hr = S_OK;
-        WNDCLASSEX wc;
+    HRESULT hr = S_OK;
+    WNDCLASSEX wc;
 
-        HICON hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+    HICON hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 
-        wc.cbSize = sizeof(WNDCLASSEX);
-        wc.style = CS_HREDRAW | CS_VREDRAW;
-        wc.lpfnWndProc = WndProc;
-        wc.cbClsExtra = NULL;
-        wc.cbWndExtra = NULL;
-        wc.hInstance = hInstance;
-        wc.hIcon = hIcon;
-        wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-        wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 2);
-        wc.lpszMenuName = nullptr;
-        wc.lpszClassName = WndClassName;
-        wc.hIconSm = hIcon;
+    wc.cbSize = sizeof(WNDCLASSEX);
+    wc.style = CS_HREDRAW | CS_VREDRAW;
+    wc.lpfnWndProc = WndProc;
+    wc.cbClsExtra = NULL;
+    wc.cbWndExtra = NULL;
+    wc.hInstance = hInstance;
+    wc.hIcon = hIcon;
+    wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 2);
+    wc.lpszMenuName = nullptr;
+    wc.lpszClassName = WndClassName;
+    wc.hIconSm = hIcon;
 
-        if (!RegisterClassEx(&wc)) {
-            THROW_NORMAL("Error registering window class");
-        }
-
-        RECT wr;
-        wr.left = 100;
-        wr.right = width + wr.left;
-        wr.top = 100;
-        wr.bottom = height + wr.top;
-        AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
-        hWnd = CreateWindowEx(
-            NULL,
-            WndClassName,
-            title.c_str(),
-            WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, CW_USEDEFAULT,
-            wr.right - wr.left, wr.bottom - wr.top,
-            nullptr,
-            nullptr,
-            hInstance,
-            NULL
-        );
-
-        if (!hWnd) {
-            THROW_NORMAL("Error creating window");
-        }
-
-        ShowWindow(hWnd, TRUE);
-        UpdateWindow(hWnd);
-
-        SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)this);
-
-        if (!gfx.init(isFullscreen, isVsync, width, height, hWnd)) {
-            THROW_NORMAL("graphics creation failed");
-        }
-        aud = std::make_unique<AudioEngine>();
-        /*if (!audioEngine.init()) {
-            THROW_NORMAL("audio engine creation failed");
-        }*/
+    if (!RegisterClassEx(&wc)) {
+        THROW_NORMAL("Error registering window class");
     }
-    catch (HrException& e)
-    {
-        ErrorLogger::Log(e);
-        return false;
+
+    RECT wr;
+    wr.left = 100;
+    wr.right = width + wr.left;
+    wr.top = 100;
+    wr.bottom = height + wr.top;
+    AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
+    hWnd = CreateWindowEx(
+        NULL,
+        WndClassName,
+        title.c_str(),
+        WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT,
+        wr.right - wr.left, wr.bottom - wr.top,
+        nullptr,
+        nullptr,
+        hInstance,
+        NULL
+    );
+
+    if (!hWnd) {
+        THROW_NORMAL("Error creating window");
     }
+
+    ShowWindow(hWnd, TRUE);
+    UpdateWindow(hWnd);
+
+    SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)this);
+
+    if (!gfx.init(isFullscreen, isVsync, width, height, hWnd)) {
+        THROW_NORMAL("graphics creation failed");
+    }
+    aud = std::make_unique<AudioEngine>();
+    /*if (!audioEngine.init()) {
+        THROW_NORMAL("audio engine creation failed");
+    }*/
     return true;
+} catch (HrException& e) {
+    ErrorLogger::Log(e);
+    return false;
 }
+    
+
 
 void Window::setTitle(LPCWSTR text) 
 {

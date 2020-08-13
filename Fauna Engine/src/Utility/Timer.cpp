@@ -11,10 +11,9 @@ Timer::Timer()
 
 float Timer::getElapsed() const
 {
-	if (!paused)
-		return (duration<float>(high_resolution_clock::now() - start)).count();
-	else
-		return (duration<float>(stop - start)).count();
+	return (!paused) ? 
+		(duration<float>(high_resolution_clock::now() - start)).count()
+		: (duration<float>(stop - start)).count();
 }
 
 void Timer::Stop()

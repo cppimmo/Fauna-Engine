@@ -1,5 +1,5 @@
 #include "Utility/Error.h"
-#include "Utility/d3dUtil.h"
+#include "Utility/Util.h"
 #include <sstream>
 
 HrException::HrException(HRESULT hr, const std::string& msg, const std::string& file,
@@ -63,7 +63,13 @@ void ErrorLogger::Log(std::wstring what, std::wstring title)
 	MessageBoxW(nullptr, what.c_str(), title.c_str(), MB_OK);
 }
 
- void ErrorLogger::Log(HrException& e)
+void ErrorLogger::Log(HrException& e)
+{
+	std::wstring wstr = string_to_wstring(e.what());
+	MessageBoxW(nullptr, wstr.c_str(), L"Error", MB_ICONERROR);
+}
+
+void ErrorLogger::Log(const HrException& e)
 {
 	std::wstring wstr = string_to_wstring(e.what());
 	MessageBoxW(nullptr, wstr.c_str(), L"Error", MB_ICONERROR);

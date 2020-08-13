@@ -32,6 +32,7 @@ bool Game::init()
 		mtnDewModel = std::make_unique<Model>();
 		coinModel = std::make_unique<Model>();
 		sunModel = std::make_unique<Model>();
+		skybox = std::make_unique<SkySphere>();
 		//DORITO
 		std::vector<Vertex> vertices = {
 			Vertex(0.0f, 0.5f, 0.0f, 0.5f, 1.0f),
@@ -105,6 +106,8 @@ bool Game::init()
 		mtnDewModel->create(wnd.getGraphics().getDevice(), wnd.getGraphics().getContext(), bagVertices, floorIndices);
 		coinModel->create(wnd.getGraphics().getDevice(), wnd.getGraphics().getContext(), bagVertices, floorIndices);
 		sunModel->create(wnd.getGraphics().getDevice(), wnd.getGraphics().getContext(), bagVertices, floorIndices);
+		std::wstring str = L"res/img/skymap.dds";
+		skybox->init(wnd.getGraphics().getDevice(), wnd.getGraphics().getContext(), str);
 		dorito->setPos(0.0f, 0.35f, 1.5f);
 		dorito->setScale(1.0f, 1.0f, 1.0f);
 		setCoinPos();
@@ -432,6 +435,12 @@ void Game::draw()
 	sunModel->bind(wnd.getGraphics().vertexShader, wnd.getGraphics().pixelShader, sunTex);
 	sunModel->draw();
 	sunModel->unbind();
+
+	wnd.getGraphics().setSkyboxState(true);
+	skybox->bind(wnd.getGraphics().skySphere_VS, wnd.getGraphics().skySphere_PS);
+	skybox->draw(camera);
+	skybox->unbind();
+	wnd.getGraphics().setSkyboxState(false);
 
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();

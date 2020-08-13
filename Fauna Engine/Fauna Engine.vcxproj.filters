@@ -5,6 +5,8 @@
     <FxCompile Include="PixelShader.hlsl" />
     <FxCompile Include="VertexShader.hlsl" />
     <FxCompile Include="VertexShaderColor.hlsl" />
+    <FxCompile Include="SkySphere_PS.hlsl" />
+    <FxCompile Include="SkySphere_VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Graphics\Shader\GeometryShader.cpp" />
@@ -12,10 +14,8 @@
     <ClCompile Include="src\Entity\GameObject.cpp" />
     <ClCompile Include="src\Graphics\Shader\HullShader.cpp" />
     <ClCompile Include="src\Graphics\Mesh.cpp" />
-    <ClCompile Include="src\Graphics\Skybox.cpp" />
     <ClCompile Include="src\Audio\Audio.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\Graphics\CubemapTexture.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Input\Gamepad.cpp" />
     <ClCompile Include="src\Graphics\Graphics.cpp" />
@@ -35,6 +35,8 @@
     <ClCompile Include="src\Graphics\Model.cpp" />
     <ClCompile Include="src\Utility\Timer.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
+    <ClCompile Include="src\Graphics\SkySphere.cpp" />
+    <ClCompile Include="src\Graphics\CubeTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
@@ -44,14 +46,10 @@
     <ClInclude Include="src\Graphics\Shader\HullShader.h" />
     <ClInclude Include="src\Graphics\Mesh.h" />
     <ClInclude Include="src\Graphics\Shader\Shader.h" />
-    <ClInclude Include="src\Graphics\Skybox.h" />
     <ClInclude Include="src\Graphics\ConstantBuffer.h" />
     <ClInclude Include="src\Graphics\IndexBuffer.h" />
     <ClInclude Include="src\Audio\Audio.h" />
     <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\Graphics\CubemapTexture.h" />
-    <ClInclude Include="src\Graphics\Vertex.h" />
-    <ClInclude Include="src\Utility\d3dUtil.h" />
     <ClInclude Include="src\Utility\Error.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Input\Gamepad.h" />
@@ -77,6 +75,10 @@
     <ClInclude Include="src\Win.h" />
     <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="src\Graphics\VertexBuffer.h" />
+    <ClInclude Include="src\Utility\Util.h" />
+    <ClInclude Include="src\Graphics\SkySphere.h" />
+    <ClInclude Include="src\Graphics\CubeTexture.h" />
+    <ClInclude Include="src\Graphics\VertexTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Fauna Engine.rc" />

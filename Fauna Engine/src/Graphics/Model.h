@@ -55,4 +55,5 @@ private:
 	DirectX::XMMATRIX WVP;
 	ID3D11DeviceContext* pContext = nullptr;
 	bool isIndexed = false;
+	static constexpr UINT offset = 0;
 };

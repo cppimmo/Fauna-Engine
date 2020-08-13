@@ -39,4 +39,5 @@ public:
 	static void Log(std::wstring what);
 	static void Log(std::wstring what, std::wstring title);
 	static void Log(HrException& e);
+	static void Log(const HrException& e);
 };

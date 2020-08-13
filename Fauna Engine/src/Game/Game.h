@@ -3,6 +3,7 @@
 #include "Window/Window.h"
 #include "Utility/Timer.h"
 #include "Graphics/Model.h"
+#include "Graphics/SkySphere.h"
 #include "Camera.h"
 
 #include <memory>
@@ -39,7 +40,7 @@ private:
 	std::unique_ptr<Model> mtnDewModel;
 	std::unique_ptr<Model> coinModel;
 	std::unique_ptr<Model> sunModel;
-
+	std::unique_ptr<SkySphere> skybox;
 	Texture dorTex, florTex, dogTex, bagTex, mtnTex, 
 		catTex, coinTex, sunTex;
 	//commented out for now

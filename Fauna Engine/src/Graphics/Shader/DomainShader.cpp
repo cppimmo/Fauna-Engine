@@ -1,6 +1,6 @@
 #include "Graphics/Shader/DomainShader.h"
 #include "Utility/Error.h"
-#include "Utility/d3dUtil.h"
+#include "Utility/Util.h"
 
 bool DomainShader::init(ID3D11Device* pDevice, std::wstring& filePath)
 {

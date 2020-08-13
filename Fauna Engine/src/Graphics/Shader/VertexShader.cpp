@@ -1,6 +1,6 @@
 #include "Graphics/Shader/VertexShader.h"
 #include "Utility/Error.h"
-#include "Utility/d3dUtil.h"
+#include "Utility/Util.h"
 
 bool VertexShader::init(ID3D11Device* pDevice, std::wstring filePath, D3D11_INPUT_ELEMENT_DESC* pLayoutDesc, UINT numElements)
 {

@@ -3,8 +3,6 @@
 #include "Window/Window.h"
 #include <DirectXMath.h>
 
-namespace DX = DirectX;
-
 class Camera
 {
 public:
@@ -12,15 +10,16 @@ public:
 
 	void update(float dt, Window& wnd);
 
-	DX::XMMATRIX getView() const { return view; }
-	DX::XMMATRIX getProjection() const { return projection; }
+	DirectX::XMVECTOR getPosition() const { return position; }
+	DirectX::XMMATRIX getView() const { return view; }
+	DirectX::XMMATRIX getProjection() const { return projection; }
 private:
-	DX::XMMATRIX projection;
-	DX::XMMATRIX view;
+	DirectX::XMMATRIX projection;
+	DirectX::XMMATRIX view;
 
-	DX::XMVECTOR position;
-	DX::XMVECTOR target;
-	DX::XMVECTOR up;
+	DirectX::XMVECTOR position;
+	DirectX::XMVECTOR target;
+	DirectX::XMVECTOR up;
 
 	const float speed = 0.01f;
 };

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
-#include "Utility/d3dUtil.h"
+#include "Utility/Util.h"
 
 template<class T>
 class VertexBuffer

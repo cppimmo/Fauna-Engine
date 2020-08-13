@@ -5,10 +5,10 @@
 #include <DirectXMath.h>
 #include <wrl.h>
 
-#include "Graphics/Vertex.h"
+#include "Graphics/VertexTypes.h"
 #include "Graphics/Shader/VertexShader.h"
 #include "Graphics/Shader/PixelShader.h"
-#include "Utility/d3dUtil.h"
+#include "Utility/Util.h"
 
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -36,6 +36,7 @@ public:
 	void setFullscreen(bool fullscreen, unsigned int widhth, unsigned int height);
 	bool getFullscreen() const { return isFullscreen; }
 	void setWireframe(bool value);
+	void setSkyboxState(bool value);
 	bool isWireframe() const { return isWireframeEnabled; }
 	void Begin(float r, float g, float b);
 	void End();
@@ -46,6 +47,8 @@ public:
 public:
 	VertexShader vertexShader;
 	PixelShader pixelShader;
+	VertexShader skySphere_VS;
+	PixelShader skySphere_PS;
 	//VertexShader vertexShaderColor;
 	//PixelShader pixelShaderColor;
 	//VertexShader vertexShaderSkybox;
@@ -61,6 +64,7 @@ private:
 	ID3D11RenderTargetView* pRenderTarget = nullptr;
 	ID3D11DepthStencilView* pDepthStencilView = nullptr;
 	ID3D11RasterizerState* pWireframeState = nullptr;
+	ID3D11RasterizerState* pSkyboxState = nullptr;
 	ID3D11Texture2D* pDepthStencilBuffer = nullptr;
 	ID3D11SamplerState* pTexSamplerState = nullptr;
 };
