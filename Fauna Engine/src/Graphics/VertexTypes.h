@@ -54,13 +54,13 @@ struct VertexMD5
 	int WeightCount;
 };
 
-struct VertexSkybox
+/*struct VertexSkybox
 {
 	VertexSkybox(float x, float y, float z)
 		: pos(x, y, z)
 	{ }
 	DirectX::XMFLOAT3 pos;
-};
+};*/
 
 struct VertexColor
 {

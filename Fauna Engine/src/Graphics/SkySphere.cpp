@@ -11,7 +11,6 @@ bool SkySphere::init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::
 {
 	HRESULT hr = S_OK;
 	this->pContext = pContext;
-
 	/*std::vector<VertexSkybox> vertices = {
 		{ -1.0f, -1.0f, -1.0f },
 		{ -1.0f,  1.0f, -1.0f },
@@ -63,7 +62,7 @@ bool SkySphere::init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::
 		// Right Face
 		22, 21, 20,
 		23, 22, 20 
-	};*/
+	};
 
 	//hr = vertexBuffer.init(pDevice, vertices.data(), vertices.size());
 	//THROW_IF_FAILED(hr, "Vertex buffer creation failed.");
@@ -72,7 +71,7 @@ bool SkySphere::init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::
 	//hr = constantBuffer.init(pDevice, pContext);
 	//THROW_IF_FAILED(hr, "Constant buffer creation failed.");
 	//if (!cubeMap.load(pDevice, filePath))
-	//	THROW_NORMAL("Failed to load cubemap texture");
+	//	THROW_NORMAL("Failed to load cubemap texture");*/
 	int LatLines = 10;
 	int LongLines = 10;
 
@@ -90,11 +89,11 @@ bool SkySphere::init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::
 	vertices[0].pos.y = 0.0f;
 	vertices[0].pos.z = 1.0f;
 
-	for (DWORD i = 0; i < LatLines - 2; ++i)
+	for (std::size_t i = 0; i < LatLines - 2; ++i)
 	{
 		spherePitch = (i + 1) * (3.14 / (LatLines - 1));
 		XMMATRIX Rotationx = XMMatrixRotationX(spherePitch);
-		for (DWORD j = 0; j < LongLines; ++j)
+		for (std::size_t j = 0; j < LongLines; ++j)
 		{
 			sphereYaw = j * (6.28 / (LongLines));
 			XMMATRIX Rotationy = XMMatrixRotationZ(sphereYaw);
@@ -116,7 +115,7 @@ bool SkySphere::init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::
 	std::vector<DWORD> indices(NumSphereFaces * 3);
 
 	int k = 0;
-	for (DWORD l = 0; l < LongLines - 1; ++l)
+	for (std::size_t l = 0; l < LongLines - 1; ++l)
 	{
 		indices[k] = 0;
 		indices[k + 1] = l + 1;
@@ -129,9 +128,9 @@ bool SkySphere::init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::
 	indices[k + 2] = 1;
 	k += 3;
 
-	for (DWORD i = 0; i < LatLines - 3; ++i)
+	for (std::size_t i = 0; i < LatLines - 3; ++i)
 	{
-		for (DWORD j = 0; j < LongLines - 1; ++j)
+		for (std::size_t j = 0; j < LongLines - 1; ++j)
 		{
 			indices[k] = i * LongLines + j + 1;
 			indices[k + 1] = i * LongLines + j + 2;
@@ -155,7 +154,7 @@ bool SkySphere::init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::
 		k += 6;
 	}
 
-	for (DWORD l = 0; l < LongLines - 1; ++l)
+	for (std::size_t l = 0; l < LongLines - 1; ++l)
 	{
 		indices[k] = NumSphereVertices - 1;
 		indices[k + 1] = (NumSphereVertices - 1) - (l + 1);
