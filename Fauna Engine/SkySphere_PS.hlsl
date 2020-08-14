@@ -1,13 +1,14 @@
 TextureCube tex;
 SamplerState samp;
 
-struct PS_IN
+struct VS_OUT
 {
-	float4 pos : SV_POSITION;
+	float4 pos : POSITION;
 	float3 texCoord : TEXCOORD;
 };
 
-float4 main(PS_IN i) : SV_TARGET
+float4 main(VS_OUT input) : SV_TARGET
 {
-	return tex.Sample(samp, i.texCoord);
+	//return (1.0f, 1.0f, 1.0f, 1.0f);
+	return tex.Sample(samp, input.texCoord);
 }

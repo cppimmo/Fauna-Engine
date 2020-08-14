@@ -28,7 +28,7 @@ private:
 	DirectX::XMMATRIX world;
 	DirectX::XMMATRIX scale;
 	DirectX::XMMATRIX translation;
-	VertexBuffer<VertexSkybox> vertexBuffer;
+	VertexBuffer<Vertex> vertexBuffer;
 	IndexBuffer indexBuffer;
 	ConstantBuffer<CB_WVP> constantBuffer;
 	CubeTexture cubeMap;

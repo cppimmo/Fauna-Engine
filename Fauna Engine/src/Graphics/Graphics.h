@@ -65,6 +65,7 @@ private:
 	ID3D11DepthStencilView* pDepthStencilView = nullptr;
 	ID3D11RasterizerState* pWireframeState = nullptr;
 	ID3D11RasterizerState* pSkyboxState = nullptr;
+	ID3D11DepthStencilState* pDSLessEqualState = nullptr;
 	ID3D11Texture2D* pDepthStencilBuffer = nullptr;
 	ID3D11SamplerState* pTexSamplerState = nullptr;
 };

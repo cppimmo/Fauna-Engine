@@ -25,12 +25,33 @@ struct VertexColor2D
 
 struct Vertex
 {
+	Vertex() {}
 	Vertex(float x, float y, float z,
 		float u, float v)
 		: pos(x, y, z), uv(u, v)
 	{ }
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT2 uv;
+};
+
+struct VertexMD5
+{
+	VertexMD5() {}
+	VertexMD5(float x, float y, float z, 
+		float u, float v,
+		float nx, float ny, float nz, 
+		float tx, float ty, float tz)
+		: pos(x, y, z), texCoord(u, v), normal(nx, ny, nz),
+		tangent(tx, ty, tz)
+	{}
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT2 texCoord;
+	DirectX::XMFLOAT3 normal;
+	DirectX::XMFLOAT3 tangent;
+	DirectX::XMFLOAT3 biTangent;
+
+	int StartWeight;
+	int WeightCount;
 };
 
 struct VertexSkybox

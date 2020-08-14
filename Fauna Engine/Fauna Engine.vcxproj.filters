@@ -37,6 +37,7 @@
     <ClCompile Include="src\Window\Window.cpp" />
     <ClCompile Include="src\Graphics\SkySphere.cpp" />
     <ClCompile Include="src\Graphics\CubeTexture.cpp" />
+    <ClCompile Include="AnimatedModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
@@ -79,6 +80,7 @@
     <ClInclude Include="src\Graphics\SkySphere.h" />
     <ClInclude Include="src\Graphics\CubeTexture.h" />
     <ClInclude Include="src\Graphics\VertexTypes.h" />
+    <ClInclude Include="AnimatedModel.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Fauna Engine.rc" />

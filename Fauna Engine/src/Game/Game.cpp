@@ -408,7 +408,7 @@ void Game::draw()
 {
 	wnd.getGraphics().Begin(0.0f, 0.0f, 0.5f);
 
-	dogModel->bind(wnd.getGraphics().vertexShader, wnd.getGraphics().pixelShader, catTex);
+	/*dogModel->bind(wnd.getGraphics().vertexShader, wnd.getGraphics().pixelShader, catTex);
 	dogModel->draw();
 	dogModel->unbind();
 
@@ -434,12 +434,14 @@ void Game::draw()
 
 	sunModel->bind(wnd.getGraphics().vertexShader, wnd.getGraphics().pixelShader, sunTex);
 	sunModel->draw();
-	sunModel->unbind();
+	sunModel->unbind();*/
 
 	wnd.getGraphics().setSkyboxState(true);
+	//wnd.getGraphics().setWireframe(true);
 	skybox->bind(wnd.getGraphics().skySphere_VS, wnd.getGraphics().skySphere_PS);
 	skybox->draw(camera);
 	skybox->unbind();
+	//wnd.getGraphics().setWireframe(false);
 	wnd.getGraphics().setSkyboxState(false);
 
 	ImGui_ImplDX11_NewFrame();

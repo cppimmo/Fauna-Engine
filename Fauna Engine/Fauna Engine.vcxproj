@@ -163,6 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimatedModel.cpp" />
     <ClCompile Include="src\Graphics\Shader\GeometryShader.cpp" />
     <ClCompile Include="src\Graphics\Shader\DomainShader.cpp" />
     <ClCompile Include="src\Entity\GameObject.cpp" />
@@ -273,6 +274,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimatedModel.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="src\Graphics\Shader\GeometryShader.h" />
     <ClInclude Include="src\Graphics\Shader\DomainShader.h" />

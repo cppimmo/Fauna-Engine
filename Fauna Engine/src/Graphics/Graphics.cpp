@@ -19,6 +19,7 @@ Graphics::~Graphics()
 	ReleaseCOM(pWireframeState);
 	ReleaseCOM(pSkyboxState);
 	ReleaseCOM(pTexSamplerState);
+	ReleaseCOM(pDSLessEqualState);
 }
 
 bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width, 
@@ -112,6 +113,14 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width,
 	hr = pDevice->CreateRasterizerState(&skyRSD, &pSkyboxState);
 	THROW_IF_FAILED(hr, "Skybox creation failed.");
 
+	D3D11_DEPTH_STENCIL_DESC dsd = {};
+	dsd.DepthEnable = true;
+	dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+
+	hr = pDevice->CreateDepthStencilState(&dsd, &pDSLessEqualState);
+	THROW_IF_FAILED(hr, "Depth Stencil State creation failed.");
+
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -121,12 +130,8 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width,
 		THROW_NORMAL("Vertex Shader failed to create");
 	if (!pixelShader.init(pDevice, L"PixelShader.cso"))
 		THROW_NORMAL("Pixel Shader failed to create");
-	
-	D3D11_INPUT_ELEMENT_DESC layout2[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
-	if (!skySphere_VS.init(pDevice, L"SkySphere_VS.cso", layout2, std::size(layout2)))
+
+	if (!skySphere_VS.init(pDevice, L"SkySphere_VS.cso", layout, std::size(layout)))
 		THROW_NORMAL("Vertex Shader failed to create");
 	if (!skySphere_PS.init(pDevice, L"SkySphere_PS.cso"))
 		THROW_NORMAL("Pixel Shader failed to create");
@@ -227,9 +232,15 @@ void Graphics::setWireframe(bool value)
 void Graphics::setSkyboxState(bool value)
 {
 	if (value)
+	{
 		pContext->RSSetState(pSkyboxState);
+		pContext->OMSetDepthStencilState(pDSLessEqualState, 0);
+	}
 	else
+	{
 		pContext->RSSetState(nullptr);
+		pContext->OMSetDepthStencilState(nullptr, 0);
+	}	
 }
 
 void Graphics::Begin(float r, float g, float b)
