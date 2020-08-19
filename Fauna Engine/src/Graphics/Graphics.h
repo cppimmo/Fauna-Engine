@@ -51,8 +51,6 @@ public:
 	PixelShader skySphere_PS;
 	//VertexShader vertexShaderColor;
 	//PixelShader pixelShaderColor;
-	//VertexShader vertexShaderSkybox;
-	//PixelShader pixelShaderSkybox;
 private:
 	bool isVsync = false;
 	bool isFullscreen = false;

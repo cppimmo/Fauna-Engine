@@ -22,10 +22,10 @@ public:
 	Game();
 	~Game();
 
-	bool init();
-	int run(HINSTANCE hInst);
-	void update();
-	void draw();
+	bool Init();
+	int Run(HINSTANCE hInst);
+	void Update();
+	void Draw();
 
 private:
 	Window wnd; 
@@ -34,31 +34,11 @@ private:
 	Timer fpsTimer;
 private:
 	std::unique_ptr<Model> dorito;
-	std::unique_ptr<Model> floorModel;
-	std::unique_ptr<Model> dogModel;
-	std::unique_ptr<Model> bagModel;
-	std::unique_ptr<Model> mtnDewModel;
-	std::unique_ptr<Model> coinModel;
-	std::unique_ptr<Model> sunModel;
+
 	std::unique_ptr<SkySphere> skybox;
-	Texture dorTex, florTex, dogTex, bagTex, mtnTex, 
-		catTex, coinTex, sunTex;
-	//commented out for now
-	//std::unique_ptr<DirectX::SoundEffect> intro;
-	std::unique_ptr<DirectX::SoundEffect> coinSound;
-	//std::unique_ptr<DirectX::SoundEffect> outro;
-	//std::unique_ptr<DirectX::SoundEffect> effects[13];
-	void setCoinPos();
-	static constexpr float minX = -0.8f;
-	static constexpr float maxX = 0.8f;
-	static constexpr float minY = -0.3f;
-	static constexpr float maxY = 1.0f;
+	Texture dorTex;
 
 	char title[12] = { 0 };
 	Camera camera;
-	int randomNum;
-	int taskNum;
-	bool doOnce = false;
-	bool didRequest = true;
 };
 

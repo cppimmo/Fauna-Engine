@@ -126,14 +126,14 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width,
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
-	if (!vertexShader.init(pDevice, L"VertexShader.cso", layout, std::size(layout)))
+	if (!vertexShader.Init(*this, L"VertexShader.cso", layout, std::size(layout)))
 		THROW_NORMAL("Vertex Shader failed to create");
-	if (!pixelShader.init(pDevice, L"PixelShader.cso"))
+	if (!pixelShader.Init(*this, L"PixelShader.cso"))
 		THROW_NORMAL("Pixel Shader failed to create");
 
-	if (!skySphere_VS.init(pDevice, L"SkySphere_VS.cso", layout, std::size(layout)))
+	if (!skySphere_VS.Init(*this, L"SkySphere_VS.cso", layout, std::size(layout)))
 		THROW_NORMAL("Vertex Shader failed to create");
-	if (!skySphere_PS.init(pDevice, L"SkySphere_PS.cso"))
+	if (!skySphere_PS.Init(*this, L"SkySphere_PS.cso"))
 		THROW_NORMAL("Pixel Shader failed to create");
 
 	/*D3D11_INPUT_ELEMENT_DESC layout2[2] = 

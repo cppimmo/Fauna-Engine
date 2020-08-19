@@ -1,8 +1,9 @@
 #include "Graphics/Shader/DomainShader.h"
 #include "Utility/Error.h"
 #include "Utility/Util.h"
+#include "Graphics/Graphics.h"
 
-bool DomainShader::init(ID3D11Device* pDevice, std::wstring& filePath)
+bool DomainShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 {
 	try
 	{
@@ -28,4 +29,14 @@ bool DomainShader::init(ID3D11Device* pDevice, std::wstring& filePath)
 DomainShader::~DomainShader()
 {
 	ReleaseCOM(pDomainShader);
+}
+
+void DomainShader::Bind(Graphics& gfx)
+{
+	gfx.getContext()->DSSetShader(pDomainShader, nullptr, NULL);
+}
+
+void DomainShader::Unbind(Graphics& gfx)
+{
+	gfx.getContext()->DSSetShader(nullptr, nullptr, NULL);
 }

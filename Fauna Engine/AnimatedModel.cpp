@@ -3,7 +3,7 @@
 
 using namespace DirectX;
 
-bool AnimatedModel::load(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::wstring& filePath, std::vector<std::wstring>& texFilePaths)
+bool AnimatedModel::Load(Graphics& gfx, std::wstring& filePath, std::vector<std::wstring>& texFilePaths)
 {
     std::wifstream file(filePath.c_str());
     std::wstring contents;
@@ -131,7 +131,7 @@ bool AnimatedModel::load(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, s
                         if (!alreadyLoaded)
                         {
                             Texture tempTexture;
-                            tempTexture.load(pDevice, fileNamePath.c_str());
+                            tempTexture.Load(gfx, fileNamePath.c_str());
                             textures.push_back(tempTexture);
                         }
 
@@ -317,9 +317,9 @@ bool AnimatedModel::load(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, s
                     facesUsing = 0;
                 }
 
-                tempMesh.indexBuffer.init(pDevice, tempMesh.indices.data(), tempMesh.indices.size());
+                tempMesh.indexBuffer.Init(gfx, tempMesh.indices.data(), tempMesh.indices.size());
 
-                tempMesh.vertexBuffer.init(pDevice, tempMesh.vertices.data(), tempMesh.vertices.size());
+                tempMesh.vertexBuffer.Init(gfx, tempMesh.vertices.data(), tempMesh.vertices.size());
 
                 //push back the tempMesh into the models subset vector
                 //this->meshes.push_back(tempMesh);

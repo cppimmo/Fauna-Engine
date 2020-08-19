@@ -2,49 +2,72 @@
 
 #include <d3d11.h>
 #include "Utility/Error.h"
-
+#include "Graphics/Bindable.h"
 
 ////////ConstantBuffer types
 struct CB_WVP {
 	DirectX::XMMATRIX WVP;
 };
 
-struct CB_SKYBOX {
-	DirectX::XMMATRIX bruh;
-};
+template<class C>//vertex shader
+class VSConstantBuffer;
 
-template<class T>
-class ConstantBuffer
+template<class C> 
+class PSConstantBuffer;
+
+template<class C>
+class ConstantBuffer : public Bindable
 {
 public:
 	ConstantBuffer() = default;
-	ConstantBuffer(const ConstantBuffer<T>&) = delete;
-	ConstantBuffer& operator=(const ConstantBuffer<T>&) = delete;
+	ConstantBuffer(const ConstantBuffer<C>&) = delete;
+	ConstantBuffer& operator=(const ConstantBuffer<C>&) = delete;
 	~ConstantBuffer()
 	{
 		ReleaseCOM(pBuffer);
 	}	
-	T data;
+	C data;
 
-	HRESULT init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	HRESULT Init(Graphics& gfx)
 	{
 		if (pBuffer != nullptr)
 			ReleaseCOM(pBuffer);
 
-		this->pContext = pContext;
+		this->pContext = gfx.getContext();
 
 		D3D11_BUFFER_DESC cbd = {};
 		cbd.Usage = D3D11_USAGE_DYNAMIC;
 		cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		cbd.MiscFlags = 0;
-		cbd.ByteWidth = static_cast<UINT>(sizeof(T) + (16 - (sizeof(T) % 16)));
+		cbd.ByteWidth = static_cast<UINT>(sizeof(C) + (16 - (sizeof(C) % 16)));
 		cbd.StructureByteStride = 0;
 
-		HRESULT hr = pDevice->CreateBuffer(&cbd, 0, &pBuffer);
+		HRESULT hr = gfx.getDevice()->CreateBuffer(&cbd, nullptr, &pBuffer);
 		return hr;
 	}
-	bool update()
+	HRESULT Init(Graphics& gfx, C* initialData)
+	{
+		if (pBuffer != nullptr)
+			ReleaseCOM(pBuffer);
+
+		this->pContext = gfx.getContext();
+
+		D3D11_BUFFER_DESC cbd = {};
+		cbd.Usage = D3D11_USAGE_DYNAMIC;
+		cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		cbd.MiscFlags = 0;
+		cbd.ByteWidth = static_cast<UINT>(sizeof(C) + (16 - (sizeof(C) % 16)));
+		cbd.StructureByteStride = 0;
+
+		D3D11_SUBRESOURCE_DATA sd = {};
+		sd.pSysMem = data;
+
+		HRESULT hr = gfx.getDevice()->CreateBuffer(&cbd, data, &pBuffer);
+		return hr;
+	}
+	bool Update()
 	{
 		D3D11_MAPPED_SUBRESOURCE msr = {};
 		HRESULT hr = pContext->Map(pBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
@@ -52,70 +75,84 @@ public:
 			ErrorLogger::Log(hr, L"Failed to map constant buffer.");
 			return false;
 		}
-		CopyMemory(msr.pData, &data, sizeof(T));
+		CopyMemory(msr.pData, &data, sizeof(C));
 		pContext->Unmap(pBuffer, 0);
 		return true;
 	}
-public://getter
-	ID3D11Buffer* const* getBuffer() const { return &pBuffer; }
-private:
+protected:
 	ID3D11Buffer* pBuffer = nullptr;
 	ID3D11DeviceContext* pContext = nullptr;
 };
 
-/*#include <d3d11.h>
-#include <DirectXMath.h>
-#include "Utility/Util.h"
-
-template<class T>
-class ConstantBuffer
+//Constantbuffer listed in order of graphics pipeline
+template<class C>//vertex shader
+class VSConstantBuffer : public ConstantBuffer<C>
 {
-private:
-	ID3D11Buffer* pBuffer = nullptr;
-	ID3D11DeviceContext* pContext = nullptr;
 public:
-	ConstantBuffer() = default;
-	ConstantBuffer(const ConstantBuffer<T>&) = delete;
-	ConstantBuffer& operator=(const ConstantBuffer<T>&) = delete;
-	~ConstantBuffer()
+	void Bind(Graphics& gfx) override
 	{
-		ReleaseCOM(pBuffer);
+		gfx.getContext()->VSSetConstantBuffers(0, 1, &this->pBuffer);
 	}
-
-	T data;
-
-	HRESULT init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	void Unbind(Graphics& gfx) override
 	{
-		this->pContext = pContext;
-
-		D3D11_BUFFER_DESC cbd = {};
-
-		cbd.ByteWidth = sizeof(T);
-		cbd.Usage = D3D11_USAGE_DYNAMIC;
-		cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		cbd.MiscFlags = 0u;
-		cbd.StructureByteStride = 0u;
-
-		D3D11_SUBRESOURCE_DATA sd = {};
-		sd.pSysMem = T;
-
-		HRESULT hr = pDevice->CreateBuffer(&cbd, &sd, &pBuffer);
-		return hr;
+		//do nothing or fatal error
+		//gfx.getContext()->VSSetConstantBuffers(0, 1, nullptr);
 	}
-	bool Update()
+};
+
+/*template<class C>//hull shader 
+class HSConstantBuffer : public ConstantBuffer<C>
+{
+public:
+	void bind(Graphics& gfx) override
 	{
-		//pGfx->getContext()->UpdateSubresource(pConstantBuffer, 0, NULL, &cb, 0, 0);
-		D3D11_MAPPED_SUBRESOURCE msr = {};
-		HRESULT hr = pContext->Map(pBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr));
-		//if (FAILED(hr))
-			//return false;
-		//CopyMemory(msr.pData, &data, sizeof(T));
-
-		pContext->Unmap(pBuffer, 0);
-		return true;
+		pContext->HSSetConstantBuffers(0, 1, pBuffer);
 	}
-public://getters
-	ID3D11Buffer* getBuffer() const { return pBuffer; }
-	//bool mapped = false;
+	void unbind(Graphics& gfx) override
+	{
+		pContext->HSSetConstantBuffers(0, 1, nullptr);
+	}
+};
+
+template<class C>//domain shader
+class DSConstantBuffer : public ConstantBuffer<C>
+{
+public:
+	void bind(Graphics& gfx) override
+	{
+		pContext->DSSetConstantBuffers(0, 1, pBuffer);
+	}
+	void unbind(Graphics& gfx) override
+	{
+		pContext->DSSetConstantBuffers(0, 1, nullptr);
+	}
+};
+
+template<class C>//geometry shader
+class GSConstantBuffer : public ConstantBuffer<C>
+{
+public:
+	void bind(Graphics& gfx) override
+	{
+		pContext->GSSetConstantBuffers(0, 1, pBuffer);
+	}
+	void unbind(Graphics& gfx) override
+	{
+		pContext->GSSetConstantBuffers(0, 1, nullptr);
+	}
 };*/
+
+template<class C>//pixel shader
+class PSConstantBuffer : public ConstantBuffer<C>
+{
+public:
+	void Bind(Graphics& gfx) override
+	{
+		gfx.getContext()->PSSetConstantBuffers(0, 1, &this->pBuffer);
+	}
+	void Unbind(Graphics& gfx) override
+	{
+		//do nothing or fatal error
+		//gfx.getContext()->PSSetConstantBuffers(0, 1, nullptr);
+	}
+};

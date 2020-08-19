@@ -18,16 +18,16 @@ void Camera::setProjection(float Fov, float aspectRatio, float NearZ, float FarZ
 
 void Camera::update(float dt, Window& wnd)
 {	
-	if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_G)) {
+	if (wnd.kbd.isKeyPressed(VK_UP)) {
 		pitch += speed;
 	}
-	if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_Y)) {
+	if (wnd.kbd.isKeyPressed(VK_DOWN)) {
 		pitch -= speed;
 	}
-	if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_J)) {
+	if (wnd.kbd.isKeyPressed(VK_LEFT)) {
 		yaw -= speed;
 	}
-	if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_K)) {
+	if (wnd.kbd.isKeyPressed(VK_RIGHT)) {
 		yaw += speed;
 	}
 	rotation = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f);

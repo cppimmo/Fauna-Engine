@@ -11,13 +11,13 @@ Texture::~Texture()
 	//ReleaseCOM(pTexSamplerState);
 }
 
-bool Texture::load(ID3D11Device* pDevice, std::wstring filePath)
+bool Texture::Load(Graphics& gfx, std::wstring filePath)
 {
 	try
 	{
 		HRESULT hr = S_OK;
 
-		hr = CreateDDSTextureFromFile(pDevice, filePath.c_str(), nullptr, &pTexture);
+		hr = CreateDDSTextureFromFile(gfx.getDevice(), filePath.c_str(), nullptr, &pTexture);
 		THROW_IF_FAILED(hr, "Texture failed to load");
 
 		/*D3D11_SAMPLER_DESC tsd = {};

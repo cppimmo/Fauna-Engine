@@ -164,7 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedModel.cpp" />
-    <ClCompile Include="Binder.cpp" />
+    <ClCompile Include="src\Window\AppWindow.cpp" />
     <ClCompile Include="src\Graphics\Shader\GeometryShader.cpp" />
     <ClCompile Include="src\Graphics\Shader\DomainShader.cpp" />
     <ClCompile Include="src\Entity\GameObject.cpp" />
@@ -276,7 +276,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedModel.h" />
-    <ClInclude Include="Binder.h" />
+    <ClInclude Include="src\Window\AppWindow.h" />
+    <ClInclude Include="src\Graphics\Bindable.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="src\Graphics\Shader\GeometryShader.h" />
     <ClInclude Include="src\Graphics\Shader\DomainShader.h" />

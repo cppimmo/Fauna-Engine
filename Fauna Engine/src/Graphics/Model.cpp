@@ -12,37 +12,31 @@ Model::~Model()
 {
 }
 
-void Model::create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::vector<Vertex>& vertices)
+void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices)
 {
-	//////////////////////////////////////////////////
-	this->pContext = pContext;
-	//////////////////////////////////////////////////
-
 	HRESULT hr = S_OK;
 	
-	hr = vertexBuffer.init(pDevice, vertices.data(), vertices.size());
+	hr = vertexBuffer.Init(gfx, vertices.data(), vertices.size());
 	ErrorLogger::Log(hr, L"Vertex buffer initialization failed");
 
-	hr = constantBuffer.init(pDevice, pContext);
+	hr = vsCBuffer.Init(gfx);
 	ErrorLogger::Log(hr, L"const buffer init failed");
 }
 
-void Model::create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
+void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
 {
-	//////////////////////////////////////////////////
 	this->isIndexed = true;
-	this->pContext = pContext;
 	//////////////////////////////////////////////////
 
 	HRESULT hr = S_OK;
 
-	hr = vertexBuffer.init(pDevice, vertices.data(), vertices.size());
+	hr = vertexBuffer.Init(gfx, vertices.data(), vertices.size());
 	ErrorLogger::Log(hr, L"Vertex buffer init failed");
 
-	hr = indexBuffer.init(pDevice, indices.data(), indices.size());
+	hr = indexBuffer.Init(gfx, indices.data(), indices.size());
 	ErrorLogger::Log(hr, L"Index buffer init failed");
 
-	hr = constantBuffer.init(pDevice, pContext);
+	hr = vsCBuffer.Init(gfx);
 	ErrorLogger::Log(hr, L"const buffer init failed");
 }
 
@@ -91,7 +85,7 @@ void Model::updateMatrix(Camera& camera)
 	world = sca * rotation * translation;
 
 	WVP = world * camera.getView() * camera.getProjection();
-	constantBuffer.data.WVP = XMMatrixTranspose(WVP);
+	vsCBuffer.data.WVP = XMMatrixTranspose(WVP);
 }
 
 void Model::adjustPos(float x, float y, float z)
@@ -144,36 +138,37 @@ void Model::setScale(float x, float y, float z)
 	transform.scale.w = 1.0f;
 }
 
-void Model::draw()
+void Model::Draw(Graphics& gfx)
 {
 	//pGfx->getContext()->UpdateSubresource(pConstantBuffer, 0, NULL, &cb, 0, 0);
 
-	pContext->VSSetConstantBuffers(0, 1, constantBuffer.getBuffer());
-	constantBuffer.update();
+	vsCBuffer.Bind(gfx);
+	vsCBuffer.Update();
+	vsCBuffer.Unbind(gfx);
 
 	if (isIndexed) 
-		pContext->DrawIndexed(indexBuffer.getIndexCount(), 0u, 0u);
+		gfx.getContext()->DrawIndexed(indexBuffer.getIndexCount(), 0u, 0u);
 	else
-		pContext->Draw(vertexBuffer.getVertexCount(), 0u);
+		gfx.getContext()->Draw(vertexBuffer.getVertexCount(), 0u);
 }
 
-void Model::bind(VertexShader& vs, PixelShader& ps, Texture& tex)
+void Model::Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& tex)
 {
 	//const UINT offset = 0;
-	pContext->VSSetShader(vs.getVertexShader(), nullptr, 0u);
-	pContext->PSSetShader(ps.getPixelShader(), nullptr, 0u);
-	pContext->PSSetShaderResources(0, 1, tex.getTexture());
+	gfx.getContext()->VSSetShader(vs.getVertexShader(), nullptr, 0u);
+	gfx.getContext()->PSSetShader(ps.getPixelShader(), nullptr, 0u);
+	gfx.getContext()->PSSetShaderResources(0, 1, tex.getTexture());
 	//pContext->PSSetSamplers(0, 1, pGfx->getSamplerState());
-	pContext->IASetVertexBuffers(0u, 1u, vertexBuffer.getBuffer(), vertexBuffer.getStridePtr(), &Model::offset);
-	if (isIndexed) pContext->IASetIndexBuffer(indexBuffer.getBuffer(), DXGI_FORMAT_R32_UINT, 0u);
-	pContext->IASetInputLayout(vs.getInputLayout());
-	pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	gfx.getContext()->IASetVertexBuffers(0u, 1u, vertexBuffer.getBuffer(), vertexBuffer.getStridePtr(), &Model::offset);
+	if (isIndexed) gfx.getContext()->IASetIndexBuffer(indexBuffer.getBuffer(), DXGI_FORMAT_R32_UINT, 0u);
+	gfx.getContext()->IASetInputLayout(vs.getInputLayout());
+	gfx.getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void Model::unbind()
+void Model::Unbind(Graphics& gfx)
 {
-	pContext->VSSetShader(nullptr, nullptr, 0u);
-	pContext->PSSetShader(nullptr, nullptr, 0u);
-	pContext->IASetVertexBuffers(0u, 0u, nullptr, nullptr, nullptr);
-	if (isIndexed) pContext->IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0u);
+	gfx.getContext()->VSSetShader(nullptr, nullptr, 0u);
+	gfx.getContext()->PSSetShader(nullptr, nullptr, 0u);
+	gfx.getContext()->IASetVertexBuffers(0u, 0u, nullptr, nullptr, nullptr);
+	if (isIndexed) gfx.getContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0u);
 }

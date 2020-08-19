@@ -1,8 +1,9 @@
 #include "Graphics/Shader/VertexShader.h"
 #include "Utility/Error.h"
 #include "Utility/Util.h"
+#include "Graphics/Graphics.h"
 
-bool VertexShader::init(ID3D11Device* pDevice, std::wstring filePath, D3D11_INPUT_ELEMENT_DESC* pLayoutDesc, UINT numElements)
+bool VertexShader::Init(Graphics& gfx, std::wstring filePath, D3D11_INPUT_ELEMENT_DESC* pLayoutDesc, UINT numElements)
 {
 	try
 	{
@@ -12,11 +13,11 @@ bool VertexShader::init(ID3D11Device* pDevice, std::wstring filePath, D3D11_INPU
 		errMsg += filePath;
 		THROW_IF_FAILED(hr, wstring_to_string(errMsg));
 
-		hr = pDevice->CreateVertexShader(pBlob->GetBufferPointer(),
+		hr = gfx.getDevice()->CreateVertexShader(pBlob->GetBufferPointer(),
 			pBlob->GetBufferSize(), nullptr, &pVertexShader);
 		THROW_IF_FAILED(hr, "Could not create Vertex shader");
 
-		hr = pDevice->CreateInputLayout(pLayoutDesc, numElements, pBlob->GetBufferPointer(),
+		hr = gfx.getDevice()->CreateInputLayout(pLayoutDesc, numElements, pBlob->GetBufferPointer(),
 			pBlob->GetBufferSize(), &pInputLayout);
 		THROW_IF_FAILED(hr, "Could not create input layout");
 	}
@@ -32,4 +33,14 @@ VertexShader::~VertexShader()
 {
 	ReleaseCOM(pVertexShader);
 	ReleaseCOM(pInputLayout);
+}
+
+void VertexShader::Bind(Graphics& gfx)
+{
+	gfx.getContext()->VSSetShader(pVertexShader, nullptr, NULL);
+}
+
+void VertexShader::Unbind(Graphics& gfx)
+{
+	gfx.getContext()->VSSetShader(nullptr, nullptr, NULL);
 }

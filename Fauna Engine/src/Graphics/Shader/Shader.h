@@ -5,12 +5,12 @@
 #include <string>
 #include "Utility/Util.h"
 
-class Shader //virutal class
+class Shader//virutal class
 {
 public:
 	~Shader() { ReleaseCOM(pBlob); }
 	virtual ID3DBlob* getBlob() const { return pBlob; }
 protected:
-	ID3D10Blob* pBlob = nullptr;
+	ID3DBlob* pBlob = nullptr;
 };
 

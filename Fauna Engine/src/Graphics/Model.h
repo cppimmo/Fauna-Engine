@@ -20,17 +20,16 @@ public:
 	Model& operator=(const Model&) = delete;
 	~Model();
 
-	void create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, 
-		std::vector<Vertex>& vertices);
-	void create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,
-		std::vector<Vertex>& vertices, std::vector<DWORD>& indices);
+	void Create(Graphics& gfx, std::vector<Vertex>& vertices);
+	void Create(Graphics& gfx, std::vector<Vertex>& vertices, 
+		std::vector<DWORD>& indices);
 
 	bool isColliding(Model& model);
 
-	void bind(VertexShader& vs, PixelShader& ps, Texture& tex);
-	void draw();
-	void drawImGUI() {}
-	void unbind();
+	void Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& tex);
+	void Draw(Graphics& gfx);
+	void DrawImGUI() {}
+	void Unbind(Graphics& gfx);
 public:
 	void updateMatrix(Camera& camera);
 	void resetMatrix();
@@ -44,7 +43,7 @@ public:
 private:
 	VertexBuffer<Vertex> vertexBuffer;
 	IndexBuffer indexBuffer;
-	ConstantBuffer<CB_WVP> constantBuffer;
+	VSConstantBuffer<CB_WVP> vsCBuffer;
 private:
 	DirectX::XMMATRIX translation;
 public:
@@ -53,7 +52,6 @@ private:
 	DirectX::XMMATRIX sca;
 	DirectX::XMMATRIX world;
 	DirectX::XMMATRIX WVP;
-	ID3D11DeviceContext* pContext = nullptr;
 	bool isIndexed = false;
 	static constexpr UINT offset = 0;
 };

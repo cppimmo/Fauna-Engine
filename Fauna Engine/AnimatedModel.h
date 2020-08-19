@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Graphics/Graphics.h"
 #include "Graphics/VertexBuffer.h"
 #include "Graphics/IndexBuffer.h"
 #include "Graphics/ConstantBuffer.h"
@@ -9,49 +10,47 @@
 #include <DirectXMath.h>
 #include <string>
 #include <vector>
-	struct Joint
-	{
-		std::wstring name;
-		int parentID;
 
-		DirectX::XMFLOAT3 pos;
-		DirectX::XMFLOAT4 orientation;
-	};
-	struct Weight
-	{
-		int jointID;
-		float bias;
-		DirectX::XMFLOAT3 pos;
-	};
-	struct Mesh
-	{
-		int texArrayIndex;
-		int numTriangles;  
+struct Joint {
+	std::wstring name;
+	int parentID;
 
-		std::vector<VertexMD5> vertices;
-		std::vector<DWORD> indices;
-		std::vector<Weight> weights;
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT4 orientation;
+};
+struct Weight {
+	int jointID;
+	float bias;
+	DirectX::XMFLOAT3 pos;
+};
+struct Mesh {
+	int texArrayIndex;
+	int numTriangles;  
 
-		std::vector<DirectX::XMFLOAT3> positions;
+	std::vector<VertexMD5> vertices;
+	std::vector<DWORD> indices;
+	std::vector<Weight> weights;
 
-		VertexBuffer<VertexMD5> vertexBuffer;
-		IndexBuffer indexBuffer;
-	};
+	std::vector<DirectX::XMFLOAT3> positions;
+
+	VertexBuffer<VertexMD5> vertexBuffer;
+	IndexBuffer indexBuffer;
+};
+
 class AnimatedModel
 {
-
 public:
 	AnimatedModel() = default;
 	//AnimatedModel(const AnimatedModel&) = delete;
 	//AnimatedModel& operator=(const AnimatedModel&) = delete;
 	~AnimatedModel() = default;
 
-	bool load(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::wstring& filePath, 
+	bool Load(Graphics& gfx, std::wstring& filePath, 
 		std::vector<std::wstring>& texFilePaths);
 
-	void bind();
-	void draw();
-	void unbind();
+	void Bind();
+	void Draw();
+	void Unbind();
 
 private:
 	int numMeshes;

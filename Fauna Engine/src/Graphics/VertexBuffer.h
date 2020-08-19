@@ -1,6 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
+#include "Graphics/Graphics.h"
 #include "Utility/Util.h"
 
 template<class T>
@@ -15,7 +16,7 @@ public:
 	VertexBuffer(const VertexBuffer<T>&) = delete;
 	VertexBuffer& operator=(const VertexBuffer<T>&) = delete;
 
-	HRESULT init(ID3D11Device* pDevice, T* data, UINT numVertices)
+	HRESULT Init(Graphics& gfx, T* data, UINT numVertices)
 	{
 		if (pBuffer != nullptr)
 			ReleaseCOM(pBuffer);
@@ -32,7 +33,7 @@ public:
 		D3D11_SUBRESOURCE_DATA sd = {};//give sub data to buffer upon creation
 		sd.pSysMem = data;
 
-		HRESULT hr = pDevice->CreateBuffer(&vbd, &sd, &pBuffer);
+		HRESULT hr = gfx.getDevice()->CreateBuffer(&vbd, &sd, &pBuffer);
 		return hr;//handle exceptions later
 	}
 public://getters

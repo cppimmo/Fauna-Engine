@@ -1,8 +1,9 @@
 #include "Graphics/Shader/PixelShader.h"
 #include "Utility/Error.h"
 #include "Utility/Util.h"
+#include "Graphics/Graphics.h"
 
-bool PixelShader::init(ID3D11Device* pDevice, std::wstring filePath)
+bool PixelShader::Init(Graphics& gfx, std::wstring filePath)
 {
 	try
 	{
@@ -13,7 +14,7 @@ bool PixelShader::init(ID3D11Device* pDevice, std::wstring filePath)
 		errMsg += filePath;
 		THROW_IF_FAILED(hr, wstring_to_string(errMsg));
 
-		hr = pDevice->CreatePixelShader(pBlob->GetBufferPointer(),
+		hr = gfx.getDevice()->CreatePixelShader(pBlob->GetBufferPointer(),
 			pBlob->GetBufferSize(), nullptr, &pPixelShader);
 		THROW_IF_FAILED(hr, "Pixel shader failed to create");
 	}
@@ -28,4 +29,14 @@ bool PixelShader::init(ID3D11Device* pDevice, std::wstring filePath)
 PixelShader::~PixelShader()
 {
 	ReleaseCOM(pPixelShader);
+}
+
+void PixelShader::Bind(Graphics& gfx)
+{
+	gfx.getContext()->PSSetShader(pPixelShader, nullptr, NULL);
+}
+
+void PixelShader::Unbind(Graphics& gfx)
+{
+	gfx.getContext()->PSSetShader(nullptr, nullptr, NULL);
 }

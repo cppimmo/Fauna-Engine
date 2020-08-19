@@ -21,7 +21,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     int nShowCmd)
 {
     srand(time(nullptr));
-    return Game{}.run(hInstance);
+    return Game{}.Run(hInstance);
 }
 
 /*#pragma comment(lib, "d3d11.lib")

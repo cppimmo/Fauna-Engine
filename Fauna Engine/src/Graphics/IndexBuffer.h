@@ -1,6 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
+#include "Graphics/Graphics.h"
 #include "Utility/Util.h"
 
 class IndexBuffer
@@ -11,7 +12,7 @@ public:
 	IndexBuffer& operator=(const IndexBuffer&) = delete;
 	~IndexBuffer() { ReleaseCOM(pBuffer); }
 
-	HRESULT init(ID3D11Device* pDevice, DWORD* data, UINT numIndices)
+	HRESULT Init(Graphics& gfx, DWORD* data, UINT numIndices)
 	{
 		if (pBuffer != nullptr)
 			ReleaseCOM(pBuffer);
@@ -27,7 +28,7 @@ public:
 		D3D11_SUBRESOURCE_DATA sd = {};
 		sd.pSysMem = data;
 
-		HRESULT hr = pDevice->CreateBuffer(&ibd, &sd, &pBuffer);
+		HRESULT hr = gfx.getDevice()->CreateBuffer(&ibd, &sd, &pBuffer);
 		return hr;
 	}
 public://getters

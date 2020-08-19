@@ -1,8 +1,9 @@
 #include "Graphics/Shader/HullShader.h"
 #include "Utility/Error.h"
 #include "Utility/Util.h"
+#include "Graphics/Graphics.h"
 
-bool HullShader::init(ID3D11Device* pDevice, std::wstring& filePath)
+bool HullShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 {
 	try
 	{
@@ -28,4 +29,14 @@ bool HullShader::init(ID3D11Device* pDevice, std::wstring& filePath)
 HullShader::~HullShader()
 {
 	ReleaseCOM(pHullShader);
+}
+
+void HullShader::Bind(Graphics& gfx)
+{
+	gfx.getContext()->HSSetShader(pHullShader, nullptr, NULL);
+}
+
+void HullShader::Unbind(Graphics& gfx)
+{
+	gfx.getContext()->HSSetShader(nullptr, nullptr, NULL);
 }

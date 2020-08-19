@@ -11,7 +11,7 @@ public:
 	CubeTexture() = default;
 	~CubeTexture();
 
-	bool load(ID3D11Device* pDevice, std::wstring& filePath);
+	bool Load(Graphics& gfx, std::wstring& filePath);
 
 	ID3D11ShaderResourceView** getTexture() { return &pSRV; }
 private:

@@ -2,6 +2,7 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include "Graphics/Graphics.h"
 #include "Graphics/VertexBuffer.h"
 #include "Graphics/IndexBuffer.h"
 #include "Graphics/ConstantBuffer.h"
@@ -19,19 +20,19 @@ public:
 	SkySphere() = default;
 	~SkySphere() = default;
 
-	bool init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,
-		std::wstring& filePath);
-	void bind(VertexShader& vs, PixelShader& ps);
-	void draw(/*ID3D11DeviceContext* pContext,*/ Camera& camera);
-	void unbind();
+	bool Init(Graphics& gfx, std::wstring& filePath);
+	void Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps);
+	void Draw(Graphics& gfx, Camera& camera);
+	void Unbind(Graphics& gfx);
 private:
 	DirectX::XMMATRIX world;
 	DirectX::XMMATRIX scale;
 	DirectX::XMMATRIX translation;
 	VertexBuffer<Vertex> vertexBuffer;
 	IndexBuffer indexBuffer;
-	ConstantBuffer<CB_WVP> constantBuffer;
+	VSConstantBuffer<CB_WVP> vsCBuffer;
 	CubeTexture cubeMap;
-	ID3D11DeviceContext* pContext;
+
+	ID3D11DeviceContext* pContext = nullptr;
 };
 

@@ -7,10 +7,10 @@
 
 using namespace DirectX;
 
-bool SkySphere::init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::wstring& filePath) try 
+bool SkySphere::Init(Graphics& gfx, std::wstring& filePath) try 
 {
 	HRESULT hr = S_OK;
-	this->pContext = pContext;
+	this->pContext = gfx.getContext();
 	/*std::vector<VertexSkybox> vertices = {
 		{ -1.0f, -1.0f, -1.0f },
 		{ -1.0f,  1.0f, -1.0f },
@@ -109,7 +109,7 @@ bool SkySphere::init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::
 	vertices[NumSphereVertices - 1].pos.y = 0.0f;
 	vertices[NumSphereVertices - 1].pos.z = -1.0f;
 
-	hr = vertexBuffer.init(pDevice, vertices.data(), vertices.size());
+	hr = vertexBuffer.Init(gfx, vertices.data(), vertices.size());
 	THROW_IF_FAILED(hr, "Vertex buffer creation failed.");
 
 	std::vector<DWORD> indices(NumSphereFaces * 3);
@@ -166,12 +166,12 @@ bool SkySphere::init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::
 	indices[k + 1] = (NumSphereVertices - 1) - LongLines;
 	indices[k + 2] = NumSphereVertices - 2;
 
-	hr = indexBuffer.init(pDevice, indices.data(), indices.size());
+	hr = indexBuffer.Init(gfx, indices.data(), indices.size());
 	THROW_IF_FAILED(hr, "Index buffer creation failed.");
 
-	hr = constantBuffer.init(pDevice, pContext);
+	hr = vsCBuffer.Init(gfx);
 	THROW_IF_FAILED(hr, "Constant buffer creation failed.");
-	if (!cubeMap.load(pDevice, filePath))
+	if (!cubeMap.Load(gfx, filePath))
 		THROW_NORMAL("Failed to load cubemap texture");
 	return true;
 } catch (HrException& e) {
@@ -179,7 +179,7 @@ bool SkySphere::init(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, std::
 	return false;
 }
 
-void SkySphere::bind(VertexShader& vs, PixelShader& ps)
+void SkySphere::Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps)
 {
 	pContext->VSSetShader(vs.getVertexShader(), nullptr, 0u);
 	pContext->PSSetShader(ps.getPixelShader(), nullptr, 0u);
@@ -191,7 +191,7 @@ void SkySphere::bind(VertexShader& vs, PixelShader& ps)
 	pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void SkySphere::draw(/*ID3D11DeviceContext* pContext,*/ Camera& camera)
+void SkySphere::Draw(Graphics& gfx, Camera& camera)
 {
 	world = XMMatrixIdentity();
 	scale = XMMatrixScaling(5.0f, 5.0f, 5.0f);
@@ -202,14 +202,15 @@ void SkySphere::draw(/*ID3D11DeviceContext* pContext,*/ Camera& camera)
 	);
 	world = scale * translation;
 	
-	constantBuffer.data.WVP = XMMatrixTranspose(world * camera.getView() * camera.getProjection());
-	pContext->VSSetConstantBuffers(0, 1, constantBuffer.getBuffer());
-	constantBuffer.update();
+	vsCBuffer.data.WVP = XMMatrixTranspose(world * camera.getView() * camera.getProjection());
+	vsCBuffer.Bind(gfx);
+	vsCBuffer.Update();
+	vsCBuffer.Unbind(gfx);
 
-	pContext->DrawIndexed(indexBuffer.getIndexCount(), 0u, 0u);
+	gfx.getContext()->DrawIndexed(indexBuffer.getIndexCount(), 0u, 0u);
 }
 
-void SkySphere::unbind()
+void SkySphere::Unbind(Graphics& gfx)
 {
 	pContext->VSSetShader(nullptr, nullptr, 0u);
 	pContext->PSSetShader(nullptr, nullptr, 0u);

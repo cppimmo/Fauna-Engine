@@ -1,8 +1,9 @@
 #include "Graphics/Shader/GeometryShader.h"
 #include "Utility/Error.h"
 #include "Utility/Util.h"
+#include "Graphics/Graphics.h"
 
-bool GeometryShader::init(ID3D11Device* pDevice, std::wstring& filePath)
+bool GeometryShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 {
 	try
 	{
@@ -28,4 +29,14 @@ bool GeometryShader::init(ID3D11Device* pDevice, std::wstring& filePath)
 GeometryShader::~GeometryShader()
 {
 	ReleaseCOM(pGeometryShader);
+}
+
+void GeometryShader::Bind(Graphics& gfx)
+{
+	gfx.getContext()->GSSetShader(pGeometryShader, nullptr, NULL);
+}
+
+void GeometryShader::Unbind(Graphics& gfx)
+{
+	gfx.getContext()->GSSetShader(nullptr, nullptr, NULL);
 }

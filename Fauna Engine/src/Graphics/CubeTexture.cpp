@@ -11,12 +11,12 @@ CubeTexture::~CubeTexture()
 	ReleaseCOM(pSRV);
 }
 
-bool CubeTexture::load(ID3D11Device* pDevice, std::wstring& filePath) try 
+bool CubeTexture::Load(Graphics& gfx, std::wstring& filePath) try 
 {
 	HRESULT hr = S_OK;
 
 	hr = CreateDDSTextureFromFileEx(
-		pDevice,
+		gfx.getDevice(),
 		filePath.c_str(),
 		0,
 		D3D11_USAGE_DEFAULT,
