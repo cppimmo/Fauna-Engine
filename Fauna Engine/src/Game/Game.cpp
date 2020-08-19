@@ -1,4 +1,4 @@
-#include "Game/Game.h"
+/*#include "Game/Game.h"
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -71,7 +71,7 @@ bool Game::Init()
 			{ 1.0f, -1.0f, -1.0f,},
 			{-1.0f, -1.0f,  1.0f,},
 			{ 1.0f, -1.0f,  1.0f},
-		};*/
+		};
 		dorito->Create(wnd.getGraphics(), vertices);
 		std::wstring str = L"res/img/skymap.dds";
 		skybox->Init(wnd.getGraphics(), str);
@@ -193,7 +193,7 @@ void Game::Draw()
 	float* rotation[3] = { &dorito->transform.rotation.x, &dorito->transform.rotation.y, &dorito->transform.rotation.z };
 	ImGui::InputFloat3("Rotation", *rotation, 0);
 	ImGui::Button("HOWDY");
-	ImGui::End();*/
+	ImGui::End();
 	
 	ImGui::Begin("Debug");
 	
@@ -212,3 +212,4 @@ void Game::Draw()
 
 	wnd.getGraphics().End();
 }
+*////

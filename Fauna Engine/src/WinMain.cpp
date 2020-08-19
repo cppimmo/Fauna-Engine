@@ -10,10 +10,16 @@
 //buffers, load config function in window class
 //DONE: imgui,
 *********************************************************/
-#include "Game/Game.h"
+//#include "Game/Game.h"
+#include "Window/AppWindow.h"
 #include "Utility/Error.h"
+#include <fstream>
+#include <exception>
 #include <random>
 #include <ctime>
+#include <string>
+
+bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& height, bool& isVysnc);
 
 int WINAPI WinMain(HINSTANCE hInstance,   
     HINSTANCE hPrevInstance,
@@ -21,7 +27,84 @@ int WINAPI WinMain(HINSTANCE hInstance,
     int nShowCmd)
 {
     srand(time(nullptr));
-    return Game{}.Run(hInstance);
+    try 
+    {
+        std::wstring title = L"D3D Application";
+        AppWindow app(title, 800, 600);
+
+        if (app.Init(hInstance))
+        {
+            return app.Run();
+        }
+        else
+        {
+            ErrorLogger::Log(L"Application launch failed");
+            return -1;
+        }
+    }
+    catch (HrException& e)
+    {
+        ErrorLogger::Log(e);
+        return -1;
+    }
+    catch (...)
+    {
+        ErrorLogger::Log(L"Unknown exception. Exiting...");
+        return -1;
+    }
+}
+
+bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& height, bool& isVysnc)
+{
+    std::ifstream file;
+    std::string line;
+
+    try
+    {
+        file.open(filePath);
+        if (!file.is_open())
+            throw std::ios::failure("The config.ini file has been misplaced. Please reinstall the application.");
+
+        int index = 1;
+        while (std::getline(file, line))
+        {
+            switch (index)
+            {
+            case 2:
+            {
+                int boolInt = std::stoi(line);
+                if (boolInt == 0)
+                    isFullscreen = false;
+                else
+                    isFullscreen = true;
+                break;
+            }
+            case 4:
+                width = std::stoi(line);
+                break;
+            case 6:
+                height = std::stoi(line);
+                break;
+            case 8:
+            {
+                int boolInt = std::stoi(line);
+                if (boolInt == 0)
+                    isVysnc = false;
+                else
+                    isVysnc = true;
+                break;
+            }
+            }
+            index++;
+        }
+        file.close();
+    }
+    catch (const std::exception& e)
+    {
+        ErrorLogger::Log(string_to_wstring(e.what()));
+        return false;
+    }
+    return true;
 }
 
 /*#pragma comment(lib, "d3d11.lib")

@@ -28,8 +28,8 @@ private:
 
 	DirectX::CXMVECTOR defaultForward = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 	DirectX::CXMVECTOR defaultRight = DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-
-	const float speed = 0.01f;
+	DirectX::CXMVECTOR defaultUp = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	const float speed = 5.1f;
 	static constexpr float pitchClamp = 89.0f;
 	float pitch;
 	float yaw;

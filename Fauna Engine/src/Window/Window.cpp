@@ -5,9 +5,8 @@
 
 using namespace DirectX;
 
-Window::Window()
-    : width(800), height(600), title(L"D3D Application"), hWnd(nullptr),
-    mouse(), kbd(), gamepad(1)
+Window::Window(std::wstring& title, UINT width, UINT height)
+    : title(title), width(width), height(height), hWnd(nullptr), mouse(), kbd(), gamepad(1)
 {
 }
 
@@ -16,11 +15,11 @@ Window::~Window()
     DestroyWindow(hWnd);
 }
 
-bool Window::init(HINSTANCE hInstance) try
+bool Window::Init(HINSTANCE hInstance) try
 {
-    bool isFullscreen, isVsync;
-    if (!load_config("config.ini", isFullscreen, this->width, this->height, isVsync))
-        THROW_NORMAL("Failed to load config.ini file. Please reinstall.");
+   // bool isFullscreen, isVsync;
+   // if (!load_config("config.ini", isFullscreen, this->width, this->height, isVsync))
+    //    THROW_NORMAL("Failed to load config.ini file. Please reinstall.");
 
     HRESULT hr = S_OK;
     WNDCLASSEX wc;
@@ -72,8 +71,8 @@ bool Window::init(HINSTANCE hInstance) try
 
     SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)this);
 
-    if (!gfx.init(isFullscreen, isVsync, width, height, hWnd)) {
-        THROW_NORMAL("graphics creation failed");
+    if (!gfx.init(false, true, width, height, hWnd)) {
+        THROW_NORMAL("Failed to create graphics");
     }
     aud = std::make_unique<AudioEngine>();
     /*if (!audioEngine.init()) {
@@ -85,16 +84,9 @@ bool Window::init(HINSTANCE hInstance) try
     return false;
 }
     
-
-
 void Window::setTitle(LPCWSTR text) 
 {
     SetWindowText(hWnd, text);
-}
-
-Graphics& Window::getGraphics()
-{
-    return gfx;
 }
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT Msg, 
@@ -247,7 +239,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
     }
 }
 
-bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& height, bool& isVysnc)
+/*bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& height, bool& isVysnc)
 {
     std::ifstream file;
     std::string line;
@@ -299,3 +291,4 @@ bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& he
     }
     return true;
 }
+*/

@@ -9,7 +9,7 @@ Graphics::~Graphics()
 {
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
+	ImGui::DestroyContext(context);
 	ReleaseCOM(pSwapChain);
 	ReleaseCOM(pDevice);
 	ReleaseCOM(pContext);
@@ -159,7 +159,8 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width,
 	THROW_IF_FAILED(hr, "Create sampler state failed");
 	//setup imgui
 	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
+	ImGuiContext* context = ImGui::CreateContext();
+	ImGui::SetCurrentContext(context);
 	ImGuiIO& io = ImGui::GetIO();
 	ImGui_ImplWin32_Init(hWnd);
 	ImGui_ImplDX11_Init(this->pDevice, this->pContext);

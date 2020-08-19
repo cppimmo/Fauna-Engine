@@ -55,6 +55,11 @@ private:
 	bool isVsync = false;
 	bool isFullscreen = false;
 	bool isWireframeEnabled = false;
+
+	/// 
+	ImGuiContext* context;
+	/// 
+
 	UINT sampleQuality = 0;
 	IDXGISwapChain* pSwapChain = nullptr;
 	ID3D11Device* pDevice = nullptr;

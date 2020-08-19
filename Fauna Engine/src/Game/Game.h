@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Window/Window.h"
+/*#include "Window/Window.h"
 #include "Utility/Timer.h"
 #include "Graphics/Model.h"
 #include "Graphics/SkySphere.h"
@@ -40,5 +40,5 @@ private:
 
 	char title[12] = { 0 };
 	Camera camera;
-};
+};*/
 
