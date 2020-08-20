@@ -9,6 +9,7 @@
 #include "Graphics/SkySphere.h"
 #include "Graphics/Texture.h"
 #include "Graphics/Camera.h"
+#include "Graphics/Mesh.h"
 
 class AppWindow : public Window
 {
@@ -27,7 +28,7 @@ private:
 	Timer fpsTimer;
 private:
 	std::unique_ptr<Model> dorito;
-
+	Model3D model;
 	std::unique_ptr<SkySphere> sky;
 	Texture dorTex;
 

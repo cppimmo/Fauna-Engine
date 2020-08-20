@@ -14,7 +14,13 @@ public:
 		ReleaseCOM(pBuffer);
 	}
 	VertexBuffer(const VertexBuffer<T>&) = delete;
-	VertexBuffer& operator=(const VertexBuffer<T>&) = delete;
+	VertexBuffer& operator=(const VertexBuffer<T>& rhs)
+	{
+		this->pBuffer = rhs.pBuffer;
+		this->stride = rhs.stride;
+		this->vertexCount = rhs.vertexCount;
+		return *this;
+	}
 
 	HRESULT Init(Graphics& gfx, T* data, UINT numVertices)
 	{

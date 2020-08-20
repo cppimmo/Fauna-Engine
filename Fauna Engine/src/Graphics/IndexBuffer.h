@@ -9,7 +9,12 @@ class IndexBuffer
 public:
 	IndexBuffer() = default;
 	IndexBuffer(const IndexBuffer&) = delete;
-	IndexBuffer& operator=(const IndexBuffer&) = delete;
+	IndexBuffer& operator=(const IndexBuffer& rhs)
+	{
+		this->indexCount = rhs.indexCount;
+		this->pBuffer = rhs.pBuffer;
+		return *this;
+	}
 	~IndexBuffer() { ReleaseCOM(pBuffer); }
 
 	HRESULT Init(Graphics& gfx, DWORD* data, UINT numIndices)

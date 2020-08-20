@@ -91,13 +91,13 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\sdk\Assimp4.1.0\include;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\imgui;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\src;D:\sdk\irrKlang-32bit-1.6.0\irrKlang-1.6.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\sdk\assimp-3.1.1-win-binaries\include;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\imgui;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\src;D:\sdk\irrKlang-32bit-1.6.0\irrKlang-1.6.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>xinput.lib;d3d11.lib;d3dcompiler.lib;irrKlang.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\sdk\Assimp4.1.0\lib\x64;D:\sdk\irrKlang-32bit-1.6.0\irrKlang-1.6.0\lib\Win32-visualStudio;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>xinput.lib;d3d11.lib;d3dcompiler.lib;irrKlang.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\sdk\assimp-3.1.1-win-binaries\lib32;D:\sdk\irrKlang-32bit-1.6.0\irrKlang-1.6.0\lib\Win32-visualStudio;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -109,13 +109,13 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\sdk\Assimp4.1.0\include;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\imgui;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\src;D:\sdk\irrKlang-32bit-1.6.0\irrKlang-1.6.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\sdk\assimp-3.1.1-win-binaries\include\assimp;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\imgui;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\src;D:\sdk\irrKlang-32bit-1.6.0\irrKlang-1.6.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>xinput.lib;d3d11.lib;d3dcompiler.lib;irrKlang.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\sdk\Assimp4.1.0\lib\x64;D:\sdk\irrKlang-32bit-1.6.0\irrKlang-1.6.0\lib\Win32-visualStudio;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>xinput.lib;d3d11.lib;d3dcompiler.lib;irrKlang.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\sdk\assimp-3.1.1-win-binaries\lib32;D:\sdk\irrKlang-32bit-1.6.0\irrKlang-1.6.0\lib\Win32-visualStudio;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

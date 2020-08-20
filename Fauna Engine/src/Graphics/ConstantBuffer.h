@@ -79,6 +79,7 @@ public:
 		pContext->Unmap(pBuffer, 0);
 		return true;
 	}
+	ID3D11Buffer* getBuffer() const { return pBuffer; }
 protected:
 	ID3D11Buffer* pBuffer = nullptr;
 	ID3D11DeviceContext* pContext = nullptr;
