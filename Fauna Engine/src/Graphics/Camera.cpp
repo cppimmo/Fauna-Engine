@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include <algorithm>
 
 using namespace DirectX;
 
@@ -16,37 +17,54 @@ void Camera::setProjection(float Fov, float aspectRatio, float NearZ, float FarZ
 	projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(Fov), aspectRatio, NearZ, FarZ);
 }
 
-void Camera::update(float dt, Window& wnd)
+void Camera::Update(float dt, Window& wnd)
 {	
-	/*if (wnd.kbd.isKeyPressed(VK_UP)) {
-		pitch += speed;
+	const auto currPos = wnd.mouse.getPos();
+
+	if (currPos.x != lastPos.x || currPos.y != lastPos.y) {
+		yaw += lastPos.x * sensitivity * dt;
+		pitch += lastPos.y * sensitivity * dt;
+		std::clamp<float>(pitch, -pitchClamp, pitchClamp);
+		lastPos = currPos;
 	}
-	if (wnd.kbd.isKeyPressed(VK_DOWN)) {
-		pitch -= speed;
-		position = XMVectorSet(0.0f, 0.0f, -10.0f, 1.0f);
-	}
-	if (wnd.kbd.isKeyPressed(VK_LEFT)) {
-		yaw -= speed;
-	}
-	if (wnd.kbd.isKeyPressed(VK_RIGHT)) {
-		yaw += speed;
-	}*/
-	//pitch = 15.0f;
-	//yaw = 15.0f;
+	
 	rotation = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f);
 	target = XMVector3TransformCoord(defaultForward, rotation);
-	//target = XMVector3Normalize(target);
-	target += position;
-	up = XMVector3TransformCoord(defaultUp, rotation);
+	target = XMVector3Normalize(target);
 
+	XMMATRIX tempRotYMatrix = XMMatrixRotationY(yaw);
+
+	right = XMVector3TransformCoord(defaultRight, tempRotYMatrix);
+	up = XMVector3TransformCoord(up, tempRotYMatrix);
+	forward = XMVector3TransformCoord(defaultForward, tempRotYMatrix);
+
+	if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_W)) {
+		moveZ += speed * dt;
+	}
+	if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_A)) {
+		moveX -= speed * dt;
+	}
+	if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_S)) {
+		moveZ -= speed * dt;
+	}
+	if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_D)) {
+		moveX += speed * dt;
+	}
+
+	if (wnd.kbd.isKeyPressed(VK_SPACE)) {
+		moveY += speed * dt;
+	}
+	if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_X)) {
+		moveY -= speed * dt;
+	}
+
+	position += moveX * right;
+	position += moveZ * forward;
+	position += moveY * up;
+	moveX = 0.0f;
+	moveZ = 0.0f;
+	moveY = 0.0f;
+
+	target = position + target;
 	view = XMMatrixLookAtLH(position, target, up);
-	
-	//XMMATRIX rotY = XMMatrixRotationY(yaw);
-
-	//right = XMVector3TransformCoord(defaultRight, rotY);
-	//up = XMVector3TransformCoord(defaultUp, rotY);
-	//forward = XMVector3TransformCoord(defaultForward, rotY);
-
-	//target = position + target;
-	
 }

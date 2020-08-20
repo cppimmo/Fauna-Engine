@@ -2,20 +2,23 @@
 
 #include <deque>
 
+
+
 class Mouse
 {
 public:
-	enum MouseButton
+	enum class MouseButton
 	{
 		BUTTON_LEFT = 0,
 		BUTTON_RIGHT,
 		BUTTON_MIDDLE,
 	};
-private:
 	struct MousePos
 	{
 		int x, y;
-	} pos;
+	};
+private:
+	MousePos pos;
 	bool leftButton = false;
 	bool rightButton = false;
 	bool middleButton = false;
@@ -45,7 +48,7 @@ public:
 	int GetX() const { return pos.x; }
 	int GetY() const { return pos.y; }
 
-	void updateBuffer(MouseButton& button);
+	void updateBuffer(MouseButton button);
 	void flush();
 };
 

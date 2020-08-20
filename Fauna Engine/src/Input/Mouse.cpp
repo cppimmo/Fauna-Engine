@@ -19,13 +19,13 @@ bool Mouse::isButtonPressed(MouseButton button)
 {
 	switch (button)
 	{
-	case BUTTON_LEFT:
+	case MouseButton::BUTTON_LEFT:
 		return leftButton;
 		break;
-	case BUTTON_RIGHT:
+	case MouseButton::BUTTON_RIGHT:
 		return rightButton;
 		break;
-	case BUTTON_MIDDLE:
+	case MouseButton::BUTTON_MIDDLE:
 		return middleButton;
 		break;
 	}
@@ -42,6 +42,7 @@ void Mouse::OnLeftPressed(int x, int y)
 	pos.x = x;
 	pos.y = y;
 	leftButton = true;
+	updateBuffer(MouseButton::BUTTON_LEFT);
 }
 
 void Mouse::OnRightPressed(int x, int y)
@@ -49,6 +50,7 @@ void Mouse::OnRightPressed(int x, int y)
 	pos.x = x;
 	pos.y = y;
 	rightButton = true;
+	updateBuffer(MouseButton::BUTTON_RIGHT);
 }
 
 void Mouse::OnMiddlePressed(int x, int y)
@@ -56,6 +58,7 @@ void Mouse::OnMiddlePressed(int x, int y)
 	pos.x = x;
 	pos.y = y;
 	middleButton = true;
+	updateBuffer(MouseButton::BUTTON_MIDDLE);
 }
 
 void Mouse::OnLeftReleased(int x, int y)
@@ -86,7 +89,7 @@ void Mouse::OnWheelMove(int x, int y, float wheelDelta)
 	this->wheelDelta = wheelDelta;
 }
 
-void Mouse::updateBuffer(MouseButton& button)
+void Mouse::updateBuffer(MouseButton button)
 {
 	if (buffer.size() <= bufferLimit)
 	{

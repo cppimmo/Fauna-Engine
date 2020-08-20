@@ -120,7 +120,7 @@ void AppWindow::Update()
 	//title.append(std::to_wstring(elapsedTimer.getElapsed()));
 	//wnd.setTitle(title.c_str());
 
-	if (kbd.isKeyPressed(Keyboard::KeyCode::VK_W) || kbd.isKeyPressed(VK_UP))
+	/*if (kbd.isKeyPressed(Keyboard::KeyCode::VK_W) || kbd.isKeyPressed(VK_UP))
 	{
 		dorito->adjustPos(0.0f, dTime * 0.85f, 0.0f);
 	}
@@ -135,7 +135,7 @@ void AppWindow::Update()
 	if (kbd.isKeyPressed(Keyboard::KeyCode::VK_D) || kbd.isKeyPressed(VK_RIGHT))
 	{
 		dorito->adjustPos(dTime * 0.85f, 0.0f, 0.0f);
-	}
+	}*/
 
 	dorito->transform.position.x = std::clamp(dorito->transform.position.x, -1.5f, 1.5f);
 	dorito->transform.position.y = std::clamp(dorito->transform.position.y, -0.30f, 1.15f);
@@ -151,7 +151,7 @@ void AppWindow::Update()
 	dorito->setScale(1.0f, 1.0f, 1.0f);
 
 	dorito->updateMatrix(camera);
-	camera.update(dTime, *this);
+	camera.Update(dTime, *this);
 }
 
 void AppWindow::Draw()
