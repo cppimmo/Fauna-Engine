@@ -1,4 +1,5 @@
 #include "Input/Mouse.h"
+#include "Win.h"
 
 Mouse::Mouse()
 	: pos{0,0}, wheelDelta(0.0f)
@@ -35,6 +36,7 @@ void Mouse::OnMouseMove(int x, int y)
 {
 	pos.x = x;
 	pos.y = y;
+	UpdateParameters();
 }
 
 void Mouse::OnLeftPressed(int x, int y)
@@ -42,7 +44,8 @@ void Mouse::OnLeftPressed(int x, int y)
 	pos.x = x;
 	pos.y = y;
 	leftButton = true;
-	updateBuffer(MouseButton::BUTTON_LEFT);
+	UpdateBuffer(MouseButton::BUTTON_LEFT);
+	UpdateParameters();
 }
 
 void Mouse::OnRightPressed(int x, int y)
@@ -50,7 +53,8 @@ void Mouse::OnRightPressed(int x, int y)
 	pos.x = x;
 	pos.y = y;
 	rightButton = true;
-	updateBuffer(MouseButton::BUTTON_RIGHT);
+	UpdateBuffer(MouseButton::BUTTON_RIGHT);
+	UpdateParameters();
 }
 
 void Mouse::OnMiddlePressed(int x, int y)
@@ -58,7 +62,8 @@ void Mouse::OnMiddlePressed(int x, int y)
 	pos.x = x;
 	pos.y = y;
 	middleButton = true;
-	updateBuffer(MouseButton::BUTTON_MIDDLE);
+	UpdateBuffer(MouseButton::BUTTON_MIDDLE);
+	UpdateParameters();
 }
 
 void Mouse::OnLeftReleased(int x, int y)
@@ -66,6 +71,7 @@ void Mouse::OnLeftReleased(int x, int y)
 	pos.x = x;
 	pos.y = y;
 	leftButton = false;
+	UpdateParameters();
 }
 
 void Mouse::OnRightReleased(int x, int y)
@@ -73,6 +79,7 @@ void Mouse::OnRightReleased(int x, int y)
 	pos.x = x;
 	pos.y = y;
 	rightButton = false;
+	UpdateParameters();
 }
 
 void Mouse::OnMiddleReleased(int x, int y)
@@ -80,6 +87,7 @@ void Mouse::OnMiddleReleased(int x, int y)
 	pos.x = x;
 	pos.y = y;
 	middleButton = false;
+	UpdateParameters();
 }
 
 void Mouse::OnWheelMove(int x, int y, float wheelDelta)
@@ -87,9 +95,10 @@ void Mouse::OnWheelMove(int x, int y, float wheelDelta)
 	pos.x = x;
 	pos.y = y;
 	this->wheelDelta = wheelDelta;
+	UpdateParameters();
 }
 
-void Mouse::updateBuffer(MouseButton button)
+void Mouse::UpdateBuffer(MouseButton button)
 {
 	if (buffer.size() <= bufferLimit)
 	{
@@ -102,7 +111,16 @@ void Mouse::updateBuffer(MouseButton button)
 	}
 }
 
-void Mouse::flush()
+void Mouse::Flush()
 {
 	buffer.clear();
+}
+
+void Mouse::UpdateParameters()
+{
+	if (lockToCenter)
+	{
+		//SetCursorPos()
+	}
+	ShowCursor(isCursorVisible);
 }

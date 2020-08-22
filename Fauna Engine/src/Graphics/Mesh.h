@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/Graphics.h"
+/*#include "Graphics/Graphics.h"
 #include "Graphics/VertexBuffer.h"
 #include <Graphics/IndexBuffer.h>
 #include "Graphics/ConstantBuffer.h"
@@ -50,4 +50,4 @@ private:
 	VertexBuffer<Vertex> vertexBuffer;
 	IndexBuffer indexBuffer;
 	ID3D11DeviceContext* pContext;
-};
+};*/

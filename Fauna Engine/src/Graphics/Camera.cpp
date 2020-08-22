@@ -21,13 +21,26 @@ void Camera::Update(float dt, Window& wnd)
 {	
 	const auto currPos = wnd.mouse.getPos();
 
-	if (currPos.x != lastPos.x || currPos.y != lastPos.y) {
+	/*if (currPos.x != lastPos.x || currPos.y != lastPos.y) {
+		yaw += lastPos.x * sensitivity * dt;
+		pitch += lastPos.y * sensitivity * dt;
+		std::clamp<float>(pitch, -pitchClamp, pitchClamp);
+		lastPos = currPos;
+	}*/
+	if ((currPos.x > lastPos.x) || (currPos.y > lastPos.y))
+	{
 		yaw += lastPos.x * sensitivity * dt;
 		pitch += lastPos.y * sensitivity * dt;
 		std::clamp<float>(pitch, -pitchClamp, pitchClamp);
 		lastPos = currPos;
 	}
-	
+	else if ((currPos.x < lastPos.x) || (currPos.y < lastPos.y))
+	{
+		yaw -= lastPos.x * sensitivity * dt;
+		pitch -= lastPos.y * sensitivity * dt;
+		std::clamp<float>(pitch, -pitchClamp, pitchClamp);
+		lastPos = currPos;
+	}
 	rotation = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f);
 	target = XMVector3TransformCoord(defaultForward, rotation);
 	target = XMVector3Normalize(target);

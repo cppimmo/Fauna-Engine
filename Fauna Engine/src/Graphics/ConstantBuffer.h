@@ -9,11 +9,20 @@ struct CB_WVP {
 	DirectX::XMMATRIX WVP;
 };
 
+struct CB_CAMPOS {
+	DirectX::XMFLOAT3 camPos;
+};
+
 template<class C>//vertex shader
 class VSConstantBuffer;
-
 template<class C> 
 class PSConstantBuffer;
+template<class C>
+class HSConstantBuffer;
+template<class C>
+class DSConstantBuffer;
+template<class C>
+class GSConstantBuffer;
 
 template<class C>
 class ConstantBuffer : public Bindable
@@ -33,8 +42,6 @@ public:
 		if (pBuffer != nullptr)
 			ReleaseCOM(pBuffer);
 
-		this->pContext = gfx.getContext();
-
 		D3D11_BUFFER_DESC cbd = {};
 		cbd.Usage = D3D11_USAGE_DYNAMIC;
 		cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -51,8 +58,6 @@ public:
 		if (pBuffer != nullptr)
 			ReleaseCOM(pBuffer);
 
-		this->pContext = gfx.getContext();
-
 		D3D11_BUFFER_DESC cbd = {};
 		cbd.Usage = D3D11_USAGE_DYNAMIC;
 		cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -67,25 +72,24 @@ public:
 		HRESULT hr = gfx.getDevice()->CreateBuffer(&cbd, data, &pBuffer);
 		return hr;
 	}
-	bool Update()
+	bool Update(Graphics& gfx)
 	{
 		D3D11_MAPPED_SUBRESOURCE msr = {};
-		HRESULT hr = pContext->Map(pBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+		HRESULT hr = gfx.getContext()->Map(pBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
 		if (FAILED(hr)) {
 			ErrorLogger::Log(hr, L"Failed to map constant buffer.");
 			return false;
 		}
 		CopyMemory(msr.pData, &data, sizeof(C));
-		pContext->Unmap(pBuffer, 0);
+		gfx.getContext()->Unmap(pBuffer, 0);
 		return true;
 	}
 	ID3D11Buffer* getBuffer() const { return pBuffer; }
 protected:
 	ID3D11Buffer* pBuffer = nullptr;
-	ID3D11DeviceContext* pContext = nullptr;
 };
 
-//Constantbuffer listed in order of graphics pipeline
+//Constantbuffer types listed in order of occurence in graphics pipeline
 template<class C>//vertex shader
 class VSConstantBuffer : public ConstantBuffer<C>
 {
@@ -101,17 +105,18 @@ public:
 	}
 };
 
-/*template<class C>//hull shader 
+template<class C>//hull shader 
 class HSConstantBuffer : public ConstantBuffer<C>
 {
 public:
-	void bind(Graphics& gfx) override
+	void Bind(Graphics& gfx) override
 	{
-		pContext->HSSetConstantBuffers(0, 1, pBuffer);
+		gfx.getContext()->HSSetConstantBuffers(0, 1, &this->pBuffer);
 	}
-	void unbind(Graphics& gfx) override
+	void Unbind(Graphics& gfx) override
 	{
-		pContext->HSSetConstantBuffers(0, 1, nullptr);
+		//do nothing undefined
+		//gfx.getContext()->HSSetConstantBuffers(0, 1, nullptr);
 	}
 };
 
@@ -119,13 +124,14 @@ template<class C>//domain shader
 class DSConstantBuffer : public ConstantBuffer<C>
 {
 public:
-	void bind(Graphics& gfx) override
+	void Bind(Graphics& gfx) override
 	{
-		pContext->DSSetConstantBuffers(0, 1, pBuffer);
+		gfx.getContext()->DSSetConstantBuffers(0, 1, &this->pBuffer);
 	}
-	void unbind(Graphics& gfx) override
+	void Unbind(Graphics& gfx) override
 	{
-		pContext->DSSetConstantBuffers(0, 1, nullptr);
+		//do nothing undefined
+		//gfx.getContext()->DSSetConstantBuffers(0, 1, nullptr);
 	}
 };
 
@@ -133,15 +139,16 @@ template<class C>//geometry shader
 class GSConstantBuffer : public ConstantBuffer<C>
 {
 public:
-	void bind(Graphics& gfx) override
+	void Bind(Graphics& gfx) override
 	{
-		pContext->GSSetConstantBuffers(0, 1, pBuffer);
+		gfx.getContext()->GSSetConstantBuffers(0, 1, &this->pBuffer);
 	}
-	void unbind(Graphics& gfx) override
+	void Unbind(Graphics& gfx) override
 	{
-		pContext->GSSetConstantBuffers(0, 1, nullptr);
+		//do nothing undefined
+		//pContext->GSSetConstantBuffers(0, 1, nullptr);
 	}
-};*/
+};
 
 template<class C>//pixel shader
 class PSConstantBuffer : public ConstantBuffer<C>

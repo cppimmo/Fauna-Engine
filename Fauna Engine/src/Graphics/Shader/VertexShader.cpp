@@ -37,10 +37,12 @@ VertexShader::~VertexShader()
 
 void VertexShader::Bind(Graphics& gfx)
 {
+	gfx.getContext()->IASetInputLayout(pInputLayout);
 	gfx.getContext()->VSSetShader(pVertexShader, nullptr, NULL);
 }
 
 void VertexShader::Unbind(Graphics& gfx)
 {
 	gfx.getContext()->VSSetShader(nullptr, nullptr, NULL);
+	gfx.getContext()->IASetInputLayout(nullptr);
 }

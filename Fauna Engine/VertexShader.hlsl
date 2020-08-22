@@ -1,4 +1,4 @@
-cbuffer ConstantBuffer
+cbuffer VSConstantBuffer
 {
 	float4x4 WVP;
 };

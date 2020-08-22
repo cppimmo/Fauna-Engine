@@ -21,6 +21,9 @@ void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices)
 
 	hr = vsCBuffer.Init(gfx);
 	ErrorLogger::Log(hr, L"const buffer init failed");
+
+	hr = psCBuffer.Init(gfx);
+	ErrorLogger::Log(hr, L"const buffer init failed");
 }
 
 void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
@@ -38,6 +41,9 @@ void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices, std::vector<DWO
 
 	hr = vsCBuffer.Init(gfx);
 	ErrorLogger::Log(hr, L"const buffer init failed");
+
+	hr = psCBuffer.Init(gfx);
+	ErrorLogger::Log(hr, L"const buffer init faield");
 }
 
 bool Model::isColliding(Model& model)
@@ -138,29 +144,37 @@ void Model::setScale(float x, float y, float z)
 	transform.scale.w = 1.0f;
 }
 
-void Model::Draw(Graphics& gfx)
+void Model::Draw(Graphics& gfx, Camera& camera)
 {
-	//pGfx->getContext()->UpdateSubresource(pConstantBuffer, 0, NULL, &cb, 0, 0);
+	float x = XMVectorGetX(camera.getPosition());
+	float y = XMVectorGetY(camera.getPosition());
+	float z = XMVectorGetZ(camera.getPosition());
+	XMFLOAT3 tempVec = {x,y,z};
+	psCBuffer.data.camPos = tempVec;
+
+	psCBuffer.Bind(gfx);
+	psCBuffer.Update(gfx);
+	psCBuffer.Unbind(gfx);
 
 	vsCBuffer.Bind(gfx);
-	vsCBuffer.Update();
+	vsCBuffer.Update(gfx);
 	vsCBuffer.Unbind(gfx);
 
-	if (isIndexed) 
-		gfx.getContext()->DrawIndexed(indexBuffer.getIndexCount(), 0u, 0u);
+	if (isIndexed)
+		indexBuffer.Draw(gfx, 0u, 0u);
 	else
-		gfx.getContext()->Draw(vertexBuffer.getVertexCount(), 0u);
+		vertexBuffer.Draw(gfx, 0u);
 }
 
 void Model::Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& tex)
 {
 	//const UINT offset = 0;
+
 	gfx.getContext()->VSSetShader(vs.getVertexShader(), nullptr, 0u);
 	gfx.getContext()->PSSetShader(ps.getPixelShader(), nullptr, 0u);
 	gfx.getContext()->PSSetShaderResources(0, 1, tex.getTexture());
-	//pContext->PSSetSamplers(0, 1, pGfx->getSamplerState());
-	gfx.getContext()->IASetVertexBuffers(0u, 1u, vertexBuffer.getBuffer(), vertexBuffer.getStridePtr(), &Model::offset);
-	if (isIndexed) gfx.getContext()->IASetIndexBuffer(indexBuffer.getBuffer(), DXGI_FORMAT_R32_UINT, 0u);
+	vertexBuffer.Bind(gfx);
+	if (isIndexed) indexBuffer.Bind(gfx);
 	gfx.getContext()->IASetInputLayout(vs.getInputLayout());
 	gfx.getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
@@ -169,6 +183,6 @@ void Model::Unbind(Graphics& gfx)
 {
 	gfx.getContext()->VSSetShader(nullptr, nullptr, 0u);
 	gfx.getContext()->PSSetShader(nullptr, nullptr, 0u);
-	gfx.getContext()->IASetVertexBuffers(0u, 0u, nullptr, nullptr, nullptr);
-	if (isIndexed) gfx.getContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0u);
+	vertexBuffer.Unbind(gfx);
+	if (isIndexed) indexBuffer.Unbind(gfx);
 }

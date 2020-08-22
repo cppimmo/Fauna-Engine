@@ -169,6 +169,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
     }
     case WM_MOUSEMOVE:
     case WM_MOUSELEAVE:
+    //case WM_INPUT:
     {
         Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
         int x = LOWORD(lParam);

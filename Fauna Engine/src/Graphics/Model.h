@@ -6,6 +6,7 @@
 #include "Graphics/VertexBuffer.h"
 #include <Graphics/IndexBuffer.h>
 #include "Graphics/ConstantBuffer.h"
+#include "Graphics/Camera.h"
 #include "Graphics/Texture.h"
 #include "Camera.h"
 #include "Component/Transform.h"
@@ -27,7 +28,7 @@ public:
 	bool isColliding(Model& model);
 
 	void Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& tex);
-	void Draw(Graphics& gfx);
+	void Draw(Graphics& gfx, Camera& camera);
 	void DrawImGUI() {}
 	void Unbind(Graphics& gfx);
 public:
@@ -44,6 +45,7 @@ private:
 	VertexBuffer<Vertex> vertexBuffer;
 	IndexBuffer indexBuffer;
 	VSConstantBuffer<CB_WVP> vsCBuffer;
+	PSConstantBuffer<CB_CAMPOS> psCBuffer;
 private:
 	DirectX::XMMATRIX translation;
 public:

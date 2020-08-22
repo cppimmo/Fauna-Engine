@@ -204,7 +204,7 @@ void SkySphere::Draw(Graphics& gfx, Camera& camera)
 	
 	vsCBuffer.data.WVP = XMMatrixTranspose(world * camera.getView() * camera.getProjection());
 	vsCBuffer.Bind(gfx);
-	vsCBuffer.Update();
+	vsCBuffer.Update(gfx);
 	vsCBuffer.Unbind(gfx);
 
 	gfx.getContext()->DrawIndexed(indexBuffer.getIndexCount(), 0u, 0u);

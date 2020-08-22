@@ -194,6 +194,7 @@
     <ClCompile Include="src\Graphics\Model.cpp" />
     <ClCompile Include="src\Utility\Timer.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
+    <ClCompile Include="Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -320,6 +321,7 @@
     <ClInclude Include="src\Win.h" />
     <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="src\Graphics\VertexBuffer.h" />
+    <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Fauna Engine.rc" />

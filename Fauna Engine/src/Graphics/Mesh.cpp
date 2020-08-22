@@ -1,7 +1,7 @@
 #include "Graphics/Mesh.h"
 #include "Utility/Error.h"
 #include "Utility/Util.h"
-
+/*
 using namespace DirectX;
 
 /*Model::Model(Graphics& gfx)
@@ -178,7 +178,7 @@ void Model::setScale(float x, float y, float z)
 	transform.scale.y = y;
 	transform.scale.z = z;
 	transform.scale.w = 1.0f;
-}*/
+}
 
 /*void RawModel::draw()
 {
@@ -212,7 +212,7 @@ void Model::unbind()
 	pGfx->getContext()->PSSetShader(nullptr, nullptr, 0u);
 	pGfx->getContext()->IASetVertexBuffers(0u, 0u, nullptr, nullptr, nullptr);
 	if (isIndexed) pGfx->getContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0u);
-}*/
+}
 bool Model3D::init(Graphics& gfx, const std::string& filePath)
 {
 	try
@@ -357,4 +357,4 @@ void Mesh::unbind() noexcept
 {
 	pContext->IASetVertexBuffers(0u, 0u, nullptr, nullptr, nullptr);
 	pContext->IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0u);
-}
+}*/

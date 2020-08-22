@@ -2,9 +2,10 @@
 
 #include <d3d11.h>
 #include "Graphics/Graphics.h"
+#include "Graphics/Bindable.h"
 #include "Utility/Util.h"
 
-class IndexBuffer
+class IndexBuffer : public Bindable
 {
 public:
 	IndexBuffer() = default;
@@ -35,6 +36,18 @@ public:
 
 		HRESULT hr = gfx.getDevice()->CreateBuffer(&ibd, &sd, &pBuffer);
 		return hr;
+	}
+	void Bind(Graphics& gfx) override
+	{
+		gfx.getContext()->IASetIndexBuffer(this->pBuffer, DXGI_FORMAT_R32_UINT, 0u);
+	}
+	void Draw(Graphics& gfx, UINT startIndexLocation, INT baseIndexLocation)
+	{
+		gfx.getContext()->DrawIndexed(indexCount, startIndexLocation, baseIndexLocation);
+	}
+	void Unbind(Graphics& gfx) override
+	{
+		gfx.getContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0u);
 	}
 public://getters
 	ID3D11Buffer* getBuffer() const { return pBuffer; }

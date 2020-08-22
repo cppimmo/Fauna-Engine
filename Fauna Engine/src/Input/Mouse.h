@@ -2,8 +2,6 @@
 
 #include <deque>
 
-
-
 class Mouse
 {
 public:
@@ -22,6 +20,8 @@ private:
 	bool leftButton = false;
 	bool rightButton = false;
 	bool middleButton = false;
+	bool lockToCenter = false;
+	bool isCursorVisible = true;
 	float wheelDelta;
 	std::deque<MouseButton> buffer;
 	static constexpr std::size_t bufferLimit = 52;
@@ -44,11 +44,20 @@ public:
 	void OnRightReleased(int x, int y);
 	void OnMiddleReleased(int x, int y);
 	void OnWheelMove(int x, int y, float wheelDelta);
-
+	
+	void UpdateBuffer(MouseButton button);
+	void Flush();
+public:
+	//setters
+	void Lock() { lockToCenter = true; }
+	void Unlock() { lockToCenter = false; }
+	void SetCursorVisibility(bool visible) { this->isCursorVisible = visible; }
+	//getters
+	bool GetLockState() const { return lockToCenter; }
+	bool GetCursorVisibility() const { return isCursorVisible; }
 	int GetX() const { return pos.x; }
 	int GetY() const { return pos.y; }
-
-	void updateBuffer(MouseButton button);
-	void flush();
+private:
+	void UpdateParameters();
 };
 

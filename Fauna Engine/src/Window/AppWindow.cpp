@@ -74,7 +74,6 @@ bool AppWindow::Init(HINSTANCE hInst)
 		sky->Init(Window::Gfx(), str);
 		dorito->setPos(0.0f, 0.35f, 1.5f);
 		dorito->setScale(1.0f, 1.0f, 1.0f);
-		model.init(Window::Gfx(), "res/sphere.obj");
 	};
 	auto loadTex = [this]() { //no need to check return types handling done in class
 		dorTex.Load(Window::Gfx(), L"res/img/dorito.dds");
@@ -157,15 +156,11 @@ void AppWindow::Update()
 
 void AppWindow::Draw()
 {
-	Window::Gfx().Begin(0.0f, 0.0f, 0.5f);
+	Window::Gfx().Begin(1.0f, 1.0f, 1.0f);
 
 	dorito->Bind(Gfx(), Gfx().vertexShader, Gfx().pixelShader, dorTex);
-	dorito->Draw(Gfx());
+	dorito->Draw(Gfx(), camera);
 	dorito->Unbind(Gfx());
-
-	model.bind(Gfx(), Gfx().vertexShader, Gfx().pixelShader, dorTex);
-	model.draw(Gfx());
-	model.unbind(Gfx());
 
 	Gfx().setSkyboxState(true);
 	//wnd.getGraphics().setWireframe(true);

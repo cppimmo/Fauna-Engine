@@ -2,10 +2,11 @@
 
 #include <d3d11.h>
 #include "Graphics/Graphics.h"
+#include "Graphics/Bindable.h"
 #include "Utility/Util.h"
 
 template<class T>
-class VertexBuffer
+class VertexBuffer : public Bindable
 {
 public:
 	VertexBuffer() = default;
@@ -42,6 +43,19 @@ public:
 		HRESULT hr = gfx.getDevice()->CreateBuffer(&vbd, &sd, &pBuffer);
 		return hr;//handle exceptions later
 	}
+	void Bind(Graphics& gfx) override
+	{
+		UINT offset = 0;
+		gfx.getContext()->IASetVertexBuffers(0u, 1u, &this->pBuffer, &stride, &offset);
+	}
+	void Draw(Graphics& gfx, UINT startLocation)
+	{
+		gfx.getContext()->Draw(vertexCount, startLocation);
+	}
+	void Unbind(Graphics& gfx) override
+	{
+		gfx.getContext()->IASetVertexBuffers(NULL, NULL, nullptr, nullptr, nullptr);
+	}
 public://getters
 	ID3D11Buffer* const* getBuffer() { return &pBuffer; }
 	const UINT getStride() const { return stride; }
@@ -50,5 +64,6 @@ public://getters
 private:
 	ID3D11Buffer* pBuffer = nullptr;
 	UINT stride = 0;
+	//UINT offset = 0;
 	UINT vertexCount = 0;
 };
