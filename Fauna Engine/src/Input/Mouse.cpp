@@ -1,8 +1,9 @@
 #include "Input/Mouse.h"
+#include "Window/Window.h"
 #include "Win.h"
 
-Mouse::Mouse()
-	: pos{0,0}, wheelDelta(0.0f)
+Mouse::Mouse(Window& wnd)
+	: pos{0,0}, wheelDelta(0.0f), wnd(wnd)
 {
 }
 
@@ -120,6 +121,7 @@ void Mouse::UpdateParameters()
 {
 	if (lockToCenter)
 	{
+		SetCursorPos(wnd.getWidth() / 2, wnd.getHeight() / 2);
 		//SetCursorPos()
 	}
 	ShowCursor(isCursorVisible);

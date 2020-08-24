@@ -53,7 +53,7 @@ protected:
 	bool Init(HINSTANCE hInstance);
 	void setTitle(LPCWSTR text);
 	Graphics& Gfx() { return gfx; }
-
+public:
 	UINT getWidth() const { return width; }
 	UINT getHeight() const { return height; }
 private:

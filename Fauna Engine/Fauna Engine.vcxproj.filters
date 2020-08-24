@@ -38,9 +38,10 @@
     <ClCompile Include="src\Graphics\CubeTexture.cpp" />
     <ClCompile Include="AnimatedModel.cpp" />
     <ClCompile Include="src\Window\AppWindow.cpp" />
-    <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\Graphics\Camera.cpp" />
     <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="src\Scene\SceneManager.cpp" />
+    <ClCompile Include="RandomGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
@@ -69,7 +70,6 @@
     <ClInclude Include="src\Input\Mouse.h" />
     <ClInclude Include="src\Graphics\Shader\PixelShader.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Graphics\Texture.h" />
     <ClInclude Include="src\Utility\Timer.h" />
     <ClInclude Include="src\Component\Transform.h" />
@@ -84,10 +84,12 @@
     <ClInclude Include="AnimatedModel.h" />
     <ClInclude Include="src\Graphics\Bindable.h" />
     <ClInclude Include="src\Window\AppWindow.h" />
-    <ClInclude Include="src\SceneManager.h" />
     <ClInclude Include="src\Graphics\Camera.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="src\Scene\Scene.h" />
+    <ClInclude Include="src\Scene\SceneManager.h" />
+    <ClInclude Include="RandomGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Fauna Engine.rc" />

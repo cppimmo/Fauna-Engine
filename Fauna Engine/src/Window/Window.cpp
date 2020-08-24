@@ -6,7 +6,7 @@
 using namespace DirectX;
 
 Window::Window(std::wstring& title, UINT width, UINT height)
-    : title(title), width(width), height(height), hWnd(nullptr), mouse(), kbd(), gamepad(1)
+    : title(title), width(width), height(height), hWnd(nullptr), mouse(*this), kbd(), gamepad(1)
 {
 }
 

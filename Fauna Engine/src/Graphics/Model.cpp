@@ -15,7 +15,20 @@ Model::~Model()
 void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices)
 {
 	HRESULT hr = S_OK;
-	
+	this->vertices = vertices;
+
+	XMVECTOR vMin = XMVectorZero(), vMax = XMVectorZero();
+	for (std::size_t i = 0; i < vertices.size(); i++)
+	{
+		XMVECTOR point = XMLoadFloat3(&vertices[i].pos);
+
+		vMin = XMVectorMin(vMin, point);
+		vMax = XMVectorMax(vMax, point);
+	}
+	XMStoreFloat3(&box.Center, 0.5f * (vMin + vMax));
+	XMStoreFloat3(&box.Extents, 0.5f * (vMax - vMin));
+	box.CreateFromPoints(box, vertices.size(), &vertices[0].pos, sizeof(Vertex));
+
 	hr = vertexBuffer.Init(gfx, vertices.data(), vertices.size());
 	ErrorLogger::Log(hr, L"Vertex buffer initialization failed");
 
@@ -29,9 +42,22 @@ void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices)
 void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
 {
 	this->isIndexed = true;
+	this->vertices = vertices;
 	//////////////////////////////////////////////////
 
 	HRESULT hr = S_OK;
+
+	XMVECTOR vMin = XMVectorZero(), vMax = XMVectorZero();
+	for (std::size_t i = 0; i < vertices.size(); i++)
+	{
+		XMVECTOR point = XMLoadFloat3(&vertices[i].pos);
+
+		vMin = XMVectorMin(vMin, point);
+		vMax = XMVectorMax(vMax, point);
+	}
+	XMStoreFloat3(&box.Center, 0.5f * (vMin + vMax));
+	XMStoreFloat3(&box.Extents, 0.5f * (vMax - vMin));
+	box.CreateFromPoints(box, vertices.size(), &vertices[0].pos, sizeof(Vertex));
 
 	hr = vertexBuffer.Init(gfx, vertices.data(), vertices.size());
 	ErrorLogger::Log(hr, L"Vertex buffer init failed");
@@ -152,7 +178,11 @@ void Model::Draw(Graphics& gfx, Camera& camera)
 	XMFLOAT3 tempVec = {x,y,z};
 	psCBuffer.data.camPos = tempVec;
 
-	psCBuffer.Bind(gfx);
+
+	DirectX::BoundingFrustum localFrustum;
+	localFrustum.Transform(localFrustum, world);
+	
+	psCBuffer.Bind(gfx); 
 	psCBuffer.Update(gfx);
 	psCBuffer.Unbind(gfx);
 
@@ -160,10 +190,15 @@ void Model::Draw(Graphics& gfx, Camera& camera)
 	vsCBuffer.Update(gfx);
 	vsCBuffer.Unbind(gfx);
 
-	if (isIndexed)
-		indexBuffer.Draw(gfx, 0u, 0u);
-	else
-		vertexBuffer.Draw(gfx, 0u);
+	if (camera.getFrustum().Intersects(box))
+	{
+		OutputDebugStringA("Okay clown i can draw you");
+		if (isIndexed) 
+			indexBuffer.Draw(gfx, 0u, 0u);
+		else
+			vertexBuffer.Draw(gfx, 0u);
+	}
+	
 }
 
 void Model::Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& tex)

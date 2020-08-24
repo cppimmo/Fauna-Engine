@@ -4,7 +4,7 @@
 #include "Window/Window.h"
 #include "Graphics/Graphics.h"
 #include "Graphics/VertexBuffer.h"
-#include <Graphics/IndexBuffer.h>
+#include "Graphics/IndexBuffer.h"
 #include "Graphics/ConstantBuffer.h"
 #include "Graphics/Camera.h"
 #include "Graphics/Texture.h"
@@ -12,6 +12,7 @@
 #include "Component/Transform.h"
 
 #include <vector>
+#include <DirectXCollision.h>
 
 class Model
 {
@@ -46,7 +47,9 @@ private:
 	IndexBuffer indexBuffer;
 	VSConstantBuffer<CB_WVP> vsCBuffer;
 	PSConstantBuffer<CB_CAMPOS> psCBuffer;
+	std::vector<Vertex> vertices;
 private:
+	DirectX::BoundingOrientedBox box;
 	DirectX::XMMATRIX translation;
 public:
 	DirectX::XMMATRIX rotation;

@@ -3,6 +3,7 @@
 #include "Window/Window.h"
 #include "Input/Mouse.h"
 #include <DirectXMath.h>
+#include <DirectXCollision.h>
 
 class Camera
 {
@@ -15,7 +16,10 @@ public:
 	DirectX::XMVECTOR getPosition() const { return position; }
 	DirectX::XMMATRIX getView() const { return view; }
 	DirectX::XMMATRIX getProjection() const { return projection; }
+	DirectX::BoundingFrustum getFrustum() const { return frustum; }
 private:
+	DirectX::BoundingFrustum frustum;
+
 	DirectX::XMMATRIX projection;
 	DirectX::XMMATRIX view;
 	DirectX::XMMATRIX rotation;

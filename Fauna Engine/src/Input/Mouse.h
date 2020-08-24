@@ -2,6 +2,8 @@
 
 #include <deque>
 
+class Window;
+
 class Mouse
 {
 public:
@@ -26,7 +28,7 @@ private:
 	std::deque<MouseButton> buffer;
 	static constexpr std::size_t bufferLimit = 52;
 public:	
-	Mouse();
+	Mouse(Window& wnd);
 	Mouse(const Mouse&) = delete;
 	Mouse& operator=(const Mouse&) = delete;
 	~Mouse() = default;
@@ -59,5 +61,6 @@ public:
 	int GetY() const { return pos.y; }
 private:
 	void UpdateParameters();
+	Window& wnd;
 };
 

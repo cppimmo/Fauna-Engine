@@ -164,7 +164,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedModel.cpp" />
-    <ClCompile Include="src\SceneManager.cpp" />
+    <ClCompile Include="RandomGenerator.cpp" />
+    <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Window\AppWindow.cpp" />
     <ClCompile Include="src\Graphics\Shader\GeometryShader.cpp" />
     <ClCompile Include="src\Graphics\Shader\DomainShader.cpp" />
@@ -278,7 +279,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedModel.h" />
-    <ClInclude Include="src\SceneManager.h" />
+    <ClInclude Include="RandomGenerator.h" />
+    <ClInclude Include="src\Scene\SceneManager.h" />
     <ClInclude Include="src\Window\AppWindow.h" />
     <ClInclude Include="src\Graphics\Bindable.h" />
     <ClInclude Include="Color.h" />
@@ -313,7 +315,7 @@
     <ClInclude Include="src\Input\Mouse.h" />
     <ClInclude Include="src\Graphics\Shader\PixelShader.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Graphics\Texture.h" />
     <ClInclude Include="src\Utility\Timer.h" />
     <ClInclude Include="src\Component\Transform.h" />
