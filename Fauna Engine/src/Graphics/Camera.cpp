@@ -9,7 +9,8 @@ Camera::Camera(Window& wnd)
 	target = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	view = XMMatrixIdentity();
-	setProjection(60.0f, static_cast<float>(wnd.getWidth() / wnd.getHeight()), 0.01f, 1000.0f);
+	zoom = 60.0f;
+	setProjection(zoom, static_cast<float>(wnd.getWidth() / wnd.getHeight()), 0.01f, 1000.0f);
 	frustum.CreateFromMatrix(frustum, projection);
 }
 
@@ -50,6 +51,9 @@ void Camera::Update(float dt, Window& wnd)
 		pitch += wnd.gamepad.rightStickY * sensitivity * dt;
 	}
 	std::clamp<float>(pitch, -pitchClamp, pitchClamp);
+
+	//zoom += wnd.mouse.getWheelDelta();
+	//setProjection(XMConvertToRadians(zoom), static_cast<float>(wnd.getWidth() / wnd.getHeight()), 0.01f, 1000.0f);
 
 	rotation = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f);
 	target = XMVector3TransformCoord(defaultForward, rotation);

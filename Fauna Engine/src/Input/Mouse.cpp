@@ -12,9 +12,11 @@ const Mouse::MousePos& Mouse::getPos() const
 	return pos;
 }
 
-const float& Mouse::getWheelDelta() const
+float Mouse::getWheelDelta()
 {
-	return wheelDelta;
+	float localDelta = this->wheelDelta;
+	wheelDelta = 0.0f;
+	return localDelta;
 }
 
 bool Mouse::isButtonPressed(MouseButton button)

@@ -38,6 +38,7 @@ private:
 	static constexpr float pitchClamp = 89.0f;
 	float pitch;
 	float yaw;
+	float zoom;
 	float sensitivity = 0.001f;
 	float moveX;
 	float moveZ;

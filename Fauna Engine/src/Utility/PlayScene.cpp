@@ -1,25 +1,14 @@
-#include "AppWindow.h"
-
 #include "Scene/PlayScene.h"
-
 #include <thread>
 #include <algorithm>
 
-AppWindow::AppWindow(std::wstring& title, UINT width, UINT height)
-	: Window(title, width, height), camera(*this)
+PlayScene::PlayScene(Window& wnd, Graphics& gfx, SceneManager& manager)
+	: Scene(wnd, gfx, manager), camera(wnd)
 {
 }
 
-AppWindow::~AppWindow()
+bool PlayScene::Init()
 {
-	Window::~Window();
-}
-
-bool AppWindow::Init(HINSTANCE hInst)
-{
-	if (!Window::Init(hInst))
-		return false;
-
 	auto loadModel = [this]() {
 		dorito = std::make_unique<Model>();
 		sky = std::make_unique<SkySphere>();
@@ -72,14 +61,14 @@ bool AppWindow::Init(HINSTANCE hInst)
 			{-1.0f, -1.0f,  1.0f,},
 			{ 1.0f, -1.0f,  1.0f},
 		};*/
-		dorito->Create(Window::Gfx(), vertices);
+		dorito->Create(Gfx(), vertices);
 		std::wstring str = L"res/img/skymap.dds";
-		sky->Init(Window::Gfx(), str);
+		sky->Init(Gfx(), str);
 		dorito->setPos(0.0f, 0.35f, 1.5f);
 		dorito->setScale(1.0f, 1.0f, 1.0f);
 	};
 	auto loadTex = [this]() { //no need to check return types handling done in class
-		dorTex.Load(Window::Gfx(), L"res/img/dorito.dds");
+		dorTex.Load(Gfx(), L"res/img/dorito.dds");
 	};
 
 	std::thread modelThread(loadModel);
@@ -89,34 +78,17 @@ bool AppWindow::Init(HINSTANCE hInst)
 	texThread.join();
 
 	return true;
+
+	return true;
 }
 
-int AppWindow::Run()
-{
-	MSG msg = {};
-	while (msg.message != WM_QUIT)
-	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			this->Update();
-			this->Draw();
-		}
-	}
-	return static_cast<int>(msg.wParam);
-}
-
-void AppWindow::Update()
+void PlayScene::Update()
 {
 	float dTime = timer.getElapsed();
 	float eTime = elapsedTimer.getElapsed();
 	timer.Reset();
 
-	if (!Window::aud->Update())
+	if (!Wnd().aud->Update())
 	{
 	}
 	//std::wstring title = L"Time elapsed: ";
@@ -143,10 +115,10 @@ void AppWindow::Update()
 	dorito->transform.position.x = std::clamp(dorito->transform.position.x, -1.5f, 1.5f);
 	dorito->transform.position.y = std::clamp(dorito->transform.position.y, -0.30f, 1.15f);
 
-	if (gamepad.Update())
+	if (Wnd().gamepad.Update())
 	{
-		float joyX = gamepad.leftStickX;
-		float joyY = gamepad.leftStickY;
+		float joyX = Wnd().gamepad.leftStickX;
+		float joyY = Wnd().gamepad.leftStickY;
 		dorito->adjustPos(0.0f, joyY * dTime * 0.85f, 0.0f);
 		dorito->adjustPos(joyX * dTime * 0.85f, 0.0f, 0.0f);
 	}
@@ -154,12 +126,12 @@ void AppWindow::Update()
 	dorito->setScale(1.0f, 1.0f, 1.0f);
 
 	dorito->updateMatrix(camera);
-	camera.Update(dTime, *this);
+	camera.Update(dTime, this->Wnd());
 }
 
-void AppWindow::Draw()
+void PlayScene::Draw()
 {
-	Window::Gfx().Begin(1.0f, 1.0f, 1.0f);
+	Gfx().Begin(1.0f, 1.0f, 1.0f);
 
 	dorito->Bind(Gfx(), Gfx().vertexShader, Gfx().pixelShader, dorTex);
 	dorito->Draw(Gfx(), camera);
@@ -185,7 +157,7 @@ void AppWindow::Draw()
 	ImGui::InputText("Window Title", title, IM_ARRAYSIZE(title));
 	if (ImGui::Button("Set Window Title"))
 	{
-		Window::setTitle(string_to_wstring(std::string(title)).c_str());
+		Wnd().setTitle(string_to_wstring(std::string(title)).c_str());
 	}
 	ImGui::End();
 

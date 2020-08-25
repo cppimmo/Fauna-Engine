@@ -34,7 +34,7 @@ public:
 	~Mouse() = default;
 
 	const MousePos& getPos() const;
-	const float& getWheelDelta() const;
+	float getWheelDelta();
 
 	bool isButtonPressed(MouseButton button);
 

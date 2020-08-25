@@ -49,17 +49,17 @@ class Window
 public:
 	Window(std::wstring& title, UINT width, UINT height);
 	~Window();
-protected:
+
 	bool Init(HINSTANCE hInstance);
 	void setTitle(LPCWSTR text);
 	Graphics& Gfx() { return gfx; }
-public:
+
 	UINT getWidth() const { return width; }
 	UINT getHeight() const { return height; }
 private:
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg,
 		WPARAM wParam, LPARAM lParam);
-protected:
+public:
 	Mouse mouse;
 	Keyboard kbd;
 	Gamepad gamepad;
