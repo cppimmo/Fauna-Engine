@@ -63,4 +63,3 @@ private:
 	void UpdateParameters();
 	Window& wnd;
 };
-

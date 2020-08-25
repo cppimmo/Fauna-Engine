@@ -24,4 +24,3 @@ private:
 	Scene* activeScene;
 	std::size_t sceneIndex;
 };
-

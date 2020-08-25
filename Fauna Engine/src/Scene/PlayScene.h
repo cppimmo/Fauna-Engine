@@ -31,4 +31,3 @@ private:
 	std::unique_ptr<SkySphere> sky;
 	char title[12] = { 0 };
 };
-
