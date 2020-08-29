@@ -1,17 +1,9 @@
 #pragma once
 
 #include <d3d11.h>
+#include "Graphics/ConstantBufferTypes.h"
 #include "Utility/Error.h"
 #include "Graphics/Bindable.h"
-
-////////ConstantBuffer types
-struct CB_WVP {
-	DirectX::XMMATRIX WVP;
-};
-
-struct CB_CAMPOS {
-	DirectX::XMFLOAT3 camPos;
-};
 
 template<class C>//vertex shader
 class VSConstantBuffer;
