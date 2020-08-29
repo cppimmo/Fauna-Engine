@@ -18,7 +18,7 @@ Graphics::~Graphics()
 	ReleaseCOM(pTexSamplerState);
 	ReleaseCOM(pDSLessEqualState);
 	ReleaseCOM(pCWCullState);
-	ReleaseCOM(pCCCullState);
+	ReleaseCOM(pCCWCullState);
 	ReleaseCOM(pTransBlendState);
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
@@ -123,7 +123,34 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width,
 
 	hr = pDevice->CreateDepthStencilState(&dsd, &pDSLessEqualState);
 	THROW_IF_FAILED(hr, "Depth Stencil State creation failed.");
-
+	
+	D3D11_BLEND_DESC blend_desc = {};
+	blend_desc.AlphaToCoverageEnable = false;
+	blend_desc.IndependentBlendEnable = false;
+	
+	blend_desc.RenderTarget[0].BlendEnable = true;
+	blend_desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blend_desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blend_desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_OP_ONE;
+	blend_desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blend_desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blend_desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		
+	hr = pDevice->CreateBlendState(&blend_desc, &pTransBlendState);
+	
+	D3D11_RASTERIZER_DESC cull_desc = {};
+	cull_desc.FillMode = D3D11_FILL_SOLID;
+	cull_desc.CullMode = D3D11_CULL_BACK;
+	
+	cull_desc.FrontCounterClockwise = true;
+	hr = pDevice->CreateRasterizerState(&cull_desc, &CCWCullMode);
+	THROW_IF_FAILED(hr, "Failed to create rasterizer state.");
+	
+	cull_desc.FrontCounterClockwise = false;
+	hr = pDevice->CreateRasterizerState(&cull_desc, &CWCullMode);
+	THROW_IF_FAILED(hr, "Failed to create rasterizer state.");
+	
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
