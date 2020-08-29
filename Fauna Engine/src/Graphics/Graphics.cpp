@@ -7,9 +7,6 @@ using namespace DirectX;
 
 Graphics::~Graphics()
 {
-	ImGui_ImplDX11_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext(context);
 	ReleaseCOM(pSwapChain);
 	ReleaseCOM(pDevice);
 	ReleaseCOM(pContext);
@@ -20,6 +17,12 @@ Graphics::~Graphics()
 	ReleaseCOM(pSkyboxState);
 	ReleaseCOM(pTexSamplerState);
 	ReleaseCOM(pDSLessEqualState);
+	ReleaseCOM(pCWCullState);
+	ReleaseCOM(pCCCullState);
+	ReleaseCOM(pTransBlendState);
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext(context);
 }
 
 bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width, 
