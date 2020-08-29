@@ -70,7 +70,7 @@ private: //com interface objects
 	ID3D11RasterizerState* pWireframeState = nullptr;
 	ID3D11RasterizerState* pSkyboxState = nullptr;
 	ID3D11RasterizerState* pCWCullState = nullptr;
-	ID3D11RasterizerState* pCCWullState = nullptr;
+	ID3D11RasterizerState* pCCWCullState = nullptr;
 	ID3D11DepthStencilState* pDSLessEqualState = nullptr;
 	ID3D11BlendState* pTransBlendState = nullptr;
 	ID3D11SamplerState* pTexSamplerState = nullptr;	
