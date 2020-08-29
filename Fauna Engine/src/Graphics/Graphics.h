@@ -44,7 +44,7 @@ public:
 	ID3D11Device* getDevice() { return pDevice; }
 	ID3D11DeviceContext* getContext() { return pContext; }
 	ID3D11SamplerState* const* getSamplerState() { return &pTexSamplerState; }
-public:
+public: // shaders
 	VertexShader vertexShader;
 	PixelShader pixelShader;
 	VertexShader skySphere_VS;
@@ -55,21 +55,24 @@ private:
 	bool isVsync = false;
 	bool isFullscreen = false;
 	bool isWireframeEnabled = false;
-
+	UINT sampleQuality = 0;
 	/// 
 	ImGuiContext* context;
 	/// 
-
-	UINT sampleQuality = 0;
-	IDXGISwapChain* pSwapChain = nullptr;
+private: //com interface objects
 	ID3D11Device* pDevice = nullptr;
 	ID3D11DeviceContext* pContext = nullptr;
+	IDXGISwapChain* pSwapChain = nullptr;
 	ID3D11RenderTargetView* pRenderTarget = nullptr;
 	ID3D11DepthStencilView* pDepthStencilView = nullptr;
+	ID3D11Texture2D* pDepthStencilBuffer = nullptr;
+	//states
 	ID3D11RasterizerState* pWireframeState = nullptr;
 	ID3D11RasterizerState* pSkyboxState = nullptr;
+	ID3D11RasterizerState* pCWCullState = nullptr;
+	ID3D11RasterizerState* pCCCullState = nullptr;
 	ID3D11DepthStencilState* pDSLessEqualState = nullptr;
-	ID3D11Texture2D* pDepthStencilBuffer = nullptr;
-	ID3D11SamplerState* pTexSamplerState = nullptr;
+	ID3D11BlendState* pTransBlendState = nullptr;
+	ID3D11SamplerState* pTexSamplerState = nullptr;	
 };
 
