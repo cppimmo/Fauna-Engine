@@ -136,22 +136,28 @@ void Model::setPos(float x, float y, float z)
 	transform.position.w = 1.0f;
 }
 
-void Model::adjustRot(float x, float y, float z, float angle)
+void Model::adjustRot(float x, float y, float z)
 {
-	/*transform.rotation.x += x;
+	transform.rotation.x += x;
 	transform.rotation.y += y;
 	transform.rotation.z += z;
-	transform.rotation.w += 1.0f;*/
-	XMVECTOR vect = XMVectorSet(x, y, z, 1.0f);
-	rotation = XMMatrixRotationAxis(vect, XMConvertToRadians(angle));
+	transform.rotation.w += 1.0f;
+	rotation = XMMatrixRotationAxis(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(x));
+	rotation = XMMatrixRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(y));
+	rotation = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f), XMConvertToRadians(z));
+	//XMVECTOR vect = XMVectorSet(x, y, z, 1.0f);
+	//rotation = XMMatrixRotationAxis(vect, XMConvertToRadians(angle));
 }
 
 void Model::setRot(float x, float y, float z)
 {
-	/*transform.rotation.x = x;
+	transform.rotation.x = x;
 	transform.rotation.y = y;
 	transform.rotation.z = z;
-	transform.rotation.w = 1.0f;*/
+	transform.rotation.w = 1.0f;
+	rotation = XMMatrixRotationAxis(XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f), XMConvertToRadians(x));
+	rotation = XMMatrixRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(y));
+	rotation = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f), XMConvertToRadians(z));
 }
 
 void Model::scale(float x, float y, float z)
@@ -190,14 +196,14 @@ void Model::Draw(Graphics& gfx, Camera& camera)
 	vsCBuffer.Update(gfx);
 	vsCBuffer.Unbind(gfx);
 
-	if (camera.getFrustum().Intersects(box))
-	{
+	//if (camera.getFrustum().Intersects(box))
+	//{
 		OutputDebugStringA("Okay clown i can draw you");
 		if (isIndexed) 
 			indexBuffer.Draw(gfx, 0u, 0u);
 		else
 			vertexBuffer.Draw(gfx, 0u);
-	}
+	//}
 	
 }
 

@@ -1,52 +1,125 @@
 #include "Audio/Audio.h"
 #include "Utility/Error.h"
-//#include "d3dUtil.h"
-using namespace irrklang;
+#include "Utility/Util.h"
+#include <wrl.h>
+
+#define FAIL(hr) if (FAILED(hr)) return false;
+
+using namespace Microsoft::WRL;
 
 AudioEngine::~AudioEngine()
 {
-	//while (engine != nullptr)
-	//{
-		engine->drop();
-	//}
+	pSourceReaderConfig->Release();
+	pSourceReader->Release();
+	MFShutdown();
+	pMasterVoice->DestroyVoice();
+	pAudio->StopEngine();
 }
 
-bool AudioEngine::init()
+bool AudioEngine::Init()
 {
-	engine = createIrrKlangDevice();
-	//if (engine == nullptr)
-	//{
-	//	return false;//no error displayed left up to window class
-	//}
+	HRESULT hr = S_OK;
+	hr = XAudio2Create(&pAudio, NULL, XAUDIO2_DEFAULT_PROCESSOR);
+	THROW_IF_FAILED(hr, "Failed to init XAudio2.");
+	
+	hr = pAudio->CreateMasteringVoice(&pMasterVoice);
+	THROW_IF_FAILED(hr, "Failed to create Master voice for XAudio2.");
+
+	hr = MFStartup(MF_VERSION);
+	THROW_IF_FAILED(hr, "MFStartup failed.");
+
+	hr = MFCreateAttributes(&pSourceReaderConfig, 1);
+	THROW_IF_FAILED(hr, "FAiled to create reader config.");
+
+	hr = pSourceReaderConfig->SetUINT32(MF_LOW_LATENCY, true);
+	THROW_IF_FAILED(hr, "Failed to set parameters");
+
 	return true;
 }
 
-void AudioEngine::playSound2D(std::string filePath, bool looped)
+void AudioEngine::PlaySound2D(std::string filePath, bool looped)
 {
-	engine->play2D(filePath.c_str(), looped);
+
 }
 
-void AudioEngine::playSound3D(Sound& sound, float x, float y, 
+bool AudioEngine::LoadFile(const std::wstring& filePath, std::vector<BYTE>& audioData, WAVEFORMATEX** wafeFormatEx, unsigned int& waveLength)
+{
+	HRESULT hr = S_OK;
+
+	DWORD streamIndex = static_cast<DWORD>(MF_SOURCE_READER_FIRST_AUDIO_STREAM);
+
+	if (pSourceReader != nullptr) {
+		pSourceReader->Release();
+	}
+	hr = MFCreateSourceReaderFromURL(filePath.c_str(), pSourceReaderConfig, &pSourceReader);
+	THROW_IF_FAILED(hr, "Failed to load audio file");
+	if (FAILED(hr)) return false;
+	//disable all other audio streams
+	hr = pSourceReader->SetStreamSelection(static_cast<DWORD>(MF_SOURCE_READER_ALL_STREAMS), false);
+	THROW_IF_FAILED(hr, "Failed to set stream selection.");
+	if (FAILED(hr)) return false;
+	//enable first audio stream
+	hr = pSourceReader->SetStreamSelection(streamIndex, true);
+	THROW_IF_FAILED(hr, "Failed to set stream selection.");
+	if (FAILED(hr)) return false;
+
+	//query info about the media file
+	ComPtr<IMFMediaType> pMediaType = nullptr;
+	hr = pSourceReader->GetNativeMediaType(streamIndex, 0, pMediaType.GetAddressOf());
+	THROW_IF_FAILED(hr, "Failed to retrieve native media type.");
+	if (FAILED(hr)) return false;
+
+	//make sure that the file is an audio file
+	GUID majorType = {};
+	hr = pMediaType->GetGUID(MF_MT_MAJOR_TYPE, &majorType);
+	THROW_IF_FAILED(hr, "Failed to retrive GUID from file type.");
+	if (majorType != MFMediaType_Audio)
+		return false;
+
+	//check for file compression
+	GUID subType = {};
+	hr = pMediaType->GetGUID(MF_MT_MAJOR_TYPE, &subType);
+	if (subType == MFAudioFormat_Float || subType == MFAudioFormat_PCM)
+	{
+		//do nothing, uncompressed
+	}
+	else
+	{
+		//audio file is compressed bossman so we tell the 
+		//source reader to decode and it looks for a way to do dat
+		ComPtr<IMFMediaType> partialType = nullptr;
+		hr = MFCreateMediaType(partialType.GetAddressOf());
+		THROW_IF_FAILED(hr, "Create media type failed.");
+		if (FAILED(hr)) return false;
+		//set the media type to audio.
+		hr = partialType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
+		THROW_IF_FAILED(hr, "Set GUID failed.");
+		if (FAILED(hr)) return false;
+		//request uncompressed data
+		hr = partialType->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
+		THROW_IF_FAILED(hr, "Set GUID failed.");
+		if (FAILED(hr)) return false;
+	
+		hr = pSourceReader->SetCurrentMediaType(streamIndex, nullptr, partialType.Get());
+		THROW_IF_FAILED(hr, "Set media type failed.");
+	}
+
+	//uncompress the data and load it into a xaudio2 buffer
+	ComPtr<IMFMediaType> uncompressedAudioType = nullptr;
+	hr = pSourceReader->GetCurrentMediaType(streamIndex, uncompressedAudioType.GetAddressOf());
+	THROW_IF_FAILED(hr, "get media type failed");
+
+
+
+	return true;
+}
+
+void AudioEngine::PlaySound3D(SoundEffect& sound, float x, float y, 
 	float z, bool looped)
 {
-	vec3df pos(x, y, z);
-	engine->play3D(sound.getSource(), pos, looped);
+
 }
 
-Sound::Sound(AudioEngine& engine, std::string filePath)
-{
-	source = engine.getEngine()->addSoundSourceFromFile(filePath.c_str());
-}
-
-Sound::~Sound()
-{
-	source->drop();
-}
-
-void Sound::setVolume(float volume)
-{
-	source->setDefaultVolume(volume);
-}
 /*AudioEngine::AudioEngine()
 {
 }

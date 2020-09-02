@@ -1,29 +1,50 @@
 #pragma once
 
-#include <irrKlang.h>
+#include "Win.h"
+#include <xaudio2.h>
 #include <string>
+#include <vector>
 
-class Sound;
+#include <mfapi.h>
+#include <mfidl.h>
+#include <mfreadwrite.h>
+
+#pragma comment(lib, "mfreadwrite.lib")
+#pragma comment(lib, "mfplat.lib")
+#pragma comment(lib, "mfuuid")
+
+class SoundEffect;
 
 class AudioEngine
 {
+	friend class SoundEffect;
 public:
 	AudioEngine() = default;
 	AudioEngine(const AudioEngine&) = delete;
 	AudioEngine& operator=(const AudioEngine&) = delete;
 	~AudioEngine();
 
-	bool init();
-	void playSound2D(std::string filePath, bool looped = false);
-	void playSound3D(Sound& sound, float x, float y, 
+	bool Init();
+	void PlaySound2D(std::string filePath, bool looped = false);
+	void PlaySound3D(SoundEffect& sound, float x, float y, 
 		float z, bool looped = false);
-
-	irrklang::ISoundEngine* getEngine() const { return engine; }
 private:
-	irrklang::ISoundEngine* engine = nullptr;
+	bool LoadFile(const std::wstring& filePath, std::vector<BYTE>& audioData, WAVEFORMATEX** wafeFormatEx, unsigned int& waveLength);
+	IMFAttributes* pSourceReaderConfig = nullptr;
+	IMFSourceReader* pSourceReader = nullptr;
+	IXAudio2* pAudio = nullptr;
+	IXAudio2MasteringVoice* pMasterVoice = nullptr;
 };
 
-class Sound
+class SoundEffect 
+{
+public:
+
+private:
+
+};
+
+/*class Sound
 {
 public:
 	Sound(AudioEngine& engine, std::string filePath);
@@ -33,7 +54,7 @@ public:
 	irrklang::ISoundSource* getSource() const { return source; }
 private:
 	irrklang::ISoundSource* source;
-};
+};*/
 /*#include "Win.h"
 #include <xaudio2.h>
 

@@ -122,7 +122,7 @@ void PlayScene::Update()
 		dorito->adjustPos(0.0f, joyY * dTime * 0.85f, 0.0f);
 		dorito->adjustPos(joyX * dTime * 0.85f, 0.0f, 0.0f);
 	}
-	dorito->adjustRot(0.0f, 1.0f, 0.0f, sin(eTime) * 35.0f);
+	dorito->adjustRot(0.0f, sin(eTime) * 35.0f, 0.0f);
 	dorito->setScale(1.0f, 1.0f, 1.0f);
 
 	dorito->updateMatrix(camera);

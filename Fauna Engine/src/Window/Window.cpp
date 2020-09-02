@@ -71,7 +71,8 @@ bool Window::Init(HINSTANCE hInstance) try
 
     SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)this);
 
-    if (!gfx.init(false, true, width, height, hWnd)) {
+    gfx = std::make_unique<Graphics>();
+    if (!gfx->Init(false, true, width, height, hWnd)) {
         THROW_NORMAL("Failed to create graphics");
     }
     aud = std::make_unique<AudioEngine>();

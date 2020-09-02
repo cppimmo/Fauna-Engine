@@ -1,7 +1,6 @@
 #include "Graphics/Graphics.h"
 #include "Utility/Error.h"
 #include "Utility/Util.h"
-//#include "imgui/imgui_impl_dx11.h"
 
 using namespace DirectX;
 
@@ -9,20 +8,10 @@ Graphics::~Graphics()
 {
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext(context);
-	ReleaseCOM(pSwapChain);
-	ReleaseCOM(pDevice);
-	ReleaseCOM(pContext);
-	ReleaseCOM(pRenderTarget);
-	ReleaseCOM(pDepthStencilBuffer);
-	ReleaseCOM(pDepthStencilView);
-	ReleaseCOM(pWireframeState);
-	ReleaseCOM(pSkyboxState);
-	ReleaseCOM(pTexSamplerState);
-	ReleaseCOM(pDSLessEqualState);
+	ImGui::DestroyContext();
 }
 
-bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width, 
+bool Graphics::Init(bool isFullscreen, bool isVsync, unsigned int width, 
 	unsigned int height, HWND hWnd) try //function try catch
 {
 	this->isFullscreen = isFullscreen;
@@ -46,15 +35,15 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width,
 	D3D_FEATURE_LEVEL feature_level;
 	hr = D3D11CreateDevice(
 		nullptr,
-		D3D_DRIVER_TYPE_HARDWARE, 
+		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
-		creationFlags, 
-		featureLevels, 
+		creationFlags,
+		featureLevels,
 		std::size(featureLevels),
 		D3D11_SDK_VERSION,
-		&pDevice, 
+		pDevice.GetAddressOf(),
 		&feature_level,
-		&pContext
+		pContext.GetAddressOf()
 	);
 	THROW_IF_FAILED(hr, "Create device and swapchain failed");
 	if ((feature_level != D3D_FEATURE_LEVEL_11_0) && (feature_level != D3D_FEATURE_LEVEL_11_1)) {
@@ -83,34 +72,34 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width,
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	sd.Flags = 0;
 
-	IDXGIDevice* dxgiDevice = nullptr;
-	hr = pDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice));
+	wrl::ComPtr<IDXGIDevice> dxgiDevice = nullptr;
+	hr = pDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(dxgiDevice.GetAddressOf()));
 	THROW_IF_FAILED(hr, "BRO");
-	IDXGIAdapter* dxgiAdapter = nullptr;
-	dxgiDevice->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&dxgiAdapter));
+	wrl::ComPtr<IDXGIAdapter> dxgiAdapter = nullptr;
+	dxgiDevice->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(dxgiAdapter.GetAddressOf()));
 
-	IDXGIFactory* dxgiFactory = nullptr;
-	dxgiAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&dxgiFactory));
+	wrl::ComPtr<IDXGIFactory> dxgiFactory = nullptr;
+	dxgiAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(dxgiFactory.GetAddressOf()));
 	THROW_IF_FAILED(hr, "Facotry");
-	dxgiFactory->CreateSwapChain(pDevice, &sd, &pSwapChain);
-	ReleaseCOM(dxgiDevice);
-	ReleaseCOM(dxgiAdapter);
-	ReleaseCOM(dxgiFactory);
+	dxgiFactory->CreateSwapChain(pDevice.Get(), &sd, pSwapChain.GetAddressOf());
+	dxgiDevice.Reset();
+	dxgiAdapter.Reset();
+	dxgiFactory.Reset();
 
-	onSize(width, height);
+	this->onSize(width, height);
 
 	D3D11_RASTERIZER_DESC rsd = {};
 	rsd.FillMode = D3D11_FILL_WIREFRAME;
 	rsd.CullMode = D3D11_CULL_NONE;
 	
-	hr = pDevice->CreateRasterizerState(&rsd, &pWireframeState);
+	hr = pDevice->CreateRasterizerState(&rsd, pWireframeState.GetAddressOf());
 	THROW_IF_FAILED(hr, "Create rasterizer state failed");
 
 	D3D11_RASTERIZER_DESC skyRSD = {};
 	skyRSD.FillMode = D3D11_FILL_SOLID;
 	skyRSD.CullMode = D3D11_CULL_NONE;
 
-	hr = pDevice->CreateRasterizerState(&skyRSD, &pSkyboxState);
+	hr = pDevice->CreateRasterizerState(&skyRSD, pSkyboxState.GetAddressOf());
 	THROW_IF_FAILED(hr, "Skybox creation failed.");
 
 	D3D11_DEPTH_STENCIL_DESC dsd = {};
@@ -118,8 +107,35 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width,
 	dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
-	hr = pDevice->CreateDepthStencilState(&dsd, &pDSLessEqualState);
+	hr = pDevice->CreateDepthStencilState(&dsd, pDSLessEqualState.GetAddressOf());
 	THROW_IF_FAILED(hr, "Depth Stencil State creation failed.");
+
+	D3D11_BLEND_DESC blend_desc = {};
+	blend_desc.AlphaToCoverageEnable = false;
+	blend_desc.IndependentBlendEnable = false;
+
+	blend_desc.RenderTarget[0].BlendEnable = true;
+	blend_desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blend_desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blend_desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blend_desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blend_desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blend_desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	hr = pDevice->CreateBlendState(&blend_desc, pTransBlendState.GetAddressOf());
+
+	D3D11_RASTERIZER_DESC cull_desc = {};
+	cull_desc.FillMode = D3D11_FILL_SOLID;
+	cull_desc.CullMode = D3D11_CULL_BACK;
+
+	cull_desc.FrontCounterClockwise = true;
+	hr = pDevice->CreateRasterizerState(&cull_desc, pCCWCullState.GetAddressOf());
+	THROW_IF_FAILED(hr, "Failed to create rasterizer state.");
+
+	cull_desc.FrontCounterClockwise = false;
+	hr = pDevice->CreateRasterizerState(&cull_desc, pCWCullState.GetAddressOf());
+	THROW_IF_FAILED(hr, "Failed to create rasterizer state.");
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
@@ -155,15 +171,16 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width,
 	tsd.ComparisonFunc = D3D11_COMPARISON_NEVER;
 	tsd.MinLOD = 0;
 	tsd.MaxLOD = D3D11_FLOAT32_MAX;
-	hr = pDevice->CreateSamplerState(&tsd, &pTexSamplerState);
+	hr = pDevice->CreateSamplerState(&tsd, pTexSamplerState.GetAddressOf());
 	THROW_IF_FAILED(hr, "Create sampler state failed");
 	//setup imgui
 	IMGUI_CHECKVERSION();
-	ImGuiContext* context = ImGui::CreateContext();
-	ImGui::SetCurrentContext(context);
-	ImGuiIO& io = ImGui::GetIO();
+	ImGui::CreateContext();
+	//ImGuiContext* context = ImGui::CreateContext();
+	//ImGui::SetCurrentContext(context);
+	//ImGuiIO& io = ImGui::GetIO();
 	ImGui_ImplWin32_Init(hWnd);
-	ImGui_ImplDX11_Init(this->pDevice, this->pContext);
+	ImGui_ImplDX11_Init(this->pDevice.Get(), this->pContext.Get());
 	ImGui::StyleColorsDark();
 	return true;
 } catch (HrException& e) {
@@ -173,9 +190,9 @@ bool Graphics::init(bool isFullscreen, bool isVsync, unsigned int width,
 
 void Graphics::onSize(unsigned int newWidth, unsigned int newHeight) try
 {
-	ReleaseCOM(pRenderTarget);
-	ReleaseCOM(pDepthStencilView);
-	ReleaseCOM(pDepthStencilBuffer);
+	pRenderTarget.Reset();
+	pDepthStencilView.Reset();
+	pDepthStencilBuffer.Reset();
 
 	HRESULT hr = S_OK;
 
@@ -184,7 +201,7 @@ void Graphics::onSize(unsigned int newWidth, unsigned int newHeight) try
 	hr = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&BackBuffer));
 	THROW_IF_FAILED(hr, "GetBuffer failed");
 	//Create our Render Target
-	hr = pDevice->CreateRenderTargetView(BackBuffer, nullptr, &pRenderTarget);
+	hr = pDevice->CreateRenderTargetView(BackBuffer, nullptr, pRenderTarget.GetAddressOf());
 	ReleaseCOM(BackBuffer);//release backbuffer incase of exception
 	THROW_IF_FAILED(hr, "Create render target view failed");
 
@@ -201,12 +218,12 @@ void Graphics::onSize(unsigned int newWidth, unsigned int newHeight) try
 	ds.CPUAccessFlags = 0;
 	ds.MiscFlags = 0;
 
-	hr = pDevice->CreateTexture2D(&ds, nullptr, &pDepthStencilBuffer);
+	hr = pDevice->CreateTexture2D(&ds, nullptr, pDepthStencilBuffer.GetAddressOf());
 	THROW_IF_FAILED(hr, "DepthStencilBuffer could not be created");
-	hr = pDevice->CreateDepthStencilView(pDepthStencilBuffer, nullptr, &pDepthStencilView);
+	hr = pDevice->CreateDepthStencilView(pDepthStencilBuffer.Get(), nullptr, pDepthStencilView.GetAddressOf());
 	THROW_IF_FAILED(hr, "DepthStencilView could not be created");
 	//Set our Render Target
-	pContext->OMSetRenderTargets(1, &pRenderTarget, pDepthStencilView);
+	pContext->OMSetRenderTargets(1, pRenderTarget.GetAddressOf(), pDepthStencilView.Get());
 
 	CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(newWidth), static_cast<float>(newHeight), 0.0f, 1.0f);
 	pContext->RSSetViewports(1, &viewport);
@@ -225,17 +242,30 @@ void Graphics::setWireframe(bool value)
 {
 	isWireframeEnabled = value;
 	if (value)
-		pContext->RSSetState(pWireframeState);
+		pContext->RSSetState(pWireframeState.Get());
 	else
 		pContext->RSSetState(nullptr);
+}
+
+void Graphics::setBlendState(bool value)
+{
+	if (value)
+	{
+		::XMFLOAT4 blendFactor = { 0.75f, 0.75f, 0.75f, 1.0f };
+		pContext->OMSetBlendState(pTransBlendState.Get(), reinterpret_cast<float*>(&blendFactor), 0xffffffff);
+	}
+	else
+	{
+		pContext->OMSetBlendState(0, 0, 0xffffffff);
+	}
 }
 
 void Graphics::setSkyboxState(bool value)
 {
 	if (value)
 	{
-		pContext->RSSetState(pSkyboxState);
-		pContext->OMSetDepthStencilState(pDSLessEqualState, 0);
+		pContext->RSSetState(pSkyboxState.Get());
+		pContext->OMSetDepthStencilState(pDSLessEqualState.Get(), 0);
 	}
 	else
 	{
@@ -247,8 +277,8 @@ void Graphics::setSkyboxState(bool value)
 void Graphics::Begin(float r, float g, float b)
 {
 	const float color[4] = { r, g, b, 1.0f };
-	pContext->ClearRenderTargetView(pRenderTarget, color);
-	pContext->ClearDepthStencilView(pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	pContext->ClearRenderTargetView(pRenderTarget.Get(), color);
+	pContext->ClearDepthStencilView(pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	pContext->PSSetSamplers(0u, 1u, &pTexSamplerState);
 }
 

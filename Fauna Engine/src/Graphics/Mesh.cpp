@@ -1,7 +1,7 @@
 #include "Graphics/Mesh.h"
 #include "Utility/Error.h"
 #include "Utility/Util.h"
-/*
+
 using namespace DirectX;
 
 /*Model::Model(Graphics& gfx)
@@ -212,12 +212,12 @@ void Model::unbind()
 	pGfx->getContext()->PSSetShader(nullptr, nullptr, 0u);
 	pGfx->getContext()->IASetVertexBuffers(0u, 0u, nullptr, nullptr, nullptr);
 	if (isIndexed) pGfx->getContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0u);
-}
-bool Model3D::init(Graphics& gfx, const std::string& filePath)
+}*/
+bool Model3D::Init(Graphics& gfx, const std::string& filePath)
 {
 	try
 	{
-		if (!this->load(gfx, filePath))
+		if (!this->Load(gfx, filePath))
 			THROW_NORMAL("Could not load 3d model: " + filePath);
 	}
 	catch (HrException& e)
@@ -228,7 +228,7 @@ bool Model3D::init(Graphics& gfx, const std::string& filePath)
 	return true;
 }
 
-bool Model3D::load(Graphics& gfx, const std::string& filePath)
+bool Model3D::Load(Graphics& gfx, const std::string& filePath)
 {
 	Assimp::Importer importer;
 
@@ -292,7 +292,7 @@ Mesh Model3D::processMesh(Graphics& gfx, aiMesh* pMesh, const aiScene* pScene)
 	return Mesh(gfx, vertices, indices);
 }
 
-void Model3D::bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& tex)
+void Model3D::Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& tex)
 {
 	gfx.getContext()->VSSetShader(vs.getVertexShader(), nullptr, 0u);
 	gfx.getContext()->PSSetShader(ps.getPixelShader(), nullptr, 0u);
@@ -301,21 +301,28 @@ void Model3D::bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& te
 	gfx.getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void Model3D::draw(Graphics& gfx)
+void Model3D::Draw(Graphics& gfx, Camera& camera)
 {
+	XMMATRIX scale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	XMMATRIX rotation = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f), 0.0f);
+	XMMATRIX transform = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
+
+	XMMATRIX world = scale * rotation * transform;
+
+	vsCBuffer.data.WVP = XMMatrixTranspose(world * camera.getView() * camera.getProjection());
 	vsCBuffer.Bind(gfx);
-	vsCBuffer.Update();
+	vsCBuffer.Update(gfx);
 	vsCBuffer.Unbind(gfx);
 
 	for (std::size_t i = 0; i < meshes.size(); i++)
 	{
-		meshes[i].bind();
-		meshes[i].draw();
-		meshes[i].unbind();
+		meshes[i].Bind();
+		meshes[i].Draw();
+		meshes[i].Unbind();
 	}
 }
 
-void Model3D::unbind(Graphics& gfx)
+void Model3D::Unbind(Graphics& gfx)
 {
 	gfx.getContext()->VSSetShader(nullptr, nullptr, 0u);
 	gfx.getContext()->PSSetShader(nullptr, nullptr, 0u);
@@ -341,20 +348,20 @@ Mesh::Mesh(const Mesh& mesh)
 	this->vertexBuffer = mesh.vertexBuffer;
 }
 
-void Mesh::bind() noexcept
+void Mesh::Bind() noexcept
 {
 	const UINT offset = 0;
 	pContext->IASetVertexBuffers(0u, 1u, vertexBuffer.getBuffer(), vertexBuffer.getStridePtr(), &offset);
 	pContext->IASetIndexBuffer(indexBuffer.getBuffer(), DXGI_FORMAT_R32_UINT, 0u);
 }
 
-void Mesh::draw() noexcept
+void Mesh::Draw() noexcept
 {
 	pContext->DrawIndexed(indexBuffer.getIndexCount(), 0u, 0u);
 }
 
-void Mesh::unbind() noexcept
+void Mesh::Unbind() noexcept
 {
 	pContext->IASetVertexBuffers(0u, 0u, nullptr, nullptr, nullptr);
 	pContext->IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0u);
-}*/
+}

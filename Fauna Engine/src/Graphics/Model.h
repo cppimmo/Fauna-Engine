@@ -37,7 +37,7 @@ public:
 	void resetMatrix();
 	void adjustPos(float x, float y, float z);
 	void setPos(float x, float y, float z);
-	void adjustRot(float x, float y, float z, float angle);
+	void adjustRot(float x, float y, float z);
 	void setRot(float x, float y, float z);
 	void scale(float x, float y, float z);
 	void setScale(float x, float y, float z);

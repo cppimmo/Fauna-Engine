@@ -10,24 +10,85 @@ AppWindow::AppWindow(std::wstring& title, UINT width, UINT height)
 {
 }
 
-AppWindow::~AppWindow()
-{
-	Window::~Window();
-}
-
 bool AppWindow::Init(HINSTANCE hInst)
 {
 	if (!Window::Init(hInst))
 		return false;
-
+	//THROW_NORMAL("BRUH LOL");
 	auto loadModel = [this]() {
 		dorito = std::make_unique<Model>();
+		box = std::make_unique<Model>();
+		smallGear = std::make_unique<Model3D>();
+		largeGear = std::make_unique<Model3D>();
 		sky = std::make_unique<SkySphere>();
 		//DORITO
 		std::vector<Vertex> vertices = {
 			Vertex(0.0f, 0.5f, 0.0f, 0.5f, 1.0f),
 			Vertex(0.5f, -0.5f, 0.0f, 1.0f, 0.0f),
 			Vertex(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f),
+		};
+		std::vector<Vertex> boxVertices =
+		{
+			// Front Face
+			Vertex(-1.0f, -1.0f, -1.0f, 0.0f, 1.0f),
+			Vertex(-1.0f,  1.0f, -1.0f, 0.0f, 0.0f),
+			Vertex(1.0f,  1.0f, -1.0f, 1.0f, 0.0f),
+			Vertex(1.0f, -1.0f, -1.0f, 1.0f, 1.0f),
+
+			// Back Face
+			Vertex(-1.0f, -1.0f, 1.0f, 1.0f, 1.0f),
+			Vertex(1.0f, -1.0f, 1.0f, 0.0f, 1.0f),
+			Vertex(1.0f,  1.0f, 1.0f, 0.0f, 0.0f),
+			Vertex(-1.0f,  1.0f, 1.0f, 1.0f, 0.0f),
+
+			// Top Face
+			Vertex(-1.0f, 1.0f, -1.0f, 0.0f, 1.0f),
+			Vertex(-1.0f, 1.0f,  1.0f, 0.0f, 0.0f),
+			Vertex(1.0f, 1.0f,  1.0f, 1.0f, 0.0f),
+			Vertex(1.0f, 1.0f, -1.0f, 1.0f, 1.0f),
+
+			// Bottom Face
+			Vertex(-1.0f, -1.0f, -1.0f, 1.0f, 1.0f),
+			Vertex(1.0f, -1.0f, -1.0f, 0.0f, 1.0f),
+			Vertex(1.0f, -1.0f,  1.0f, 0.0f, 0.0f),
+			Vertex(-1.0f, -1.0f,  1.0f, 1.0f, 0.0f),
+
+			// Left Face
+			Vertex(-1.0f, -1.0f,  1.0f, 0.0f, 1.0f),
+			Vertex(-1.0f,  1.0f,  1.0f, 0.0f, 0.0f),
+			Vertex(-1.0f,  1.0f, -1.0f, 1.0f, 0.0f),
+			Vertex(-1.0f, -1.0f, -1.0f, 1.0f, 1.0f),
+
+			// Right Face
+			Vertex(1.0f, -1.0f, -1.0f, 0.0f, 1.0f),
+			Vertex(1.0f,  1.0f, -1.0f, 0.0f, 0.0f),
+			Vertex(1.0f,  1.0f,  1.0f, 1.0f, 0.0f),
+			Vertex(1.0f, -1.0f,  1.0f, 1.0f, 1.0f),
+		};
+		std::vector<DWORD> boxIndices = {
+			// Front Face
+			0,  1,  2,
+			0,  2,  3,
+
+			// Back Face
+			4,  5,  6,
+			4,  6,  7,
+
+			// Top Face
+			8,  9, 10,
+			8, 10, 11,
+
+			// Bottom Face
+			12, 13, 14,
+			12, 14, 15,
+
+			// Left Face
+			16, 17, 18,
+			16, 18, 19,
+
+			// Right Face
+			20, 21, 22,
+			20, 22, 23
 		};
 		/*td::vector<Vertex> boxVertices = {
 			{ -1.0f,  1.0f, -1.0f, },
@@ -73,10 +134,15 @@ bool AppWindow::Init(HINSTANCE hInst)
 			{ 1.0f, -1.0f,  1.0f},
 		};*/
 		dorito->Create(Window::Gfx(), vertices);
+		box->Create(Window::Gfx(), boxVertices, boxIndices);
+		//smallGear->Init(Window::Gfx(), "res/8gear.obj");
+		//largeGear->Init(Window::Gfx(), "res/20gear.obj");
 		std::wstring str = L"res/img/skymap.dds";
 		sky->Init(Window::Gfx(), str);
 		dorito->setPos(0.0f, 0.35f, 1.5f);
 		dorito->setScale(1.0f, 1.0f, 1.0f);
+		box->setPos(2.0f, 1.0f, 6.0f);
+		box->setScale(3.0f, 1.0f, 4.0f);
 	};
 	auto loadTex = [this]() { //no need to check return types handling done in class
 		dorTex.Load(Window::Gfx(), L"res/img/dorito.dds");
@@ -150,28 +216,34 @@ void AppWindow::Update()
 		dorito->adjustPos(0.0f, joyY * dTime * 0.85f, 0.0f);
 		dorito->adjustPos(joyX * dTime * 0.85f, 0.0f, 0.0f);
 	}
-	dorito->adjustRot(0.0f, 1.0f, 0.0f, sin(eTime) * 35.0f);
+	dorito->adjustRot(0.0f, sin(eTime) * 35.0f, 0.0f);
 	dorito->setScale(1.0f, 1.0f, 1.0f);
 
 	dorito->updateMatrix(camera);
+	box->updateMatrix(camera);
+
 	camera.Update(dTime, *this);
 }
 
 void AppWindow::Draw()
 {
-	Window::Gfx().Begin(1.0f, 1.0f, 1.0f);
+	Window::Gfx().Begin(0.0f, 0.0f, 0.0f);
 
 	dorito->Bind(Gfx(), Gfx().vertexShader, Gfx().pixelShader, dorTex);
 	dorito->Draw(Gfx(), camera);
 	dorito->Unbind(Gfx());
 
-	Gfx().setSkyboxState(true);
+	box->Bind(Gfx(), Gfx().vertexShader, Gfx().pixelShader, dorTex);
+	box->Draw(Gfx(), camera);
+	box->Unbind(Gfx());
+
+	//Gfx().setSkyboxState(true);
 	//wnd.getGraphics().setWireframe(true);
-	sky->Bind(Gfx(), Gfx().skySphere_VS, Gfx().skySphere_PS);
-	sky->Draw(Gfx(), camera);
-	sky->Unbind(Gfx());
+	//sky->Bind(Gfx(), Gfx().skySphere_VS, Gfx().skySphere_PS);
+	//sky->Draw(Gfx(), camera);
+	//sky->Unbind(Gfx());
 	//wnd.getGraphics().setWireframe(false);
-	Gfx().setSkyboxState(false);
+	//Gfx().setSkyboxState(false);
 
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();

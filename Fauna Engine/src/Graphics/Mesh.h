@@ -1,6 +1,6 @@
 #pragma once
 
-/*#include "Graphics/Graphics.h"
+#include "Graphics/Graphics.h"
 #include "Graphics/VertexBuffer.h"
 #include <Graphics/IndexBuffer.h>
 #include "Graphics/ConstantBuffer.h"
@@ -24,17 +24,17 @@ public:
 	Model3D& operator=(const Model3D&) = delete;
 	~Model3D() = default;
 
-	bool init(Graphics& gfx, const std::string& filePath);
-	bool load(Graphics& gfx, const std::string& filePath);
-	void processNode(Graphics& gfx, aiNode* pNode, const aiScene* pScene);
-	Mesh processMesh(Graphics& gfx, aiMesh* pMesh, const aiScene* pScene);
-	void bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& tex);
-	void draw(Graphics& gfx);
-	void unbind(Graphics& gfx);
-public:
+	bool Init(Graphics& gfx, const std::string& filePath);
+	void Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& tex);
+	void Draw(Graphics& gfx, Camera& camera);
+	void Unbind(Graphics& gfx);
+private:
 	Transform transform;
 	VSConstantBuffer<CB_WVP> vsCBuffer;
-private:
+private:	
+	bool Load(Graphics& gfx, const std::string& filePath);	
+	void processNode(Graphics& gfx, aiNode* pNode, const aiScene* pScene);
+	Mesh processMesh(Graphics& gfx, aiMesh* pMesh, const aiScene* pScene);
 	std::vector<Mesh> meshes;
 };
 
@@ -43,11 +43,11 @@ class Mesh
 public:
 	Mesh(Graphics& gfx, std::vector<Vertex>& vertices, std::vector<DWORD>& indices);
 	Mesh(const Mesh& mesh);
-	void bind() noexcept;
-	void draw() noexcept;
-	void unbind() noexcept;
+	void Bind() noexcept;
+	void Draw() noexcept;
+	void Unbind() noexcept;
 private:
 	VertexBuffer<Vertex> vertexBuffer;
 	IndexBuffer indexBuffer;
 	ID3D11DeviceContext* pContext;
-};*/
+};

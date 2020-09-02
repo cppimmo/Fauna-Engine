@@ -48,11 +48,11 @@ class Window
 	friend class Camera;
 public:
 	Window(std::wstring& title, UINT width, UINT height);
-	~Window();
+	virtual ~Window();
 
 	bool Init(HINSTANCE hInstance);
 	void setTitle(LPCWSTR text);
-	Graphics& Gfx() { return gfx; }
+	Graphics& Gfx() { return *gfx.get(); }
 
 	UINT getWidth() const { return width; }
 	UINT getHeight() const { return height; }
@@ -66,7 +66,7 @@ public:
 	//AudioEngine audioEngine;
 	std::unique_ptr<DirectX::AudioEngine> aud;
 private:
-	Graphics gfx;
+	std::unique_ptr<Graphics> gfx;
 	UINT width, height;
 	LPCTSTR WndClassName = L"window";
 	std::wstring title;

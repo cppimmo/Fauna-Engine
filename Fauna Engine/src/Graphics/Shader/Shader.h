@@ -4,13 +4,16 @@
 #include <d3dcompiler.h>
 #include <string>
 #include "Utility/Util.h"
+#include <wrl.h>
+
+namespace wrl = Microsoft::WRL;
 
 class Shader//virutal class
 {
 public:
-	~Shader() { ReleaseCOM(pBlob); }
-	virtual ID3DBlob* getBlob() const { return pBlob; }
+	virtual ~Shader() = default;
+	ID3DBlob* getBlob() const { return pBlob.Get(); }
 protected:
-	ID3DBlob* pBlob = nullptr;
+	wrl::ComPtr<ID3DBlob> pBlob = nullptr;
 };
 
