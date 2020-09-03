@@ -41,7 +41,7 @@
     <ClCompile Include="src\Graphics\Camera.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
-    <ClCompile Include="src\Utility\PlayScene.cpp" />
+    <ClCompile Include="src\Scene\PlayScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />

@@ -31,14 +31,7 @@ XINPUT_GAMEPAD* Gamepad::getGamepad()
 
 bool Gamepad::isConnected()
 {
-    if (XInputGetState(controllerID - 1, &state) == ERROR_SUCCESS)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return XInputGetState(controllerID - 1, &state) == ERROR_SUCCESS;
 }
 
 float normalize(float input, const float min, const float max)

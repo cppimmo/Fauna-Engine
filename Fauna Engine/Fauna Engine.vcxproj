@@ -164,7 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedModel.cpp" />
-    <ClCompile Include="src\Utility\PlayScene.cpp" />
+    <ClCompile Include="src\Scene\PlayScene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Window\AppWindow.cpp" />
     <ClCompile Include="src\Graphics\Shader\GeometryShader.cpp" />

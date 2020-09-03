@@ -4,7 +4,6 @@
 
 #include <thread>
 #include <algorithm>
-#include "Utility/RandomGenerator.h"
 
 AppWindow::AppWindow(std::wstring& title, UINT width, UINT height)
 	: Window(title, width, height), camera(*this)
@@ -195,13 +194,13 @@ void AppWindow::Draw()
 	box->Draw(Gfx(), camera);
 	box->Unbind(Gfx());
 
-	//Gfx().setSkyboxState(true);
-	//wnd.getGraphics().setWireframe(true);
-	//sky->Bind(Gfx(), Gfx().skySphere_VS, Gfx().skySphere_PS);
-	//sky->Draw(Gfx(), camera);
-	//sky->Unbind(Gfx());
-	//wnd.getGraphics().setWireframe(false);
-	//Gfx().setSkyboxState(false);
+	Gfx().setSkyboxState(true);
+	//Gfx().setWireframe(true);
+	sky->Bind(Gfx(), Gfx().skySphere_VS, Gfx().skySphere_PS);
+	sky->Draw(Gfx(), camera);
+	sky->Unbind(Gfx());
+	//Gfx().setWireframe(false);
+	Gfx().setSkyboxState(false);
 
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
