@@ -279,6 +279,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedModel.h" />
+    <ClInclude Include="src\Graphics\ConstantBufferTypes.h" />
     <ClInclude Include="src\Scene\PlayScene.h" />
     <ClInclude Include="src\Utility\RandomGenerator.h" />
     <ClInclude Include="src\Scene\SceneManager.h" />

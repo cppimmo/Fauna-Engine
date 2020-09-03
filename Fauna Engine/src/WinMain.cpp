@@ -15,8 +15,6 @@
 #include "Utility/Error.h"
 #include <fstream>
 #include <exception>
-#include <random>
-#include <ctime>
 #include <string>
 
 bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& height, bool& isVysnc);
@@ -26,7 +24,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
     LPSTR lpCmdLine,
     int nShowCmd)
 {
-    srand(time(nullptr));
     try 
     {
         std::wstring title = L"D3D Application";

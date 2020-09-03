@@ -9,12 +9,12 @@ class CubeTexture
 {
 public:
 	CubeTexture() = default;
-	~CubeTexture();
+	~CubeTexture() = default;
 
 	bool Load(Graphics& gfx, std::wstring& filePath);
 
-	ID3D11ShaderResourceView** getTexture() { return &pSRV; }
+	ID3D11ShaderResourceView* const* getTexture() const { return pSRV.GetAddressOf(); }
 private:
-	ID3D11ShaderResourceView* pSRV = nullptr;
-	ID3D11Texture2D* pTexture = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pSRV = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture = nullptr;
 };

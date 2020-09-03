@@ -46,7 +46,7 @@ private:
 	VertexBuffer<Vertex> vertexBuffer;
 	IndexBuffer indexBuffer;
 	VSConstantBuffer<CB_WVP> vsCBuffer;
-	PSConstantBuffer<CB_CAMPOS> psCBuffer;
+	PSConstantBuffer<CB_CamPos> psCBuffer;
 	std::vector<Vertex> vertices;
 private:
 	DirectX::BoundingOrientedBox box;

@@ -4,6 +4,7 @@
 
 #include <thread>
 #include <algorithm>
+#include "Utility/RandomGenerator.h"
 
 AppWindow::AppWindow(std::wstring& title, UINT width, UINT height)
 	: Window(title, width, height), camera(*this)
@@ -90,49 +91,6 @@ bool AppWindow::Init(HINSTANCE hInst)
 			20, 21, 22,
 			20, 22, 23
 		};
-		/*td::vector<Vertex> boxVertices = {
-			{ -1.0f,  1.0f, -1.0f, },
-			{ -1.0f, -1.0f, -1.0f, },
-			{1.0f, -1.0f, -1.0f,},
-			{1.0f, -1.0f, -1.0f,},
-			{1.0f,  1.0f, -1.0f,},
-			{-1.0f,  1.0f, -1.0f,},
-
-			{-1.0f, -1.0f,  1.0f,},
-			{-1.0f, -1.0f, -1.0f,},
-			{-1.0f,  1.0f, -1.0f,},
-			{-1.0f,  1.0f, -1.0f,},
-			{-1.0f,  1.0f,  1.0f,},
-			{-1.0f, -1.0f,  1.0f,},
-
-			{1.0f, -1.0f, -1.0f,},
-			{1.0f, -1.0f,  1.0f,},
-			{ 1.0f,  1.0f,  1.0f,},
-			{1.0f,  1.0f,  1.0f,},
-			{1.0f,  1.0f, -1.0f,},
-			{1.0f, -1.0f, -1.0f,},
-
-			{-1.0f, -1.0f,  1.0f,},
-			{-1.0f,  1.0f,  1.0f,},
-			{1.0f,  1.0f,  1.0f,},
-			{1.0f,  1.0f,  1.0f,},
-			{1.0f, -1.0f,  1.0f,},
-			{-1.0f, -1.0f,  1.0f,},
-
-			{-1.0f,  1.0f, -1.0f,},
-			{ 1.0f,  1.0f, -1.0f,},
-			{ 1.0f,  1.0f,  1.0f,},
-			{ 1.0f,  1.0f,  1.0f,},
-			{-1.0f,  1.0f,  1.0f,},
-			{-1.0f,  1.0f, -1.0f,},
-
-			{-1.0f, -1.0f, -1.0f,},
-			{-1.0f, -1.0f,  1.0f,},
-			{ 1.0f, -1.0f, -1.0f,},
-			{ 1.0f, -1.0f, -1.0f,},
-			{-1.0f, -1.0f,  1.0f,},
-			{ 1.0f, -1.0f,  1.0f},
-		};*/
 		dorito->Create(Window::Gfx(), vertices);
 		box->Create(Window::Gfx(), boxVertices, boxIndices);
 		//smallGear->Init(Window::Gfx(), "res/8gear.obj");
@@ -264,5 +222,5 @@ void AppWindow::Draw()
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-	Gfx().End();
+	Window::Gfx().End();
 }

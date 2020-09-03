@@ -14,8 +14,6 @@
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
 
-namespace wrl = Microsoft::WRL;
-
 class Graphics
 {
 private:
@@ -40,13 +38,14 @@ public:
 	void setWireframe(bool value);
 	void setBlendState(bool value);
 	void setSkyboxState(bool value);
+	void setDrawMode(D3D11_PRIMITIVE_TOPOLOGY mode);
 	bool isWireframe() const { return isWireframeEnabled; }
 	void Begin(float r, float g, float b);
 	void End();
 
 	ID3D11Device* getDevice() { return pDevice.Get(); }
 	ID3D11DeviceContext* getContext() { return pContext.Get(); }
-	ID3D11SamplerState* const* getSamplerState() { return &pTexSamplerState; }
+	ID3D11SamplerState* const* getSamplerState() { return pTexSamplerState.GetAddressOf(); }
 public:
 	VertexShader vertexShader;
 	PixelShader pixelShader;
@@ -60,19 +59,19 @@ private:
 	bool isWireframeEnabled = false;
 	UINT sampleQuality = 0;
 private: //com MAKE THESE COMPTRS DING DONGa
-	wrl::ComPtr<ID3D11Device> pDevice = nullptr;
-	wrl::ComPtr<ID3D11DeviceContext> pContext = nullptr;
-	wrl::ComPtr<IDXGISwapChain> pSwapChain = nullptr;
-	wrl::ComPtr<ID3D11RenderTargetView> pRenderTarget = nullptr;
-	wrl::ComPtr<ID3D11DepthStencilView> pDepthStencilView = nullptr;
-	wrl::ComPtr<ID3D11Texture2D> pDepthStencilBuffer = nullptr;
-	//pipline states
-	wrl::ComPtr<ID3D11RasterizerState> pWireframeState = nullptr;
-	wrl::ComPtr<ID3D11RasterizerState> pSkyboxState = nullptr;
-	wrl::ComPtr<ID3D11RasterizerState> pCWCullState = nullptr;
-	wrl::ComPtr<ID3D11RasterizerState> pCCWCullState = nullptr;
-	wrl::ComPtr<ID3D11BlendState> pTransBlendState = nullptr;
-	wrl::ComPtr<ID3D11DepthStencilState> pDSLessEqualState = nullptr;
-	wrl::ComPtr<ID3D11SamplerState> pTexSamplerState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Device> pDevice = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext = nullptr;
+	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pRenderTarget = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthStencilView = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencilBuffer = nullptr;
+		//pipline states
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pWireframeState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pSkyboxState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pCWCullState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pCCWCullState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11BlendState> pTransBlendState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> pDSLessEqualState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> pTexSamplerState = nullptr;
 };
 

@@ -2,6 +2,8 @@
 #include "Utility/Error.h"
 #include "Utility/Util.h"
 #include "Graphics/Graphics.h"
+#include "Graphics/Texture.h"
+#include "Graphics/CubeTexture.h"
 
 bool PixelShader::Init(Graphics& gfx, std::wstring filePath)
 {
@@ -26,14 +28,19 @@ bool PixelShader::Init(Graphics& gfx, std::wstring filePath)
 	return true;
 }
 
-PixelShader::~PixelShader()
+void PixelShader::setShaderResource(Graphics& gfx, Texture& tex)
 {
-	ReleaseCOM(pPixelShader);
+	gfx.getContext()->PSSetShaderResources(0, 1, tex.getTexture());
+}
+
+void PixelShader::setShaderResource(Graphics& gfx, CubeTexture& cubeTex)
+{
+	gfx.getContext()->PSSetShaderResources(0, 1, cubeTex.getTexture());
 }
 
 void PixelShader::Bind(Graphics& gfx)
 {
-	gfx.getContext()->PSSetShader(pPixelShader, nullptr, NULL);
+	gfx.getContext()->PSSetShader(pPixelShader.Get(), nullptr, NULL);
 }
 
 void PixelShader::Unbind(Graphics& gfx)

@@ -29,16 +29,10 @@ bool VertexShader::Init(Graphics& gfx, std::wstring filePath, D3D11_INPUT_ELEMEN
 	return true;
 }
 
-VertexShader::~VertexShader()
-{
-	ReleaseCOM(pVertexShader);
-	ReleaseCOM(pInputLayout);
-}
-
 void VertexShader::Bind(Graphics& gfx)
 {
-	gfx.getContext()->IASetInputLayout(pInputLayout);
-	gfx.getContext()->VSSetShader(pVertexShader, nullptr, NULL);
+	gfx.getContext()->IASetInputLayout(pInputLayout.Get());
+	gfx.getContext()->VSSetShader(pVertexShader.Get(), nullptr, NULL);
 }
 
 void VertexShader::Unbind(Graphics& gfx)

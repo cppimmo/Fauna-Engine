@@ -3,6 +3,7 @@
 #include "Utility/Util.h"
 
 using namespace DirectX;
+namespace wrl = Microsoft::WRL;
 
 Graphics::~Graphics()
 {
@@ -272,6 +273,11 @@ void Graphics::setSkyboxState(bool value)
 		pContext->RSSetState(nullptr);
 		pContext->OMSetDepthStencilState(nullptr, 0);
 	}	
+}
+
+void Graphics::setDrawMode(D3D11_PRIMITIVE_TOPOLOGY mode)
+{
+	pContext->IASetPrimitiveTopology(mode);
 }
 
 void Graphics::Begin(float r, float g, float b)

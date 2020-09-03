@@ -26,14 +26,9 @@ bool DomainShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 	return true;
 }
 
-DomainShader::~DomainShader()
-{
-	ReleaseCOM(pDomainShader);
-}
-
 void DomainShader::Bind(Graphics& gfx)
 {
-	gfx.getContext()->DSSetShader(pDomainShader, nullptr, NULL);
+	gfx.getContext()->DSSetShader(pDomainShader.Get(), nullptr, NULL);
 }
 
 void DomainShader::Unbind(Graphics& gfx)

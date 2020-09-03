@@ -196,13 +196,17 @@ void Model::Draw(Graphics& gfx, Camera& camera)
 	vsCBuffer.Update(gfx);
 	vsCBuffer.Unbind(gfx);
 
-	//if (camera.getFrustum().Intersects(box))
+//	if (camera.getFrustum().Intersects(box))
 	//{
 		OutputDebugStringA("Okay clown i can draw you");
 		if (isIndexed) 
 			indexBuffer.Draw(gfx, 0u, 0u);
 		else
 			vertexBuffer.Draw(gfx, 0u);
+	//}
+	//else
+	////{
+	//	OutputDebugStringA("Okay lol I like kinda can't draw you");
 	//}
 	
 }
@@ -211,13 +215,12 @@ void Model::Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& tex)
 {
 	//const UINT offset = 0;
 
-	gfx.getContext()->VSSetShader(vs.getVertexShader(), nullptr, 0u);
-	gfx.getContext()->PSSetShader(ps.getPixelShader(), nullptr, 0u);
-	gfx.getContext()->PSSetShaderResources(0, 1, tex.getTexture());
+	vs.Bind(gfx); 
+	ps.Bind(gfx);
+	ps.setShaderResource(gfx, tex);
 	vertexBuffer.Bind(gfx);
 	if (isIndexed) indexBuffer.Bind(gfx);
-	gfx.getContext()->IASetInputLayout(vs.getInputLayout());
-	gfx.getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	gfx.setDrawMode(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void Model::Unbind(Graphics& gfx)

@@ -91,6 +91,7 @@
     <ClInclude Include="src\Scene\SceneManager.h" />
     <ClInclude Include="src\Scene\PlayScene.h" />
     <ClInclude Include="src\Utility\RandomGenerator.h" />
+    <ClInclude Include="src\Graphics\ConstantBufferTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Fauna Engine.rc" />

@@ -8,12 +8,11 @@ class Texture
 {
 public:
 	Texture() = default;
-	~Texture();
+	~Texture() = default;
 
 	bool Load(Graphics& gfx, std::wstring filePath);
-	//return double ptr to objs for pssetblahblah functions
-	ID3D11ShaderResourceView* const* getTexture() const { return &pTexture; }
+	ID3D11ShaderResourceView* const* getTexture() const { return pTexture.GetAddressOf(); }
 private:
-	ID3D11ShaderResourceView* pTexture = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTexture = nullptr;
 };
 

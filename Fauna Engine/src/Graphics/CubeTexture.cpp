@@ -5,12 +5,6 @@
 
 using namespace DirectX;
 
-CubeTexture::~CubeTexture()
-{
-	ReleaseCOM(pTexture);
-	ReleaseCOM(pSRV);
-}
-
 bool CubeTexture::Load(Graphics& gfx, std::wstring& filePath) try 
 {
 	HRESULT hr = S_OK;
@@ -24,7 +18,7 @@ bool CubeTexture::Load(Graphics& gfx, std::wstring& filePath) try
 		0,
 		D3D11_RESOURCE_MISC_TEXTURECUBE,
 		false,
-		reinterpret_cast<ID3D11Resource**>(&pTexture),
+		reinterpret_cast<ID3D11Resource**>(pTexture.GetAddressOf()),
 		&pSRV,
 		nullptr
 	);

@@ -26,14 +26,9 @@ bool GeometryShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 	return true;
 }
 
-GeometryShader::~GeometryShader()
-{
-	ReleaseCOM(pGeometryShader);
-}
-
 void GeometryShader::Bind(Graphics& gfx)
 {
-	gfx.getContext()->GSSetShader(pGeometryShader, nullptr, NULL);
+	gfx.getContext()->GSSetShader(pGeometryShader.Get(), nullptr, NULL);
 }
 
 void GeometryShader::Unbind(Graphics& gfx)

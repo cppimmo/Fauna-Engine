@@ -26,14 +26,9 @@ bool HullShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 	return true;
 }
 
-HullShader::~HullShader()
-{
-	ReleaseCOM(pHullShader);
-}
-
 void HullShader::Bind(Graphics& gfx)
 {
-	gfx.getContext()->HSSetShader(pHullShader, nullptr, NULL);
+	gfx.getContext()->HSSetShader(pHullShader.Get(), nullptr, NULL);
 }
 
 void HullShader::Unbind(Graphics& gfx)
