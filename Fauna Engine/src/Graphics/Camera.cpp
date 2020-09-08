@@ -43,12 +43,10 @@ void Camera::Update(float dt, Window& wnd)
 	}
 	if (wnd.gamepad.Update())
 	{
-		if (wnd.gamepad.isButtonPressed(XINPUT_GAMEPAD_DPAD_LEFT))
-		{
-			yaw -= sensitivity * dt;
-		}
-		yaw += wnd.gamepad.rightStickX * sensitivity * dt;
-		pitch += wnd.gamepad.rightStickY * sensitivity * dt;
+		yaw += wnd.gamepad.rightStickX * axisMultiplier * sensitivity * dt;
+		pitch += -(wnd.gamepad.rightStickY * axisMultiplier * sensitivity * dt);
+		moveX = wnd.gamepad.leftStickX * speed * dt;
+		moveZ = wnd.gamepad.leftStickY * speed * dt;
 	}
 	std::clamp<float>(pitch, -pitchClamp, pitchClamp);
 
@@ -59,7 +57,7 @@ void Camera::Update(float dt, Window& wnd)
 	target = XMVector3TransformCoord(defaultForward, rotation);
 	target = XMVector3Normalize(target);
 
-	XMMATRIX tempRotYMatrix = XMMatrixRotationY(yaw);
+	auto tempRotYMatrix = XMMatrixRotationY(yaw);
 
 	right = XMVector3TransformCoord(defaultRight, tempRotYMatrix);
 	up = XMVector3TransformCoord(up, tempRotYMatrix);
@@ -77,11 +75,10 @@ void Camera::Update(float dt, Window& wnd)
 	if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_D)) {
 		moveX += speed * dt;
 	}
-
-	if (wnd.kbd.isKeyPressed(VK_SPACE)) {
+	
+	if (wnd.kbd.isKeyPressed(VK_SPACE) || wnd.gamepad.isButtonPressed(XINPUT_GAMEPAD_A)) {
 		moveY += speed * dt;
-	}
-	if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_X)) {
+	} else if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_X) || wnd.gamepad.isButtonPressed(XINPUT_GAMEPAD_B)) {
 		moveY -= speed * dt;
 	}
 

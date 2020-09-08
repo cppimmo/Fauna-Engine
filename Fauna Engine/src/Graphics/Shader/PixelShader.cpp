@@ -28,22 +28,17 @@ bool PixelShader::Init(Graphics& gfx, std::wstring filePath)
 	return true;
 }
 
-void PixelShader::setShaderResource(Graphics& gfx, Texture& tex)
-{
-	gfx.getContext()->PSSetShaderResources(0, 1, tex.getTexture());
-}
-
-void PixelShader::setShaderResource(Graphics& gfx, CubeTexture& cubeTex)
-{
-	gfx.getContext()->PSSetShaderResources(0, 1, cubeTex.getTexture());
-}
-
 void PixelShader::Bind(Graphics& gfx)
 {
 	gfx.getContext()->PSSetShader(pPixelShader.Get(), nullptr, NULL);
 }
 
-void PixelShader::Unbind(Graphics& gfx)
+void PixelShader::SetShaderResources(Graphics& gfx, UINT startSlot, UINT numViews, ID3D11ShaderResourceView* const* pViews)
 {
-	gfx.getContext()->PSSetShader(nullptr, nullptr, NULL);
+	gfx.getContext()->PSSetShaderResources(startSlot, numViews, pViews);
+}
+
+void PixelShader::SetSamplers(Graphics& gfx, UINT startSlot, UINT numSamplers, ID3D11SamplerState* const* pSamplers)
+{
+	gfx.getContext()->PSSetSamplers(startSlot, numSamplers, pSamplers);
 }

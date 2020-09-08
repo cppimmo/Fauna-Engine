@@ -31,7 +31,12 @@ void GeometryShader::Bind(Graphics& gfx)
 	gfx.getContext()->GSSetShader(pGeometryShader.Get(), nullptr, NULL);
 }
 
-void GeometryShader::Unbind(Graphics& gfx)
+void GeometryShader::SetShaderResources(Graphics& gfx, UINT startSlot, UINT numViews, ID3D11ShaderResourceView* const* pViews)
 {
-	gfx.getContext()->GSSetShader(nullptr, nullptr, NULL);
+	gfx.getContext()->GSSetShaderResources(startSlot, numViews, pViews);
+}
+
+void GeometryShader::SetSamplers(Graphics& gfx, UINT startSlot, UINT numSamplers, ID3D11SamplerState* const* pSamplers)
+{
+	gfx.getContext()->GSSetSamplers(startSlot, numSamplers, pSamplers);
 }

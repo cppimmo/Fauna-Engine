@@ -181,14 +181,12 @@ bool SkySphere::Init(Graphics& gfx, std::wstring& filePath) try
 
 void SkySphere::Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps)
 {
-	pContext->VSSetShader(vs.getVertexShader(), nullptr, 0u);
-	pContext->PSSetShader(ps.getPixelShader(), nullptr, 0u);
-	pContext->PSSetShaderResources(0, 1, cubeMap.getTexture());
-	const UINT offset = 0u;
-	pContext->IASetVertexBuffers(0u, 1u, vertexBuffer.getBuffer(), vertexBuffer.getStridePtr(), &offset);
+	vs.Bind(gfx);
+	ps.Bind(gfx);
+	ps.SetShaderResources(gfx, 0, 1, cubeMap.getTexture());
+	pContext->IASetVertexBuffers(0u, 1u, vertexBuffer.getBuffer(), vertexBuffer.getStridePtr(), vertexBuffer.getOffset());
 	pContext->IASetIndexBuffer(indexBuffer.getBuffer(), DXGI_FORMAT_R32_UINT, 0u);
-	pContext->IASetInputLayout(vs.getInputLayout());
-	pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	gfx.setDrawMode(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void SkySphere::Draw(Graphics& gfx, Camera& camera)

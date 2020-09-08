@@ -1,6 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
+#include <wrl.h>
 #include "Graphics/ConstantBufferTypes.h"
 #include "Utility/Error.h"
 #include "Graphics/Bindable.h"
@@ -23,16 +24,13 @@ public:
 	ConstantBuffer() = default;
 	ConstantBuffer(const ConstantBuffer<C>&) = delete;
 	ConstantBuffer& operator=(const ConstantBuffer<C>&) = delete;
-	~ConstantBuffer()
-	{
-		ReleaseCOM(pBuffer);
-	}	
+	~ConstantBuffer() = default;
 	C data;
 
 	HRESULT Init(Graphics& gfx)
 	{
 		if (pBuffer != nullptr)
-			ReleaseCOM(pBuffer);
+			pBuffer.Reset();
 
 		D3D11_BUFFER_DESC cbd = {};
 		cbd.Usage = D3D11_USAGE_DYNAMIC;
@@ -42,13 +40,13 @@ public:
 		cbd.ByteWidth = static_cast<UINT>(sizeof(C) + (16 - (sizeof(C) % 16)));
 		cbd.StructureByteStride = 0;
 
-		HRESULT hr = gfx.getDevice()->CreateBuffer(&cbd, nullptr, &pBuffer);
+		HRESULT hr = gfx.getDevice()->CreateBuffer(&cbd, nullptr, pBuffer.GetAddressOf());
 		return hr;
 	}
 	HRESULT Init(Graphics& gfx, C* initialData)
 	{
 		if (pBuffer != nullptr)
-			ReleaseCOM(pBuffer);
+			pBuffer.Reset();
 
 		D3D11_BUFFER_DESC cbd = {};
 		cbd.Usage = D3D11_USAGE_DYNAMIC;
@@ -61,24 +59,24 @@ public:
 		D3D11_SUBRESOURCE_DATA sd = {};
 		sd.pSysMem = data;
 
-		HRESULT hr = gfx.getDevice()->CreateBuffer(&cbd, data, &pBuffer);
+		HRESULT hr = gfx.getDevice()->CreateBuffer(&cbd, data, pBuffer.GetAddressOf());
 		return hr;
 	}
 	bool Update(Graphics& gfx)
 	{
 		D3D11_MAPPED_SUBRESOURCE msr = {};
-		HRESULT hr = gfx.getContext()->Map(pBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+		HRESULT hr = gfx.getContext()->Map(pBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
 		if (FAILED(hr)) {
 			ErrorLogger::Log(hr, L"Failed to map constant buffer.");
 			return false;
 		}
-		CopyMemory(msr.pData, &data, sizeof(C));
-		gfx.getContext()->Unmap(pBuffer, 0);
+		memcpy(msr.pData, &data, sizeof(C));
+		gfx.getContext()->Unmap(pBuffer.Get(), 0);
 		return true;
 	}
-	ID3D11Buffer* getBuffer() const { return pBuffer; }
+	ID3D11Buffer* getBuffer() const { return pBuffer.Get(); }
 protected:
-	ID3D11Buffer* pBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pBuffer = nullptr;
 };
 
 //Constantbuffer types listed in order of occurence in graphics pipeline
@@ -88,12 +86,7 @@ class VSConstantBuffer : public ConstantBuffer<C>
 public:
 	void Bind(Graphics& gfx) override
 	{
-		gfx.getContext()->VSSetConstantBuffers(0, 1, &this->pBuffer);
-	}
-	void Unbind(Graphics& gfx) override
-	{
-		//do nothing or fatal error
-		//gfx.getContext()->VSSetConstantBuffers(0, 1, nullptr);
+		gfx.getContext()->VSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
 	}
 };
 
@@ -103,12 +96,7 @@ class HSConstantBuffer : public ConstantBuffer<C>
 public:
 	void Bind(Graphics& gfx) override
 	{
-		gfx.getContext()->HSSetConstantBuffers(0, 1, &this->pBuffer);
-	}
-	void Unbind(Graphics& gfx) override
-	{
-		//do nothing undefined
-		//gfx.getContext()->HSSetConstantBuffers(0, 1, nullptr);
+		gfx.getContext()->HSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
 	}
 };
 
@@ -118,12 +106,7 @@ class DSConstantBuffer : public ConstantBuffer<C>
 public:
 	void Bind(Graphics& gfx) override
 	{
-		gfx.getContext()->DSSetConstantBuffers(0, 1, &this->pBuffer);
-	}
-	void Unbind(Graphics& gfx) override
-	{
-		//do nothing undefined
-		//gfx.getContext()->DSSetConstantBuffers(0, 1, nullptr);
+		gfx.getContext()->DSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
 	}
 };
 
@@ -133,12 +116,7 @@ class GSConstantBuffer : public ConstantBuffer<C>
 public:
 	void Bind(Graphics& gfx) override
 	{
-		gfx.getContext()->GSSetConstantBuffers(0, 1, &this->pBuffer);
-	}
-	void Unbind(Graphics& gfx) override
-	{
-		//do nothing undefined
-		//pContext->GSSetConstantBuffers(0, 1, nullptr);
+		gfx.getContext()->GSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
 	}
 };
 
@@ -148,11 +126,6 @@ class PSConstantBuffer : public ConstantBuffer<C>
 public:
 	void Bind(Graphics& gfx) override
 	{
-		gfx.getContext()->PSSetConstantBuffers(0, 1, &this->pBuffer);
-	}
-	void Unbind(Graphics& gfx) override
-	{
-		//do nothing or fatal error
-		//gfx.getContext()->PSSetConstantBuffers(0, 1, nullptr);
+		gfx.getContext()->PSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
 	}
 };

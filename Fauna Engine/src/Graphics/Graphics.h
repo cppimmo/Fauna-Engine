@@ -43,9 +43,9 @@ public:
 	void Begin(float r, float g, float b);
 	void End();
 
-	ID3D11Device* getDevice() { return pDevice.Get(); }
-	ID3D11DeviceContext* getContext() { return pContext.Get(); }
-	ID3D11SamplerState* const* getSamplerState() { return pTexSamplerState.GetAddressOf(); }
+	auto getDevice() const -> ID3D11Device*;
+	auto getContext() const -> ID3D11DeviceContext*;
+	auto getSamplerState() const -> ID3D11SamplerState* const*;
 public:
 	VertexShader vertexShader;
 	PixelShader pixelShader;
@@ -57,21 +57,22 @@ private:
 	bool isVsync = false;
 	bool isFullscreen = false;
 	bool isWireframeEnabled = false;
+	UINT bufferCount = 1;
 	UINT sampleQuality = 0;
-private: //com MAKE THESE COMPTRS DING DONGa
+private:
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext = nullptr;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pRenderTarget = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthStencilView = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencilBuffer = nullptr;
-		//pipline states
+	//pipline states
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pWireframeState = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pSkyboxState = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pCWCullState = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pCCWCullState = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11BlendState> pTransBlendState = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> pDSLessEqualState = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> pTexSamplerState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> pSamplerState = nullptr;
 };
 

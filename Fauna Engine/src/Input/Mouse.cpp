@@ -123,8 +123,7 @@ void Mouse::UpdateParameters()
 {
 	if (lockToCenter)
 	{
-		SetCursorPos(wnd.getWidth() / 2, wnd.getHeight() / 2);
-		//SetCursorPos()
+		::SetCursorPos(wnd.getWidth() / 2, wnd.getHeight() / 2);
 	}
-	ShowCursor(isCursorVisible);
+	::ShowCursor(isCursorVisible);
 }

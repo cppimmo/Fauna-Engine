@@ -16,10 +16,9 @@ public:
 	PixelShader() = default;
 	~PixelShader() = default;
 
-	void setShaderResource(Graphics& gfx, Texture& tex);
-	void setShaderResource(Graphics& gfx, CubeTexture& cubeTex);
 	void Bind(Graphics& gfx) override;
-	void Unbind(Graphics& gfx) override;
+	void SetShaderResources(Graphics& gfx, UINT startSlot, UINT numViews, ID3D11ShaderResourceView* const* pViews) override;
+	void SetSamplers(Graphics& gfx, UINT startSlot, UINT numSamplers, ID3D11SamplerState* const* pSamplers) override;
 
 	ID3D11PixelShader* getPixelShader() const { return pPixelShader.Get(); }
 private:

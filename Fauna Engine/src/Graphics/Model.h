@@ -14,6 +14,9 @@
 #include <vector>
 #include <DirectXCollision.h>
 
+#define RAW_MDL
+
+#ifdef RAW_MDL
 class Model
 {
 public:
@@ -60,3 +63,12 @@ private:
 	bool isIndexed = false;
 	static constexpr UINT offset = 0;
 };
+#else
+class Model
+{
+public:
+
+private:
+
+};
+#endif

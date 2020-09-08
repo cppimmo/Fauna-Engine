@@ -4,6 +4,7 @@
 
 using namespace DirectX;
 
+#ifdef RAW_MDL
 Model::Model()
 {
 }
@@ -217,7 +218,7 @@ void Model::Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& tex)
 
 	vs.Bind(gfx); 
 	ps.Bind(gfx);
-	ps.setShaderResource(gfx, tex);
+	ps.SetShaderResources(gfx, 0, 1, tex.getTexture());
 	vertexBuffer.Bind(gfx);
 	if (isIndexed) indexBuffer.Bind(gfx);
 	gfx.setDrawMode(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -230,3 +231,7 @@ void Model::Unbind(Graphics& gfx)
 	vertexBuffer.Unbind(gfx);
 	if (isIndexed) indexBuffer.Unbind(gfx);
 }
+
+#else
+
+#endif

@@ -58,8 +58,11 @@ public://getters
 	ID3D11Buffer* getBuffer() const { return pBuffer.Get(); }
 	const UINT getIndexCount() const { return indexCount; }
 	const UINT* getIndexCountPtr() const { return &indexCount; }
+	const UINT* getOffset() const { return &offset; }
+	void setOffset(UINT offset) { this->offset = offset; }
 private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pBuffer = nullptr;
 	UINT indexCount = 0;
+	UINT offset = 0;
 };
 

@@ -98,11 +98,12 @@ bool AppWindow::Init(HINSTANCE hInst)
 		sky->Init(Window::Gfx(), str);
 		dorito->setPos(0.0f, 0.35f, 1.5f);
 		dorito->setScale(1.0f, 1.0f, 1.0f);
-		box->setPos(2.0f, 1.0f, 6.0f);
-		box->setScale(3.0f, 1.0f, 4.0f);
+		box->setPos(0.0f, 0.0f, 0.0f);
+		box->setScale(1.0f, 1.0f, 1.0f);
 	};
 	auto loadTex = [this]() { //no need to check return types handling done in class
 		dorTex.Load(Window::Gfx(), L"res/img/dorito.dds");
+		dxTex.Load(Window::Gfx(), L"res/img/directx.dds");
 	};
 
 	std::thread modelThread(loadModel);
@@ -166,13 +167,13 @@ void AppWindow::Update()
 	dorito->transform.position.x = std::clamp(dorito->transform.position.x, -1.5f, 1.5f);
 	dorito->transform.position.y = std::clamp(dorito->transform.position.y, -0.30f, 1.15f);
 
-	if (gamepad.Update())
+	/*if (gamepad.Update())
 	{
 		float joyX = gamepad.leftStickX;
 		float joyY = gamepad.leftStickY;
 		dorito->adjustPos(0.0f, joyY * dTime * 0.85f, 0.0f);
 		dorito->adjustPos(joyX * dTime * 0.85f, 0.0f, 0.0f);
-	}
+	}*/
 	dorito->adjustRot(0.0f, sin(eTime) * 35.0f, 0.0f);
 	dorito->setScale(1.0f, 1.0f, 1.0f);
 
@@ -190,7 +191,7 @@ void AppWindow::Draw()
 	dorito->Draw(Gfx(), camera);
 	dorito->Unbind(Gfx());
 
-	box->Bind(Gfx(), Gfx().vertexShader, Gfx().pixelShader, dorTex);
+	box->Bind(Gfx(), Gfx().vertexShader, Gfx().pixelShader, dxTex);
 	box->Draw(Gfx(), camera);
 	box->Unbind(Gfx());
 

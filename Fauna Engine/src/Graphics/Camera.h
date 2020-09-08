@@ -9,6 +9,7 @@ class Camera
 {
 public:
 	Camera(Window& wnd);
+	Camera(Window& wnd, DirectX::XMVECTOR pos, DirectX::XMMATRIX proj);
 
 	void setProjection(float Fov, float aspectRatio, float NearZ, float FarZ);
 	void Update(float dt, Window& wnd);
@@ -34,15 +35,15 @@ private:
 	DirectX::CXMVECTOR defaultForward = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 	DirectX::CXMVECTOR defaultRight = DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
 	DirectX::CXMVECTOR defaultUp = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	
 	const float speed = 1.0f;
 	static constexpr float pitchClamp = 89.0f;
 	float pitch;
 	float yaw;
 	float zoom;
 	float sensitivity = 0.001f;
-	float moveX;
-	float moveZ;
-	float moveY;
+	static constexpr int axisMultiplier = 1000;
+	float moveX, moveY, moveZ;
 	Mouse::MousePos lastPos;
 };
 

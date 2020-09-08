@@ -15,7 +15,6 @@
     <ClCompile Include="src\Graphics\Shader\HullShader.cpp" />
     <ClCompile Include="src\Graphics\Mesh.cpp" />
     <ClCompile Include="src\Audio\Audio.cpp" />
-    <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Input\Gamepad.cpp" />
     <ClCompile Include="src\Graphics\Graphics.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -42,6 +41,8 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scene\PlayScene.cpp" />
+    <ClCompile Include="src\Graphics\VertexBuffer.cpp" />
+    <ClCompile Include="src\Graphics\IndexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
@@ -85,7 +86,6 @@
     <ClInclude Include="src\Graphics\Bindable.h" />
     <ClInclude Include="src\Window\AppWindow.h" />
     <ClInclude Include="src\Graphics\Camera.h" />
-    <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scene\SceneManager.h" />

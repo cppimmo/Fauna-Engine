@@ -3,7 +3,7 @@
 #include "Utility/Util.h"
 #include "Graphics/Graphics.h"
 
-bool HullShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
+bool HullShader::Init(Graphics& gfx, std::wstring& filePath)
 {
 	try
 	{
@@ -14,7 +14,7 @@ bool HullShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 		errMsg += filePath;
 		THROW_IF_FAILED(hr, wstring_to_string(errMsg));
 
-		hr = pDevice->CreateHullShader(pBlob->GetBufferPointer(),
+		hr = gfx.getDevice()->CreateHullShader(pBlob->GetBufferPointer(),
 			pBlob->GetBufferSize(), nullptr, &pHullShader);
 		THROW_IF_FAILED(hr, "Pixel shader failed to create");
 	}
@@ -31,7 +31,12 @@ void HullShader::Bind(Graphics& gfx)
 	gfx.getContext()->HSSetShader(pHullShader.Get(), nullptr, NULL);
 }
 
-void HullShader::Unbind(Graphics& gfx)
+void HullShader::SetShaderResources(Graphics& gfx, UINT startSlot, UINT numViews, ID3D11ShaderResourceView* const* pViews)
 {
-	gfx.getContext()->HSSetShader(nullptr, nullptr, NULL);
+	gfx.getContext()->HSSetShaderResources(startSlot, numViews, pViews);
+}
+
+void HullShader::SetSamplers(Graphics& gfx, UINT startSlot, UINT numSamplers, ID3D11SamplerState* const* pSamplers)
+{
+	gfx.getContext()->HSSetSamplers(startSlot, numSamplers, pSamplers);
 }

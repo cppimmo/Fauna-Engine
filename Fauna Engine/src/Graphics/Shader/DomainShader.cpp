@@ -31,7 +31,12 @@ void DomainShader::Bind(Graphics& gfx)
 	gfx.getContext()->DSSetShader(pDomainShader.Get(), nullptr, NULL);
 }
 
-void DomainShader::Unbind(Graphics& gfx)
+void DomainShader::SetShaderResources(Graphics& gfx, UINT startSlot, UINT numViews, ID3D11ShaderResourceView* const* pViews)
 {
-	gfx.getContext()->DSSetShader(nullptr, nullptr, NULL);
+	gfx.getContext()->DSSetShaderResources(startSlot, numViews, pViews);
+}
+
+void DomainShader::SetSamplers(Graphics& gfx, UINT startSlot, UINT numSamplers, ID3D11SamplerState* const* pSamplers)
+{
+	gfx.getContext()->DSSetSamplers(startSlot, numSamplers, pSamplers);
 }

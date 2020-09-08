@@ -10,7 +10,7 @@ template<class T>
 class VertexBuffer : public Bindable
 {
 public:
-	VertexBuffer() : stride(sizeof(T)), vertexCount(0) {}
+	VertexBuffer() : vertexCount(0), stride(sizeof(T)) {}
 	~VertexBuffer() = default;
 	VertexBuffer(const VertexBuffer<T>& rhs)
 	{
@@ -47,7 +47,6 @@ public:
 	}
 	void Bind(Graphics& gfx) override
 	{
-		UINT offset = 0;
 		gfx.getContext()->IASetVertexBuffers(0u, 1u, pBuffer.GetAddressOf(), &stride, &offset);
 	}
 	void Draw(Graphics& gfx, UINT startLocation)
@@ -63,9 +62,11 @@ public://getters
 	const UINT getStride() const { return stride; }
 	const UINT* getStridePtr() const { return &stride; }
 	const UINT getVertexCount() const { return vertexCount; }
+	const UINT* getOffset() const { return &offset; }
+	void setOffset(UINT offset) { this->offset = offset; }
 private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pBuffer = nullptr;
+	UINT vertexCount;	
 	UINT stride;
-	//UINT offset = 0;
-	UINT vertexCount;
+	UINT offset = 0;
 };

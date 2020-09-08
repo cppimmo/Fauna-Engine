@@ -33,7 +33,7 @@ private:
 	std::unique_ptr<Model3D> smallGear;
 	std::unique_ptr<Model3D> largeGear;
 	std::unique_ptr<SkySphere> sky;
-	Texture dorTex;
+	Texture dorTex, dxTex;
 
 	char title[12] = { 0 };
 	Camera camera;

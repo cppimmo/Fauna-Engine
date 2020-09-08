@@ -67,7 +67,7 @@ bool Graphics::Init(bool isFullscreen, bool isVsync, unsigned int width,
 	sd.SampleDesc.Count = samplingLevel;
 	sd.SampleDesc.Quality = sampleQuality - 1;
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	sd.BufferCount = 1;
+	sd.BufferCount = bufferCount;
 	sd.OutputWindow = hWnd;
 	sd.Windowed = TRUE;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
@@ -153,6 +153,21 @@ bool Graphics::Init(bool isFullscreen, bool isVsync, unsigned int width,
 	if (!skySphere_PS.Init(*this, L"SkySphere_PS.cso"))
 		THROW_NORMAL("Pixel Shader failed to create");
 
+	//create texture sampler state
+	D3D11_SAMPLER_DESC tsd = {};
+	tsd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	tsd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	tsd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	tsd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	tsd.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	tsd.MinLOD = 0;
+	tsd.MaxLOD = D3D11_FLOAT32_MAX;
+	hr = pDevice->CreateSamplerState(&tsd, pSamplerState.GetAddressOf());
+	THROW_IF_FAILED(hr, "Create sampler state failed");
+
+	pixelShader.SetSamplers(*this, 0, 1, pSamplerState.GetAddressOf());
+	skySphere_PS.SetSamplers(*this, 0, 1, pSamplerState.GetAddressOf());
+
 	/*D3D11_INPUT_ELEMENT_DESC layout2[2] = 
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -163,17 +178,6 @@ bool Graphics::Init(bool isFullscreen, bool isVsync, unsigned int width,
 	if (!pixelShaderColor.init(pDevice, L"PixelShaderColor.cso"))
 		THROW_NORMAL("Pixel Shader failed to create");*/
 
-	//create texture sampler state
-	D3D11_SAMPLER_DESC tsd = {};
-	tsd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	tsd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	tsd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	tsd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	tsd.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	tsd.MinLOD = 0;
-	tsd.MaxLOD = D3D11_FLOAT32_MAX;
-	hr = pDevice->CreateSamplerState(&tsd, pTexSamplerState.GetAddressOf());
-	THROW_IF_FAILED(hr, "Create sampler state failed");
 	//setup imgui
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -197,13 +201,13 @@ void Graphics::onSize(unsigned int newWidth, unsigned int newHeight) try
 
 	HRESULT hr = S_OK;
 
-	hr = pSwapChain->ResizeBuffers(1, newWidth, newHeight, DXGI_FORMAT_B8G8R8A8_UNORM, 0);
-	ID3D11Texture2D* BackBuffer; //Create our BackBuffer
-	hr = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&BackBuffer));
+	hr = pSwapChain->ResizeBuffers(1, newWidth, newHeight, DXGI_FORMAT_B8G8R8A8_UNORM, 0u);
+	wrl::ComPtr<ID3D11Texture2D> pBackBuffer; //Create our BackBuffer
+	hr = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(pBackBuffer.GetAddressOf()));
 	THROW_IF_FAILED(hr, "GetBuffer failed");
 	//Create our Render Target
-	hr = pDevice->CreateRenderTargetView(BackBuffer, nullptr, pRenderTarget.GetAddressOf());
-	ReleaseCOM(BackBuffer);//release backbuffer incase of exception
+	hr = pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, pRenderTarget.GetAddressOf());
+	pBackBuffer.Reset();
 	THROW_IF_FAILED(hr, "Create render target view failed");
 
 	D3D11_TEXTURE2D_DESC ds = {};
@@ -285,10 +289,24 @@ void Graphics::Begin(float r, float g, float b)
 	const float color[4] = { r, g, b, 1.0f };
 	pContext->ClearRenderTargetView(pRenderTarget.Get(), color);
 	pContext->ClearDepthStencilView(pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	pContext->PSSetSamplers(0u, 1u, &pTexSamplerState);
 }
 
 void Graphics::End()
 {
 	pSwapChain->Present(isVsync, 0u);
+}
+
+auto Graphics::getDevice() const -> ID3D11Device*
+{
+	return this->pDevice.Get();
+}
+
+auto Graphics::getContext() const -> ID3D11DeviceContext*
+{
+	return this->pContext.Get();
+}
+
+auto Graphics::getSamplerState() const -> ID3D11SamplerState* const*
+{
+	return this->pSamplerState.GetAddressOf();
 }

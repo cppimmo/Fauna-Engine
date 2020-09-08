@@ -4,35 +4,49 @@
 #include <string>
 
 //#define ReleaseCOM(x) if (x != nullptr) { x->Release(); x = nullptr; }
-template<class T>
-inline void ReleaseCOM(T* pInterface)
+namespace Util 
 {
-	if (pInterface != nullptr)
+	template<class T>
+	inline void ReleaseCOM(T* pInterface)
 	{
-		pInterface->Release();
-		pInterface = nullptr;
+		if (pInterface != nullptr)
+		{
+			pInterface->Release();
+			pInterface = nullptr;
+		}
+	}
+
+	template<class T>
+	inline void ReleaseCOM(T** ppInterface)
+	{
+		if (*ppInterface != nullptr)
+		{
+			(*ppInterface)->Release();
+			(*ppInterface) = nullptr;
+		}
+	}
+
+	template<class T>
+	inline void DeletePtr(T* pPointer)
+	{
+		if (pPointer != nullptr)
+		{
+			delete pPointer;
+			pPointer = nullptr;
+		}
+	}
+
+	template<class T>
+	inline void DeletePtr(T** pPointer)
+	{
+		if (*pPointer != nullptr)
+		{
+			delete *pPointer;
+			*pPointer = nullptr;
+		}
 	}
 }
 
-template<class T>
-inline void ReleaseCOM(T** ppInterface)
-{
-	if (*ppInterface != nullptr)
-	{
-		(*ppInterface)->Release();
-		(*ppInterface) = nullptr;
-	}
-}
-
-template<class T>
-inline void DeletePtr(T* pPointer)
-{
-	if (pPointer != nullptr)
-	{
-		delete pPointer;
-		pPointer = nullptr;
-	}
-}
 //#define DeletePtr(x) if (x) { delete x; x = nullptr; }
 
 #define CONFIG_PATH "config.ini"

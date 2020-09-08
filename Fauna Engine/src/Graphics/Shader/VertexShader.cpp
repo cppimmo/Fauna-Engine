@@ -3,7 +3,7 @@
 #include "Utility/Util.h"
 #include "Graphics/Graphics.h"
 
-bool VertexShader::Init(Graphics& gfx, std::wstring filePath, D3D11_INPUT_ELEMENT_DESC* pLayoutDesc, UINT numElements)
+bool VertexShader::Init(Graphics& gfx, std::wstring filePath, D3D11_INPUT_ELEMENT_DESC* pDesc, UINT numElements)
 {
 	try
 	{
@@ -17,7 +17,7 @@ bool VertexShader::Init(Graphics& gfx, std::wstring filePath, D3D11_INPUT_ELEMEN
 			pBlob->GetBufferSize(), nullptr, &pVertexShader);
 		THROW_IF_FAILED(hr, "Could not create Vertex shader");
 
-		hr = gfx.getDevice()->CreateInputLayout(pLayoutDesc, numElements, pBlob->GetBufferPointer(),
+		hr = gfx.getDevice()->CreateInputLayout(pDesc, numElements, pBlob->GetBufferPointer(),
 			pBlob->GetBufferSize(), &pInputLayout);
 		THROW_IF_FAILED(hr, "Could not create input layout");
 	}
@@ -35,8 +35,20 @@ void VertexShader::Bind(Graphics& gfx)
 	gfx.getContext()->VSSetShader(pVertexShader.Get(), nullptr, NULL);
 }
 
-void VertexShader::Unbind(Graphics& gfx)
+void VertexShader::SetShaderResources(Graphics& gfx, UINT startSlot, UINT numViews, ID3D11ShaderResourceView* const* pViews)
 {
-	gfx.getContext()->VSSetShader(nullptr, nullptr, NULL);
-	gfx.getContext()->IASetInputLayout(nullptr);
+	gfx.getContext()->VSSetShaderResources(startSlot, numViews, pViews);
+}
+
+void VertexShader::SetSamplers(Graphics& gfx, UINT startSlot, UINT numSamplers, ID3D11SamplerState* const* pSamplers)
+{
+	gfx.getContext()->VSSetSamplers(startSlot, numSamplers, pSamplers);
+}
+
+void VertexShader::SetInputLayout(Graphics& gfx, const D3D11_INPUT_ELEMENT_DESC* pDesc, UINT numElements)
+{
+	if (pInputLayout)
+		pInputLayout.Reset();
+	gfx.getDevice()->CreateInputLayout(pDesc, numElements,
+		Shader::pBlob->GetBufferPointer(), Shader::pBlob->GetBufferSize(), pInputLayout.GetAddressOf());
 }

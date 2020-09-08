@@ -164,6 +164,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedModel.cpp" />
+    <ClCompile Include="src\Graphics\IndexBuffer.cpp" />
+    <ClCompile Include="src\Graphics\VertexBuffer.cpp" />
     <ClCompile Include="src\Scene\PlayScene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Window\AppWindow.cpp" />
@@ -176,7 +178,6 @@
     <ClCompile Include="src\Audio\Audio.cpp" />
     <ClCompile Include="src\Graphics\Camera.cpp" />
     <ClCompile Include="src\Graphics\CubeTexture.cpp" />
-    <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Input\Gamepad.cpp" />
     <ClCompile Include="src\Graphics\Graphics.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -301,7 +302,6 @@
     <ClInclude Include="src\Graphics\VertexTypes.h" />
     <ClInclude Include="src\Utility\Util.h" />
     <ClInclude Include="src\Utility\Error.h" />
-    <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Input\Gamepad.h" />
     <ClInclude Include="src\Graphics\Graphics.h" />
     <ClInclude Include="imgui\imconfig.h" />
