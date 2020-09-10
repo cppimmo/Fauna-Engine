@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Win.h"
+#include <wrl.h>
 #include <xaudio2.h>
 #include <string>
 #include <vector>
@@ -19,28 +20,41 @@ class AudioEngine
 {
 	friend class SoundEffect;
 public:
-	AudioEngine() = default;
+	AudioEngine();
 	AudioEngine(const AudioEngine&) = delete;
 	AudioEngine& operator=(const AudioEngine&) = delete;
 	~AudioEngine();
 
-	bool Init();
+	bool loadSound(const std::wstring& filePath, SoundEffect& effect);
 	void PlaySound2D(std::string filePath, bool looped = false);
 	void PlaySound3D(SoundEffect& sound, float x, float y, 
 		float z, bool looped = false);
 private:
-	bool LoadFile(const std::wstring& filePath, std::vector<BYTE>& audioData, WAVEFORMATEX** wafeFormatEx, unsigned int& waveLength);
-	IMFAttributes* pSourceReaderConfig = nullptr;
-	IMFSourceReader* pSourceReader = nullptr;
-	IXAudio2* pAudio = nullptr;
-	IXAudio2MasteringVoice* pMasterVoice = nullptr;
+	bool LoadFile(const std::wstring& filePath, std::vector<BYTE>& audioData, WAVEFORMATEX** waveFormatEx, unsigned int& waveFormatLength);
+	Microsoft::WRL::ComPtr<IMFAttributes> pSourceReaderConfig = nullptr;
+	Microsoft::WRL::ComPtr<IMFSourceReader> pSourceReader = nullptr;
+	Microsoft::WRL::ComPtr<IXAudio2> pAudio = nullptr;
+	IXAudio2MasteringVoice* pEffectMasterVoice = nullptr;
+	IXAudio2MasteringVoice* pMusicMasterVoice = nullptr;
 };
 
 class SoundEffect 
 {
-public:
-
+	friend class AudioEngine;
 private:
+	IXAudio2SourceVoice* pSourceVoice = nullptr;
+	WAVEFORMATEX waveFormat;
+	UINT waveLength;
+	std::vector<BYTE> audioData;
+	XAUDIO2_BUFFER audioBuffer;
+
+	float falloff;
+	UINT priority;
+
+	UINT index;
+public:
+	SoundEffect(AudioEngine* pAudioEngine);
+	~SoundEffect() { pSourceVoice->DestroyVoice(); };
 
 };
 

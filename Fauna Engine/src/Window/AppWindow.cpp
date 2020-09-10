@@ -96,6 +96,7 @@ bool AppWindow::Init(HINSTANCE hInst)
 		//largeGear->Init(Window::Gfx(), "res/20gear.obj");
 		std::wstring str = L"res/img/skymap.dds";
 		sky->Init(Window::Gfx(), str);
+
 		dorito->setPos(0.0f, 0.35f, 1.5f);
 		dorito->setScale(1.0f, 1.0f, 1.0f);
 		box->setPos(0.0f, 0.0f, 0.0f);

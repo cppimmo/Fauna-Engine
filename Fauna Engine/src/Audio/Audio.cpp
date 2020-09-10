@@ -1,38 +1,56 @@
 #include "Audio/Audio.h"
 #include "Utility/Error.h"
 #include "Utility/Util.h"
-#include <wrl.h>
 
-#define FAIL(hr) if (FAILED(hr)) return false;
+//#define FAIL(hr) if (FAILED(hr)) return false;
 
-using namespace Microsoft::WRL;
+namespace wrl = Microsoft::WRL;
 
-AudioEngine::~AudioEngine()
-{
-	pSourceReaderConfig->Release();
-	pSourceReader->Release();
-	MFShutdown();
-	pMasterVoice->DestroyVoice();
-	pAudio->StopEngine();
-}
-
-bool AudioEngine::Init()
+AudioEngine::AudioEngine()
 {
 	HRESULT hr = S_OK;
-	hr = XAudio2Create(&pAudio, NULL, XAUDIO2_DEFAULT_PROCESSOR);
+	hr = XAudio2Create(pAudio.GetAddressOf(), NULL, XAUDIO2_DEFAULT_PROCESSOR);
 	THROW_IF_FAILED(hr, "Failed to init XAudio2.");
-	
-	hr = pAudio->CreateMasteringVoice(&pMasterVoice);
+
+	hr = pAudio->CreateMasteringVoice(&pEffectMasterVoice);
+	THROW_IF_FAILED(hr, "Failed to create Master voice for XAudio2.");
+
+	hr = pAudio->CreateMasteringVoice(&pMusicMasterVoice);
 	THROW_IF_FAILED(hr, "Failed to create Master voice for XAudio2.");
 
 	hr = MFStartup(MF_VERSION);
 	THROW_IF_FAILED(hr, "MFStartup failed.");
 
-	hr = MFCreateAttributes(&pSourceReaderConfig, 1);
+	hr = MFCreateAttributes(pSourceReaderConfig.GetAddressOf(), 1);
 	THROW_IF_FAILED(hr, "FAiled to create reader config.");
 
 	hr = pSourceReaderConfig->SetUINT32(MF_LOW_LATENCY, true);
 	THROW_IF_FAILED(hr, "Failed to set parameters");
+}
+
+AudioEngine::~AudioEngine()
+{
+	MFShutdown();
+	pEffectMasterVoice->DestroyVoice();
+	pMusicMasterVoice->DestroyVoice();
+	pAudio->StopEngine();
+}
+
+bool AudioEngine::loadSound(const std::wstring& filePath, SoundEffect& effect)
+{
+	HRESULT hr = S_OK;
+
+	WAVEFORMATEX* waveFormatEx;
+	LoadFile(filePath, effect.audioData, &waveFormatEx, effect.waveLength);
+
+	effect.waveFormat = *waveFormatEx;
+
+	hr = pAudio->CreateSourceVoice(&effect.pSourceVoice, &effect.waveFormat);
+
+	effect.audioBuffer = {};
+	effect.audioBuffer.AudioBytes = (UINT32)effect.audioData.size();
+	effect.audioBuffer.pAudioData = (BYTE* const)effect.audioData.data();
+	effect.audioBuffer.pContext = nullptr;
 
 	return true;
 }
@@ -42,16 +60,16 @@ void AudioEngine::PlaySound2D(std::string filePath, bool looped)
 
 }
 
-bool AudioEngine::LoadFile(const std::wstring& filePath, std::vector<BYTE>& audioData, WAVEFORMATEX** wafeFormatEx, unsigned int& waveLength)
+bool AudioEngine::LoadFile(const std::wstring& filePath, std::vector<BYTE>& audioData, WAVEFORMATEX** waveFormatEx, unsigned int& waveFormatLength)
 {
 	HRESULT hr = S_OK;
 
 	DWORD streamIndex = static_cast<DWORD>(MF_SOURCE_READER_FIRST_AUDIO_STREAM);
 
 	if (pSourceReader != nullptr) {
-		pSourceReader->Release();
+		pSourceReader.Reset();
 	}
-	hr = MFCreateSourceReaderFromURL(filePath.c_str(), pSourceReaderConfig, &pSourceReader);
+	hr = MFCreateSourceReaderFromURL(filePath.c_str(), pSourceReaderConfig.Get(), pSourceReader.GetAddressOf());
 	THROW_IF_FAILED(hr, "Failed to load audio file");
 	if (FAILED(hr)) return false;
 	//disable all other audio streams
@@ -64,7 +82,7 @@ bool AudioEngine::LoadFile(const std::wstring& filePath, std::vector<BYTE>& audi
 	if (FAILED(hr)) return false;
 
 	//query info about the media file
-	ComPtr<IMFMediaType> pMediaType = nullptr;
+	wrl::ComPtr<IMFMediaType> pMediaType = nullptr;
 	hr = pSourceReader->GetNativeMediaType(streamIndex, 0, pMediaType.GetAddressOf());
 	THROW_IF_FAILED(hr, "Failed to retrieve native media type.");
 	if (FAILED(hr)) return false;
@@ -87,7 +105,7 @@ bool AudioEngine::LoadFile(const std::wstring& filePath, std::vector<BYTE>& audi
 	{
 		//audio file is compressed bossman so we tell the 
 		//source reader to decode and it looks for a way to do dat
-		ComPtr<IMFMediaType> partialType = nullptr;
+		wrl::ComPtr<IMFMediaType> partialType = nullptr;
 		hr = MFCreateMediaType(partialType.GetAddressOf());
 		THROW_IF_FAILED(hr, "Create media type failed.");
 		if (FAILED(hr)) return false;
@@ -105,11 +123,56 @@ bool AudioEngine::LoadFile(const std::wstring& filePath, std::vector<BYTE>& audi
 	}
 
 	//uncompress the data and load it into a xaudio2 buffer
-	ComPtr<IMFMediaType> uncompressedAudioType = nullptr;
+	wrl::ComPtr<IMFMediaType> uncompressedAudioType = nullptr;
 	hr = pSourceReader->GetCurrentMediaType(streamIndex, uncompressedAudioType.GetAddressOf());
 	THROW_IF_FAILED(hr, "get media type failed");
 
+	hr = MFCreateWaveFormatExFromMFMediaType(uncompressedAudioType.Get(), waveFormatEx, &waveFormatLength);
+	THROW_IF_FAILED(hr, "create wave formatex failed.");
 
+	//ensure the stream is selected
+	hr = pSourceReader->SetStreamSelection(streamIndex, true);
+	THROW_IF_FAILED(hr, "set stream selectionf failed.");
+
+	wrl::ComPtr<IMFSample> pSample = nullptr;
+	wrl::ComPtr<IMFMediaBuffer> pBuffer = nullptr;
+	BYTE* localAudioData = nullptr;
+	DWORD localAudioDataLength = 0;
+
+	while (true)
+	{
+		DWORD flags = 0;
+		hr = pSourceReader->ReadSample(streamIndex, 0, nullptr,
+			&flags, nullptr, pSample.GetAddressOf());
+		THROW_IF_FAILED(hr, "Unable to readsample.");
+
+		//check if data is still valid
+		if (flags & MF_SOURCE_READERF_CURRENTMEDIATYPECHANGED)
+			break;
+
+		//check for end of stream
+		if (flags & MF_SOURCE_READERF_ENDOFSTREAM)
+			break;
+
+		if (pSample == nullptr)
+			continue;
+
+		//convert data to contiguous buffer
+		hr = pSample->ConvertToContiguousBuffer(pBuffer.GetAddressOf());
+		THROW_IF_FAILED(hr, "Failed to convert buffer");
+
+		//Lock buffer and copy data to local memory
+		hr = pBuffer->Lock(&localAudioData, nullptr, &localAudioDataLength);
+		THROW_IF_FAILED(hr, "Lock failed");
+
+		for (std::size_t i = 0; i < localAudioDataLength; i++)
+			audioData.push_back(localAudioData[i]);
+
+		//unlock the buffer
+		hr = pBuffer->Unlock();
+		THROW_IF_FAILED(hr, "Failed to unlock the buffer.");
+		localAudioData = nullptr;
+	}
 
 	return true;
 }

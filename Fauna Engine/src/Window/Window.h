@@ -71,4 +71,5 @@ private:
 	LPCTSTR WndClassName = L"window";
 	std::wstring title;
 	HWND hWnd;
+	bool initialized = false;
 };

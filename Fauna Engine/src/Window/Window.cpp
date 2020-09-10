@@ -79,6 +79,7 @@ bool Window::Init(HINSTANCE hInstance) try
     /*if (!audioEngine.init()) {
         THROW_NORMAL("audio engine creation failed");
     }*/
+    this->initialized = true;
     return true;
 } catch (HrException& e) {
     ErrorLogger::Log(e);
@@ -111,15 +112,21 @@ LRESULT Window::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
         
         Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
         
-        std::wstring str = L"Width: ";
-        str.append(std::to_wstring(newWidth));
-        str.append(L", Height:" + std::to_wstring(newHeight));
-        OutputDebugStringW(str.c_str());
-        //window->setTitle(str.c_str());
-        //if (window->getGraphics().getDevice())
-        //{
-            //window->getGraphics().onSize(newWidth, newHeight);
-       // }
+        if (window != nullptr)
+        {
+            if (window->initialized)
+            {
+                std::wstring str = L"Width: ";
+                str.append(std::to_wstring(newWidth));
+                str.append(L", Height:" + std::to_wstring(newHeight));
+                OutputDebugStringW(str.c_str());
+                window->setTitle(str.c_str());
+                if (window->Gfx().getDevice() != nullptr)
+                {
+                    window->Gfx().onSize(newWidth, newHeight);
+                }
+            }
+        }
         break;
     }
     case WM_KEYDOWN:
