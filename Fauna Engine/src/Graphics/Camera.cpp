@@ -43,10 +43,10 @@ void Camera::Update(float dt, Window& wnd)
 	}
 	if (wnd.gamepad.Update())
 	{
-		yaw += wnd.gamepad.rightStickX * axisMultiplier * sensitivity * dt;
-		pitch += -(wnd.gamepad.rightStickY * axisMultiplier * sensitivity * dt);
-		moveX = wnd.gamepad.leftStickX * speed * dt;
-		moveZ = wnd.gamepad.leftStickY * speed * dt;
+		yaw += wnd.gamepad.getRightStick().x * axisMultiplier * sensitivity * dt;
+		pitch += -(wnd.gamepad.getRightStick().y * axisMultiplier * sensitivity * dt);
+		moveX = wnd.gamepad.getLeftStick().x * speed * dt;
+		moveZ = wnd.gamepad.getLeftStick().y * speed * dt;
 	}
 	std::clamp<float>(pitch, -pitchClamp, pitchClamp);
 

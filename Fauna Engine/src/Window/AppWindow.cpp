@@ -27,7 +27,49 @@ bool AppWindow::Init(HINSTANCE hInst)
 			Vertex(0.5f, -0.5f, 0.0f, 1.0f, 0.0f),
 			Vertex(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f),
 		};
-		std::vector<Vertex> boxVertices =
+		std::vector<Vertex> boxVertices = {
+			 Vertex(-0.5f, -0.5f, -0.5f,  0.0f, 0.0),
+			Vertex( 0.5f, -0.5f, -0.5f,  1.0f, 0.0f),
+			Vertex( 0.5f,  0.5f, -0.5f,  1.0f, 1.0f),
+			Vertex( 0.5f,  0.5f, -0.5f,  1.0f, 1.0f),
+			Vertex(-0.5f,  0.5f, -0.5f,  0.0f, 1.0f),
+			Vertex(-0.5f, -0.5f, -0.5f,  0.0f, 0.0f),
+			Vertex(-0.5f, -0.5f,  0.5f,  0.0f, 0.0f),
+			Vertex( 0.5f, -0.5f,  0.5f,  1.0f, 0.0f),
+			Vertex( 0.5f,  0.5f,  0.5f,  1.0f, 1.0f),
+			Vertex( 0.5f,  0.5f,  0.5f,  1.0f, 1.0f),
+			Vertex(-0.5f,  0.5f,  0.5f,  0.0f, 1.0f),
+			Vertex(-0.5f, -0.5f,  0.5f,  0.0f, 0.0f),
+				
+			Vertex(-0.5f,  0.5f,  0.5f,  1.0f, 0.0f),
+			Vertex(-0.5f,  0.5f, -0.5f,  1.0f, 1.0f),
+			Vertex(-0.5f, -0.5f, -0.5f,  0.0f, 1.0f),
+			Vertex(-0.5f, -0.5f, -0.5f,  0.0f, 1.0f),
+			Vertex(-0.5f, -0.5f,  0.5f,  0.0f, 0.0f),
+			Vertex(-0.5f,  0.5f,  0.5f,  1.0f, 0.0f),
+			
+			Vertex( 0.5f,  0.5f,  0.5f,  1.0f, 0.0f),
+			Vertex( 0.5f,  0.5f, -0.5f,  1.0f, 1.0f),
+			Vertex( 0.5f, -0.5f, -0.5f,  0.0f, 1.0f),
+			Vertex( 0.5f, -0.5f, -0.5f,  0.0f, 1.0f),
+			Vertex( 0.5f, -0.5f,  0.5f,  0.0f, 0.0f),
+			Vertex( 0.5f,  0.5f,  0.5f,  1.0f, 0.0f),
+									   
+			Vertex(-0.5f, -0.5f, -0.5f,  0.0f, 1.0f),
+			Vertex( 0.5f, -0.5f, -0.5f,  1.0f, 1.0f),
+			Vertex( 0.5f, -0.5f,  0.5f,  1.0f, 0.0f),
+			Vertex( 0.5f, -0.5f,  0.5f,  1.0f, 0.0f),
+			Vertex(-0.5f, -0.5f,  0.5f,  0.0f, 0.0f),
+			Vertex(-0.5f, -0.5f, -0.5f,  0.0f, 1.0f),
+									   
+			Vertex(-0.5f,  0.5f, -0.5f,  0.0f, 1.0f),
+			Vertex( 0.5f,  0.5f, -0.5f,  1.0f, 1.0f),
+			Vertex( 0.5f,  0.5f,  0.5f,  1.0f, 0.0f),
+			Vertex( 0.5f,  0.5f,  0.5f,  1.0f, 0.0f),
+			Vertex(-0.5f,  0.5f,  0.5f,  0.0f, 0.0f),
+			Vertex(-0.5f,  0.5f, -0.5f,  0.0f, 1.0f)
+		};
+		/*std::vector<Vertex> boxVertices =
 		{
 			// Front Face
 			Vertex(-1.0f, -1.0f, -1.0f, 0.0f, 1.0f),
@@ -89,9 +131,9 @@ bool AppWindow::Init(HINSTANCE hInst)
 			// Right Face
 			20, 21, 22,
 			20, 22, 23
-		};
+		};*/
 		dorito->Create(Window::Gfx(), vertices);
-		box->Create(Window::Gfx(), boxVertices, boxIndices);
+		box->Create(Window::Gfx(), boxVertices);
 		//smallGear->Init(Window::Gfx(), "res/8gear.obj");
 		//largeGear->Init(Window::Gfx(), "res/20gear.obj");
 		std::wstring str = L"res/img/skymap.dds";
@@ -177,6 +219,8 @@ void AppWindow::Update()
 	}*/
 	dorito->adjustRot(0.0f, sin(eTime) * 35.0f, 0.0f);
 	dorito->setScale(1.0f, 1.0f, 1.0f);
+
+	box->setPos(0.0f, 0.0f, 0.0f);
 
 	dorito->updateMatrix(camera);
 	box->updateMatrix(camera);

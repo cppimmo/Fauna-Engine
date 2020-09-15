@@ -72,17 +72,17 @@ bool Gamepad::Update()
 
     if (deadzoneX <= 1.0f || deadzoneY <= 1.0f)
     {
-        leftStickX = ApplyDeadzone(normLX, maxValue, deadzoneX);
-        leftStickY = ApplyDeadzone(normLY, maxValue, deadzoneY);
-        rightStickX = ApplyDeadzone(normRX, maxValue, deadzoneX);
-        rightStickY = ApplyDeadzone(normRY, maxValue, deadzoneY);
+        leftStick.x = ApplyDeadzone(normLX, maxValue, deadzoneX);
+        leftStick.y = ApplyDeadzone(normLY, maxValue, deadzoneY);
+        rightStick.x = ApplyDeadzone(normRX, maxValue, deadzoneX);
+        rightStick.y = ApplyDeadzone(normRY, maxValue, deadzoneY);
     }
     else
     {
-        leftStickX = ApplyDeadzone(normLX, maxValue, normalize(deadzoneX, SHRT_MIN, SHRT_MAX));
-        leftStickY = ApplyDeadzone(normLY, maxValue, normalize(deadzoneY, SHRT_MIN, SHRT_MAX));
-        rightStickX = ApplyDeadzone(normRX, maxValue, normalize(deadzoneX, SHRT_MIN, SHRT_MAX));
-        rightStickY = ApplyDeadzone(normRY, maxValue, normalize(deadzoneY, SHRT_MIN, SHRT_MAX));
+        leftStick.x = ApplyDeadzone(normLX, maxValue, normalize(deadzoneX, SHRT_MIN, SHRT_MAX));
+        leftStick.y = ApplyDeadzone(normLY, maxValue, normalize(deadzoneY, SHRT_MIN, SHRT_MAX));
+        rightStick.x = ApplyDeadzone(normRX, maxValue, normalize(deadzoneX, SHRT_MIN, SHRT_MAX));
+        rightStick.y = ApplyDeadzone(normRY, maxValue, normalize(deadzoneY, SHRT_MIN, SHRT_MAX));
     }
 
     leftTrigger = static_cast<float>(state.Gamepad.bLeftTrigger) / 255.0f;//normalize input 
@@ -114,4 +114,24 @@ void Gamepad::resetVibration()
 bool Gamepad::isButtonPressed(UINT button) const
 {
     return (state.Gamepad.wButtons & button) != 0;
+}
+
+const Gamepad::StickPos Gamepad::getLeftStick() const
+{
+    return leftStick;
+}
+
+const Gamepad::StickPos Gamepad::getRightStick() const
+{
+    return rightStick;
+}
+
+const float Gamepad::getLeftTrigger() const
+{
+    return this->leftTrigger;
+}
+
+const float Gamepad::getRightTrigger() const
+{
+    return this->rightTrigger;
 }

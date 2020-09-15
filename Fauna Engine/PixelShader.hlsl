@@ -12,6 +12,9 @@ struct VS_OUT
 Texture2D doritoTexture;
 SamplerState samplerState;
 
+const float blurSizeH = 1.0f / 800.0f;
+const float blurSizeV = 1.0f / 600.0f;
+
 float4 main(VS_OUT vso) : SV_TARGET
 {
 	/*float fogStart = 100;	
