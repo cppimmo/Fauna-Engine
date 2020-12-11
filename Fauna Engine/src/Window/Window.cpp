@@ -1,5 +1,6 @@
 #include "Window/Window.h"
-#include "Utility/Error.h"
+
+#include "Utility/Log.h"
 #include "../resource.h"
 #include <fstream>
 
@@ -82,7 +83,7 @@ bool Window::Init(HINSTANCE hInstance) try
     this->initialized = true;
     return true;
 } catch (HrException& e) {
-    ErrorLogger::Log(e);
+    Log::Message_Box(e);
     return false;
 }
     
@@ -295,7 +296,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
     }
     catch (const std::exception& e)
     {
-        ErrorLogger::Log(string_to_wstring(e.what()));
+        Log::Log(string_to_wstring(e.what()));
         return false;
     }
     return true;

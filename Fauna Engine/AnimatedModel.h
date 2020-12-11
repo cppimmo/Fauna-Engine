@@ -18,11 +18,13 @@ struct Joint {
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT4 orientation;
 };
+
 struct Weight {
 	int jointID;
 	float bias;
 	DirectX::XMFLOAT3 pos;
 };
+
 struct Mesh {
 	int texArrayIndex;
 	int numTriangles;  

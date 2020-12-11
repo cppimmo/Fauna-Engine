@@ -32,7 +32,7 @@ protected:
 	mutable std::string whatStr;
 };
 
-class ErrorLogger
+/*class Log
 {
 public:
 	static void Log(HRESULT hr, std::wstring what);
@@ -40,4 +40,4 @@ public:
 	static void Log(std::wstring what, std::wstring title);
 	static void Log(HrException& e);
 	static void Log(const HrException& e);
-};
+};*/

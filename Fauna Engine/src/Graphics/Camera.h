@@ -35,13 +35,13 @@ private:
 	DirectX::CXMVECTOR defaultForward = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 	DirectX::CXMVECTOR defaultRight = DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
 	DirectX::CXMVECTOR defaultUp = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	
+private:
 	const float speed = 1.0f;
 	static constexpr float pitchClamp = 89.0f;
 	float pitch;
 	float yaw;
 	float zoom;
-	float sensitivity = 0.001f;
+	float sensitivity = 0.1f;
 	static constexpr int axisMultiplier = 1000;
 	float moveX, moveY, moveZ;
 	Mouse::MousePos lastPos;

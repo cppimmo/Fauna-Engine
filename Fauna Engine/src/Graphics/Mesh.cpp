@@ -1,5 +1,6 @@
 #include "Graphics/Mesh.h"
-#include "Utility/Error.h"
+
+#include "Utility/Log.h"
 #include "Utility/Util.h"
 
 using namespace DirectX;
@@ -18,10 +19,10 @@ void Model::create(std::vector<Vertex>& vertices)
 	HRESULT hr = S_OK;
 
 	hr = vertexBuffer.init(pGfx->getDevice(), vertices.data(), vertices.size());
-	ErrorLogger::Log(hr, L"Vertex buffer initialization failed");
+	Log::Log(hr, L"Vertex buffer initialization failed");
 
 	hr = constantBuffer.init(pGfx->getDevice(), pGfx->getContext());
-	ErrorLogger::Log(hr, L"const buffer init failed");
+	Log::Log(hr, L"const buffer init failed");
 	/*vertexCount = vertices.size();
 	D3D11_BUFFER_DESC bd = {};
 	bd.Usage = D3D11_USAGE_DEFAULT;
@@ -34,7 +35,7 @@ void Model::create(std::vector<Vertex>& vertices)
 	sd.pSysMem = vertices.data();
 
 	hr = pGfx->getDevice()->CreateBuffer(&bd, &sd, &pVertexBuffer);
-	ErrorLogger::Log(hr, L"Create Buffer failed");
+	Log::Log(hr, L"Create Buffer failed");
 
 	D3D11_BUFFER_DESC cbd = {};
 	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -49,7 +50,7 @@ void Model::create(std::vector<Vertex>& vertices)
 	D3D11_SUBRESOURCE_DATA csd = {};
 	csd.pSysMem = &cb;
 	pGfx->getDevice()->CreateBuffer(&cbd, &csd, &pConstantBuffer);
-	ErrorLogger::Log(hr, L"Create Buffer failed");
+	Log::Log(hr, L"Create Buffer failed");
 }
 
 void Model::create(std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
@@ -61,13 +62,13 @@ void Model::create(std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
 	HRESULT hr = S_OK;
 
 	hr = vertexBuffer.init(pGfx->getDevice(), vertices.data(), vertices.size());
-	ErrorLogger::Log(hr, L"Vertex buffer init failed");
+	Log::Log(hr, L"Vertex buffer init failed");
 
 	hr = indexBuffer.init(pGfx->getDevice(), indices.data(), indices.size());
-	ErrorLogger::Log(hr, L"Index buffer init failed");
+	Log::Log(hr, L"Index buffer init failed");
 
 	hr = constantBuffer.init(pGfx->getDevice(), pGfx->getContext());
-	ErrorLogger::Log(hr, L"const buffer init failed");
+	Log::Log(hr, L"const buffer init failed");
 	//VERTEX BUFFER STUFF
 	vertexCount = vertices.size();
 	D3D11_BUFFER_DESC bd = {};
@@ -81,7 +82,7 @@ void Model::create(std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
 	sd.pSysMem = vertices.data();
 
 	hr = pGfx->getDevice()->CreateBuffer(&bd, &sd, &pVertexBuffer);
-	ErrorLogger::Log(hr, L"Create Buffer failed");
+	Log::Log(hr, L"Create Buffer failed");
 
 	//INDEX BUFFER STUFF
 	indexCount = indices.size();
@@ -95,7 +96,7 @@ void Model::create(std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
 	D3D11_SUBRESOURCE_DATA isd = {};
 	isd.pSysMem = indices.data();
 	hr = pGfx->getDevice()->CreateBuffer(&ibd, &isd, &pIndexBuffer);
-	ErrorLogger::Log(hr, L"Creation of Index Buffer Failed");
+	Log::Log(hr, L"Creation of Index Buffer Failed");
 
 	D3D11_BUFFER_DESC cbd = {};
 	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -108,7 +109,7 @@ void Model::create(std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
 	//D3D11_SUBRESOURCE_DATA csd = {};
 	//csd.pSysMem = &cb;
 	hr = pGfx->getDevice()->CreateBuffer(&cbd, nullptr, &pConstantBuffer);
-	ErrorLogger::Log(hr, L"Create Buffer failed");
+	Log::Log(hr, L"Create Buffer failed");
 }*/
 
 /*void Model::resetMatrix()
@@ -222,7 +223,7 @@ bool Model3D::Init(Graphics& gfx, const std::string& filePath)
 	}
 	catch (HrException& e)
 	{
-		ErrorLogger::Log(e);
+		Log::Message_Box(e);
 		return false;
 	}
 	return true;

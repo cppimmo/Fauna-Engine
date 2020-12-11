@@ -1,5 +1,5 @@
 #include "Model.h"
-#include "Utility/Error.h"
+
 #include "Utility/Util.h"
 
 using namespace DirectX;
@@ -31,13 +31,13 @@ void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices)
 	box.CreateFromPoints(box, vertices.size(), &vertices[0].pos, sizeof(Vertex));
 
 	hr = vertexBuffer.Init(gfx, vertices.data(), vertices.size());
-	ErrorLogger::Log(hr, L"Vertex buffer initialization failed");
+	Log::Message_Box(hr, "Vertex buffer initialization failed");
 
 	hr = vsCBuffer.Init(gfx);
-	ErrorLogger::Log(hr, L"const buffer init failed");
+	Log::Message_Box(hr, "const buffer init failed");
 
 	hr = psCBuffer.Init(gfx);
-	ErrorLogger::Log(hr, L"const buffer init failed");
+	Log::Message_Box(hr, "const buffer init failed");
 }
 
 void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
@@ -61,16 +61,16 @@ void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices, std::vector<DWO
 	box.CreateFromPoints(box, vertices.size(), &vertices[0].pos, sizeof(Vertex));
 
 	hr = vertexBuffer.Init(gfx, vertices.data(), vertices.size());
-	ErrorLogger::Log(hr, L"Vertex buffer init failed");
+	Log::Message_Box(hr, "Vertex buffer init failed");
 
 	hr = indexBuffer.Init(gfx, indices.data(), indices.size());
-	ErrorLogger::Log(hr, L"Index buffer init failed");
+	Log::Message_Box(hr, "Index buffer init failed");
 
 	hr = vsCBuffer.Init(gfx);
-	ErrorLogger::Log(hr, L"const buffer init failed");
+	Log::Message_Box(hr, "const buffer init failed");
 
 	hr = psCBuffer.Init(gfx);
-	ErrorLogger::Log(hr, L"const buffer init faield");
+	Log::Message_Box(hr, "const buffer init faield");
 }
 
 bool Model::isColliding(Model& model)

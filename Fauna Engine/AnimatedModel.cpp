@@ -337,3 +337,15 @@ bool AnimatedModel::Load(Graphics& gfx, std::wstring& filePath, std::vector<std:
    // }
     return true;
 }
+
+void AnimatedModel::Bind()
+{
+}
+
+void AnimatedModel::Draw()
+{
+}
+
+void AnimatedModel::Unbind()
+{
+}

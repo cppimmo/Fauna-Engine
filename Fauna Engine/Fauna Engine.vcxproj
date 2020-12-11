@@ -106,16 +106,16 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\sdk\assimp-3.1.1-win-binaries\include;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\imgui;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\src;D:\sdk\irrKlang-32bit-1.6.0\irrKlang-1.6.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio Projects\Fauna Engine\Fauna Engine\lua535;D:\sdk\assimp-3.1.1-win-binaries\include;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\imgui;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\src;D:\sdk\irrKlang-32bit-1.6.0\irrKlang-1.6.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>xinput.lib;d3d11.lib;d3dcompiler.lib;xaudio2.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\sdk\assimp-3.1.1-win-binaries\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>xinput.lib;d3d11.lib;d3dcompiler.lib;xaudio2.lib;lua53.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Visual Studio Projects\Fauna Engine\Fauna Engine\lua535;D:\sdk\assimp-3.1.1-win-binaries\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -148,26 +148,29 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\sdk\Assimp4.1.0\include;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\imgui;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio Projects\Fauna Engine\Fauna Engine\lua535;D:\sdk\Assimp4.1.0\include;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\imgui;D:\Visual Studio Projects\Fauna Engine\Fauna Engine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>xinput.lib;d3d11.lib;d3dcompiler.lib;xaudio2.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\sdk\Assimp4.1.0\lib\x64;D:\sdk\irrKlang-32bit-1.6.0\irrKlang-1.6.0\lib\Win32-visualStudio;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>xinput.lib;d3d11.lib;d3dcompiler.lib;xaudio2.lib;lua53.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Visual Studio Projects\Fauna Engine\Fauna Engine\lua535;D:\sdk\Assimp4.1.0\lib\x64;D:\sdk\irrKlang-32bit-1.6.0\irrKlang-1.6.0\lib\Win32-visualStudio;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedModel.cpp" />
+    <ClCompile Include="src\Utility\LuaManager.cpp" />
+    <ClCompile Include="src\Graphics\Shader\ComputeShader.cpp" />
     <ClCompile Include="src\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="src\Graphics\VertexBuffer.cpp" />
     <ClCompile Include="src\Scene\PlayScene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
+    <ClCompile Include="src\Utility\Log.cpp" />
     <ClCompile Include="src\Window\AppWindow.cpp" />
     <ClCompile Include="src\Graphics\Shader\GeometryShader.cpp" />
     <ClCompile Include="src\Graphics\Shader\DomainShader.cpp" />
@@ -199,6 +202,7 @@
     <ClCompile Include="Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="lua535\lua53.dll" />
     <None Include="packages.config" />
     <None Include="PixelShaderColor.cso" />
     <None Include="config.ini" />
@@ -280,8 +284,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedModel.h" />
+    <ClInclude Include="lua535\include\lauxlib.h" />
+    <ClInclude Include="lua535\include\lua.h" />
+    <ClInclude Include="lua535\include\lua.hpp" />
+    <ClInclude Include="lua535\include\luaconf.h" />
+    <ClInclude Include="lua535\include\lualib.h" />
+    <ClInclude Include="src\Utility\LuaManager.h" />
+    <ClInclude Include="src\Graphics\Shader\ComputeShader.h" />
     <ClInclude Include="src\Graphics\ConstantBufferTypes.h" />
     <ClInclude Include="src\Scene\PlayScene.h" />
+    <ClInclude Include="src\Utility\Log.h" />
     <ClInclude Include="src\Utility\RandomGenerator.h" />
     <ClInclude Include="src\Scene\SceneManager.h" />
     <ClInclude Include="src\Window\AppWindow.h" />
@@ -335,6 +347,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="credtis.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lua535\lua53.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

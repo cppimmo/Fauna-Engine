@@ -43,9 +43,15 @@ private:
 /*static bool load_config(const char* filePath, bool& isFullscreen, UINT& width,
 	UINT& height, bool& isVysnc);*/
 
+struct Config 
+{
+
+};
+
 class Window
 {
 	friend class Camera;
+	friend class Log;
 public:
 	Window(std::wstring& title, UINT width, UINT height);
 	virtual ~Window();

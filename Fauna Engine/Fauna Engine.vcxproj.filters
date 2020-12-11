@@ -43,6 +43,9 @@
     <ClCompile Include="src\Scene\PlayScene.cpp" />
     <ClCompile Include="src\Graphics\VertexBuffer.cpp" />
     <ClCompile Include="src\Graphics\IndexBuffer.cpp" />
+    <ClCompile Include="src\Graphics\Shader\ComputeShader.cpp" />
+    <ClCompile Include="src\Utility\Log.cpp" />
+    <ClCompile Include="src\Utility\LuaManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
@@ -92,6 +95,14 @@
     <ClInclude Include="src\Scene\PlayScene.h" />
     <ClInclude Include="src\Utility\RandomGenerator.h" />
     <ClInclude Include="src\Graphics\ConstantBufferTypes.h" />
+    <ClInclude Include="src\Graphics\Shader\ComputeShader.h" />
+    <ClInclude Include="lua535\include\lauxlib.h" />
+    <ClInclude Include="lua535\include\lua.h" />
+    <ClInclude Include="lua535\include\lua.hpp" />
+    <ClInclude Include="lua535\include\luaconf.h" />
+    <ClInclude Include="lua535\include\lualib.h" />
+    <ClInclude Include="src\Utility\Log.h" />
+    <ClInclude Include="src\Utility\LuaManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Fauna Engine.rc" />
@@ -104,6 +115,7 @@
     <None Include="PixelShaderColor.cso" />
     <None Include="config.ini" />
     <None Include="VertexShaderColor.cso" />
+    <None Include="lua535\lua53.dll" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="credtis.txt" />
@@ -121,5 +133,8 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{192dcdda-7b84-48cb-a45c-a44ac37ec9d2}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lua535\lua53.lib" />
   </ItemGroup>
 </Project>

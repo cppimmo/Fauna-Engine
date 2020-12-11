@@ -12,7 +12,9 @@
 *********************************************************/
 //#include "Game/Game.h"
 #include "Window/AppWindow.h"
-#include "Utility/Error.h"
+
+#include "Utility/Log.h"
+#include "Utility/Log.h"
 #include <fstream>
 #include <exception>
 #include <string>
@@ -35,18 +37,18 @@ int WINAPI WinMain(HINSTANCE hInstance,
         }
         else
         {
-            ErrorLogger::Log(L"Application launch failed");
+            Log::Message_Box("Application launch failed");
             return -1;
         }
     }
     catch (HrException& e)
     {
-        ErrorLogger::Log(e);
+        Log::Message_Box(e);
         return -1;
     }
     catch (...)
     {
-        ErrorLogger::Log(L"Unknown exception. Exiting...");
+        Log::Message_Box("Unknown exception. Exiting...");
         return -1;
     }
 }
@@ -98,7 +100,7 @@ bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& he
     }
     catch (const std::exception& e)
     {
-        ErrorLogger::Log(string_to_wstring(e.what()));
+        Log::Message_Box(e.what());
         return false;
     }
     return true;

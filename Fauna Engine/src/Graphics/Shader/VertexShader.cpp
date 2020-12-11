@@ -1,5 +1,6 @@
 #include "Graphics/Shader/VertexShader.h"
-#include "Utility/Error.h"
+
+#include "Utility/Log.h"
 #include "Utility/Util.h"
 #include "Graphics/Graphics.h"
 
@@ -23,7 +24,7 @@ bool VertexShader::Init(Graphics& gfx, std::wstring filePath, D3D11_INPUT_ELEMEN
 	}
 	catch (HrException& e)
 	{
-		ErrorLogger::Log(e);
+		Log::Message_Box(e);
 		return false;
 	}
 	return true;

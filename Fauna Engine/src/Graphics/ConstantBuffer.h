@@ -3,7 +3,8 @@
 #include <d3d11.h>
 #include <wrl.h>
 #include "Graphics/ConstantBufferTypes.h"
-#include "Utility/Error.h"
+
+#include "Utility/Log.h"
 #include "Graphics/Bindable.h"
 
 template<class C>//vertex shader
@@ -67,7 +68,7 @@ public:
 		D3D11_MAPPED_SUBRESOURCE msr = {};
 		HRESULT hr = gfx.getContext()->Map(pBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
 		if (FAILED(hr)) {
-			ErrorLogger::Log(hr, L"Failed to map constant buffer.");
+			Log::Message_Box(hr, "Failed to map constant buffer.");
 			return false;
 		}
 		memcpy(msr.pData, &data, sizeof(C));

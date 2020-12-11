@@ -78,8 +78,6 @@ bool PlayScene::Init()
 	texThread.join();
 
 	return true;
-
-	return true;
 }
 
 void PlayScene::Update()
@@ -117,8 +115,8 @@ void PlayScene::Update()
 
 	if (Wnd().gamepad.Update())
 	{
-		float joyX = Wnd().gamepad.leftStickX;
-		float joyY = Wnd().gamepad.leftStickY;
+		float joyX = Wnd().gamepad.getLeftStick().x;
+		float joyY = Wnd().gamepad.getLeftStick().y;
 		dorito->adjustPos(0.0f, joyY * dTime * 0.85f, 0.0f);
 		dorito->adjustPos(joyX * dTime * 0.85f, 0.0f, 0.0f);
 	}

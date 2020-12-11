@@ -1,7 +1,8 @@
 #include "Graphics/Shader/DomainShader.h"
-#include "Utility/Error.h"
+
 #include "Utility/Util.h"
 #include "Graphics/Graphics.h"
+#include <Utility\Log.h>
 
 bool DomainShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 {
@@ -20,7 +21,7 @@ bool DomainShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 	}
 	catch (HrException& e)
 	{
-		ErrorLogger::Log(e);
+		Log::Message_Box(e);
 		return false;
 	}
 	return true;

@@ -1,5 +1,6 @@
 #include "Graphics/Shader/GeometryShader.h"
-#include "Utility/Error.h"
+
+#include "Utility/Log.h"
 #include "Utility/Util.h"
 #include "Graphics/Graphics.h"
 
@@ -20,7 +21,7 @@ bool GeometryShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 	}
 	catch (HrException& e)
 	{
-		ErrorLogger::Log(e);
+		Log::Message_Box(e);
 		return false;
 	}
 	return true;

@@ -1,7 +1,8 @@
 #include "SkySphere.h"
 #include <DDSTextureLoader.h>
 #include "Utility/Util.h"
-#include "Utility/Error.h"
+#include "Utility/Log.h"
+
 #include "Graphics/VertexTypes.h"
 #include <vector>
 
@@ -175,7 +176,7 @@ bool SkySphere::Init(Graphics& gfx, std::wstring& filePath) try
 		THROW_NORMAL("Failed to load cubemap texture");
 	return true;
 } catch (HrException& e) {
-	ErrorLogger::Log(e);
+	Log::Message_Box(e);
 	return false;
 }
 

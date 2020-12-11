@@ -1,6 +1,7 @@
 #include "Graphics/CubeTexture.h"
 #include <DDSTextureLoader.h>
-#include "Utility/Error.h"
+
+#include "Utility/Log.h"
 #include "Utility/Util.h"
 
 using namespace DirectX;
@@ -26,6 +27,6 @@ bool CubeTexture::Load(Graphics& gfx, std::wstring& filePath) try
 
 	return true;
 } catch (HrException& e) {
-	ErrorLogger::Log(e);
+	Log::Message_Box(e);
 	return false;
 }

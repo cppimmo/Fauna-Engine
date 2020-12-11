@@ -29,7 +29,10 @@ void Camera::Update(float dt, Window& wnd)
 		std::clamp<float>(pitch, -pitchClamp, pitchClamp);
 		lastPos = currPos;
 	}*/
-	if ((currPos.x > lastPos.x) || (currPos.y > lastPos.y))
+	yaw = currPos.x - lastPos.x * sensitivity * dt;
+	pitch = currPos.y - lastPos.y * sensitivity * dt;
+	this->lastPos = currPos;
+	/*if ((currPos.x > lastPos.x) || (currPos.y > lastPos.y))
 	{
 		yaw += lastPos.x * sensitivity * dt;
 		pitch += lastPos.y * sensitivity * dt;
@@ -47,7 +50,7 @@ void Camera::Update(float dt, Window& wnd)
 		pitch += -(wnd.gamepad.getRightStick().y * axisMultiplier * sensitivity * dt);
 		moveX = wnd.gamepad.getLeftStick().x * speed * dt;
 		moveZ = wnd.gamepad.getLeftStick().y * speed * dt;
-	}
+	}*/
 	std::clamp<float>(pitch, -pitchClamp, pitchClamp);
 
 	//zoom += wnd.mouse.getWheelDelta();

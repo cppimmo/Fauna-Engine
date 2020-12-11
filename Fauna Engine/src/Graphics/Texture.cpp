@@ -1,6 +1,7 @@
 #include "Graphics/Texture.h"
 #include <DDSTextureLoader.h>
-#include "Utility/Error.h"
+#include "Utility/Log.h"
+
 #include "Utility/Util.h"
 
 using namespace DirectX;
@@ -27,7 +28,7 @@ bool Texture::Load(Graphics& gfx, std::wstring filePath)
 	}
 	catch (HrException& e)
 	{
-		ErrorLogger::Log(e);
+		Log::Message_Box(e);
 		return false;
 	}
 	return true;

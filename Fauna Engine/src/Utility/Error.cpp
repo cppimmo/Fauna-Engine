@@ -44,33 +44,3 @@ inline const std::string& HrException::getFile() const noexcept
 {
 	return file;
 }
-
-void ErrorLogger::Log(HRESULT hr, std::wstring what)
-{
-	if (FAILED(hr))
-	{
-		MessageBoxW(nullptr, what.c_str(), L"Error", MB_ICONERROR);
-	}
-}
- 
-void ErrorLogger::Log(std::wstring what)
-{
-	MessageBoxW(nullptr, what.c_str(), L"User Defined Error", MB_ICONERROR);
-}
-
-void ErrorLogger::Log(std::wstring what, std::wstring title)
-{
-	MessageBoxW(nullptr, what.c_str(), title.c_str(), MB_OK);
-}
-
-void ErrorLogger::Log(HrException& e)
-{
-	std::wstring wstr = string_to_wstring(e.what());
-	MessageBoxW(nullptr, wstr.c_str(), L"Error", MB_ICONERROR);
-}
-
-void ErrorLogger::Log(const HrException& e)
-{
-	std::wstring wstr = string_to_wstring(e.what());
-	MessageBoxW(nullptr, wstr.c_str(), L"Error", MB_ICONERROR);
-}

@@ -1,5 +1,6 @@
 #include "Graphics/Graphics.h"
-#include "Utility/Error.h"
+
+#include "Utility/Log.h"
 #include "Utility/Util.h"
 
 using namespace DirectX;
@@ -189,7 +190,7 @@ bool Graphics::Init(bool isFullscreen, bool isVsync, unsigned int width,
 	ImGui::StyleColorsDark();
 	return true;
 } catch (HrException& e) {
-	ErrorLogger::Log(e);
+	Log::Message_Box(e);
 	return false;
 }
 
@@ -233,7 +234,7 @@ void Graphics::onSize(unsigned int newWidth, unsigned int newHeight) try
 	CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(newWidth), static_cast<float>(newHeight), 0.0f, 1.0f);
 	pContext->RSSetViewports(1, &viewport);
 } catch (HrException& e) {
-	ErrorLogger::Log(e);
+	Log::Message_Box(e);
 }
 
 void Graphics::setFullscreen(bool fullscreen, unsigned int width, unsigned int height)
