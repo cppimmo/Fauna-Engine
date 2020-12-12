@@ -2,6 +2,7 @@
 
 #include "Utility/Log.h"
 #include "Utility/Util.h"
+#include <Utility\Error.h>
 
 using namespace DirectX;
 
@@ -221,7 +222,7 @@ bool Model3D::Init(Graphics& gfx, const std::string& filePath)
 		if (!this->Load(gfx, filePath))
 			THROW_NORMAL("Could not load 3d model: " + filePath);
 	}
-	catch (HrException& e)
+	catch (const HrException& e)
 	{
 		Log::Message_Box(e);
 		return false;

@@ -16,8 +16,8 @@ public:
 		const std::string& function, std::size_t line) noexcept;
 	HrException(const std::string& msg, const std::string& file,
 		const std::string& function, std::size_t line) noexcept;
-	HrException(const HrException&) = delete;
-	HrException& operator=(const HrException&) = delete;
+	HrException(const HrException& rhs);
+	HrException& operator=(const HrException& rhs);
 	~HrException() = default;
 	const char* what() const noexcept override { return whatStr.c_str(); }
 	virtual const char* getType() const noexcept; //not pure 

@@ -5,6 +5,7 @@
 
 #include "Graphics/VertexTypes.h"
 #include <vector>
+#include <Utility\Error.h>
 
 using namespace DirectX;
 
@@ -175,7 +176,7 @@ bool SkySphere::Init(Graphics& gfx, std::wstring& filePath) try
 	if (!cubeMap.Load(gfx, filePath))
 		THROW_NORMAL("Failed to load cubemap texture");
 	return true;
-} catch (HrException& e) {
+} catch (const HrException& e) {
 	Log::Message_Box(e);
 	return false;
 }

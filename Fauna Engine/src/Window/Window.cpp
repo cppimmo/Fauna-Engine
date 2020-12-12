@@ -1,5 +1,5 @@
 #include "Window/Window.h"
-
+#include "Utility/Error.h"
 #include "Utility/Log.h"
 #include "../resource.h"
 #include <fstream>
@@ -82,7 +82,7 @@ bool Window::Init(HINSTANCE hInstance) try
     }*/
     this->initialized = true;
     return true;
-} catch (HrException& e) {
+} catch (const HrException& e) {
     Log::Message_Box(e);
     return false;
 }

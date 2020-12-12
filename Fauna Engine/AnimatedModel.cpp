@@ -1,4 +1,4 @@
-#include "AnimatedModel.h"
+/*#include "AnimatedModel.h"
 #include <fstream>
 
 using namespace DirectX;
@@ -349,3 +349,4 @@ void AnimatedModel::Draw()
 void AnimatedModel::Unbind()
 {
 }
+*/

@@ -3,6 +3,7 @@
 
 #include "Utility/Log.h"
 #include "Utility/Util.h"
+#include <Utility\Error.h>
 
 using namespace DirectX;
 
@@ -26,7 +27,7 @@ bool CubeTexture::Load(Graphics& gfx, std::wstring& filePath) try
 	THROW_IF_FAILED(hr, "Failed to load cubemap texture.");
 
 	return true;
-} catch (HrException& e) {
+} catch (const HrException& e) {
 	Log::Message_Box(e);
 	return false;
 }

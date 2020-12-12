@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include "Graphics/Graphics.h"
 #include "Graphics/VertexBuffer.h"
@@ -62,5 +62,5 @@ private:
 	std::vector<Mesh> meshes;
 	std::vector<Texture> textures;
 	ID3D11DeviceContext* pContext = nullptr;
-};
+};*/
 

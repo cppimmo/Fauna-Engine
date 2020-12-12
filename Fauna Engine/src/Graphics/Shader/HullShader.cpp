@@ -3,6 +3,7 @@
 #include "Utility/Log.h"
 #include "Utility/Util.h"
 #include "Graphics/Graphics.h"
+#include <Utility\Error.h>
 
 bool HullShader::Init(Graphics& gfx, std::wstring& filePath)
 {
@@ -19,7 +20,7 @@ bool HullShader::Init(Graphics& gfx, std::wstring& filePath)
 			pBlob->GetBufferSize(), nullptr, &pHullShader);
 		THROW_IF_FAILED(hr, "Pixel shader failed to create");
 	}
-	catch (HrException& e)
+	catch (const HrException& e)
 	{
 		Log::Message_Box(e);
 		return false;

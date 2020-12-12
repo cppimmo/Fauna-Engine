@@ -5,6 +5,7 @@
 #include "Graphics/Graphics.h"
 #include "Graphics/Texture.h"
 #include "Graphics/CubeTexture.h"
+#include <Utility\Error.h>
 
 bool PixelShader::Init(Graphics& gfx, std::wstring filePath)
 {
@@ -21,7 +22,7 @@ bool PixelShader::Init(Graphics& gfx, std::wstring filePath)
 			pBlob->GetBufferSize(), nullptr, &pPixelShader);
 		THROW_IF_FAILED(hr, "Pixel shader failed to create");
 	}
-	catch (HrException& e)
+	catch (const HrException& e)
 	{
 		Log::Message_Box(e);
 		return false;

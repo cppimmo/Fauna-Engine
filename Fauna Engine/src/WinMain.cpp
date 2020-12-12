@@ -12,9 +12,8 @@
 *********************************************************/
 //#include "Game/Game.h"
 #include "Window/AppWindow.h"
-
 #include "Utility/Log.h"
-#include "Utility/Log.h"
+#include "Utility/Error.h"
 #include <fstream>
 #include <exception>
 #include <string>
@@ -41,7 +40,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
             return -1;
         }
     }
-    catch (HrException& e)
+    catch (const HrException& e)
     {
         Log::Message_Box(e);
         return -1;

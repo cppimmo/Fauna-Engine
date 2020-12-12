@@ -2,6 +2,7 @@
 
 #include "Utility/Log.h"
 #include "Utility/Util.h"
+#include <Utility\Error.h>
 
 using namespace DirectX;
 namespace wrl = Microsoft::WRL;
@@ -189,7 +190,7 @@ bool Graphics::Init(bool isFullscreen, bool isVsync, unsigned int width,
 	ImGui_ImplDX11_Init(this->pDevice.Get(), this->pContext.Get());
 	ImGui::StyleColorsDark();
 	return true;
-} catch (HrException& e) {
+} catch (const HrException& e) {
 	Log::Message_Box(e);
 	return false;
 }
@@ -233,7 +234,7 @@ void Graphics::onSize(unsigned int newWidth, unsigned int newHeight) try
 
 	CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(newWidth), static_cast<float>(newHeight), 0.0f, 1.0f);
 	pContext->RSSetViewports(1, &viewport);
-} catch (HrException& e) {
+} catch (const HrException& e) {
 	Log::Message_Box(e);
 }
 

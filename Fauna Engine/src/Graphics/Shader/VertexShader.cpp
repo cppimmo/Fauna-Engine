@@ -3,6 +3,7 @@
 #include "Utility/Log.h"
 #include "Utility/Util.h"
 #include "Graphics/Graphics.h"
+#include <Utility\Error.h>
 
 bool VertexShader::Init(Graphics& gfx, std::wstring filePath, D3D11_INPUT_ELEMENT_DESC* pDesc, UINT numElements)
 {
@@ -22,7 +23,7 @@ bool VertexShader::Init(Graphics& gfx, std::wstring filePath, D3D11_INPUT_ELEMEN
 			pBlob->GetBufferSize(), &pInputLayout);
 		THROW_IF_FAILED(hr, "Could not create input layout");
 	}
-	catch (HrException& e)
+	catch (const HrException& e)
 	{
 		Log::Message_Box(e);
 		return false;

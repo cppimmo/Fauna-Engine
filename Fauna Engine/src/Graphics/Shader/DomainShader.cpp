@@ -3,6 +3,7 @@
 #include "Utility/Util.h"
 #include "Graphics/Graphics.h"
 #include <Utility\Log.h>
+#include <Utility\Error.h>
 
 bool DomainShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 {
@@ -19,7 +20,7 @@ bool DomainShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 			pBlob->GetBufferSize(), nullptr, &pDomainShader);
 		THROW_IF_FAILED(hr, "Pixel shader failed to create");
 	}
-	catch (HrException& e)
+	catch (const HrException& e)
 	{
 		Log::Message_Box(e);
 		return false;

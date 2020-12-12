@@ -11,6 +11,13 @@ LuaManager::~LuaManager()
 	lua_close(this->lua_state);
 }
 
+LuaManager& LuaManager::Get()
+{
+	// singleton
+	static LuaManager instance;
+	return instance;
+}
+
 int LuaManager::GetGlobal(const std::string& name)
 {
 	return 0;

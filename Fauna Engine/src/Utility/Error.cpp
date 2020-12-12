@@ -25,6 +25,23 @@ HrException::HrException(const std::string& msg, const std::string& file,
 	whatStr = oss.str();
 }
 
+HrException::HrException(const HrException& rhs)
+{
+	this->file = rhs.file;
+	this->function = rhs.function;
+	this->line = rhs.line;
+	this->whatStr = rhs.whatStr;
+}
+
+HrException& HrException::operator=(const HrException& rhs)
+{
+	this->file = rhs.file;
+	this->function = rhs.function;
+	this->line = rhs.line;
+	this->whatStr = rhs.whatStr;
+	return *this;
+}
+
 const char* HrException::getType() const noexcept
 {
 	return "Base Exception";

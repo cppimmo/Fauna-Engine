@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Win.h"
-#include "Utility/Error.h"
 #include "Window/Window.h"
 #include <string>
 #include <iostream>
 #include <fstream>
+
+class HrException;
+class LuaManager;
 
 class Log 
 {

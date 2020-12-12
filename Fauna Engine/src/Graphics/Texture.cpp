@@ -3,6 +3,7 @@
 #include "Utility/Log.h"
 
 #include "Utility/Util.h"
+#include <Utility\Error.h>
 
 using namespace DirectX;
 
@@ -26,7 +27,7 @@ bool Texture::Load(Graphics& gfx, std::wstring filePath)
 		hr = pDevice->CreateSamplerState(&tsd, &pTexSamplerState);
 		THROW_IF_FAILED(hr, "Create sampler state failed");*/
 	}
-	catch (HrException& e)
+	catch (const HrException& e)
 	{
 		Log::Message_Box(e);
 		return false;
