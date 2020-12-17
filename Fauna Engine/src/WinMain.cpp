@@ -10,7 +10,7 @@
 //buffers, load config function in window class
 //DONE: imgui,
 *********************************************************/
-//#include "Game/Game.h"
+
 #include "Window/AppWindow.h"
 #include "Utility/Log.h"
 #include "Utility/Error.h"
@@ -43,6 +43,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
     catch (const HrException& e)
     {
         Log::Message_Box(e);
+        return -1;
+    }
+    catch (const std::exception& e)
+    {
+        Log::Message_Box(e.what());
         return -1;
     }
     catch (...)

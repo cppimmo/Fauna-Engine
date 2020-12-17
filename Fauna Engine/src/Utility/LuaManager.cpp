@@ -13,7 +13,6 @@ LuaManager::~LuaManager()
 
 LuaManager& LuaManager::Get()
 {
-	// singleton
 	static LuaManager instance;
 	return instance;
 }
@@ -33,7 +32,7 @@ bool LuaManager::Check(int result, int stackLoc)
 	if (result != LUA_OK)
 	{
 		std::string errormsg = lua_tostring(this->lua_state, stackLoc);
-		Log::Get().Debug_Print(errormsg);
+		Log::Get().DebugPrint(errormsg);
 		return false;
 	}
 	return true;

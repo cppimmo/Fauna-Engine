@@ -16,7 +16,7 @@ Window::~Window()
     DestroyWindow(hWnd);
 }
 
-bool Window::Init(HINSTANCE hInstance) try
+bool Window::Init(HINSTANCE hInstance)
 {
    // bool isFullscreen, isVsync;
    // if (!load_config("config.ini", isFullscreen, this->width, this->height, isVsync))
@@ -81,10 +81,8 @@ bool Window::Init(HINSTANCE hInstance) try
         THROW_NORMAL("audio engine creation failed");
     }*/
     this->initialized = true;
+    Log::Get().SetWindowPointer(this);
     return true;
-} catch (const HrException& e) {
-    Log::Message_Box(e);
-    return false;
 }
     
 void Window::setTitle(LPCWSTR text) 
