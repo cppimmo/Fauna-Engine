@@ -46,6 +46,7 @@
     <ClCompile Include="src\Graphics\Shader\ComputeShader.cpp" />
     <ClCompile Include="src\Utility\Log.cpp" />
     <ClCompile Include="src\Utility\LuaManager.cpp" />
+    <ClCompile Include="Material.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
@@ -103,6 +104,7 @@
     <ClInclude Include="lua535\include\lualib.h" />
     <ClInclude Include="src\Utility\Log.h" />
     <ClInclude Include="src\Utility\LuaManager.h" />
+    <ClInclude Include="Material.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Fauna Engine.rc" />

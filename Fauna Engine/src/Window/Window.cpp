@@ -183,7 +183,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
         int y = HIWORD(lParam);
         window->mouse.OnMouseMove(x, y);
         break;
-    } 
+    }
     case WM_LBUTTONDOWN:
     {
         Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));

@@ -14,6 +14,21 @@
 #pragma comment(lib, "mfplat.lib")
 #pragma comment(lib, "mfuuid")
 
+class AudioDevice
+{
+public:
+
+private:
+};
+
+class AudioListener
+{
+public:
+
+private:
+
+};
+
 class SoundEffect;
 
 class AudioEngine

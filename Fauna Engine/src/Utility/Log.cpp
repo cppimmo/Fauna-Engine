@@ -1,4 +1,5 @@
 #include "Utility/Log.h"
+#include "Window/Window.h"
 #include <filesystem>
 #include <chrono>
 #include <ctime>
@@ -48,7 +49,7 @@ void Log::Message_Box(HRESULT hr, std::string what)
 	}
 }
 
-void Log::Message_Box(const HrException& e)
+void Log::Message_Box(const std::exception& e)
 {
 	Log::Get().PrepareMessageBox();
 	MessageBoxA(nullptr, e.what(), "ERROR", MB_ICONERROR);
@@ -96,7 +97,7 @@ void Log::PrepareMessageBox()
 	// perform window resizing and disable fullscreen
 }
 
-void Log::DebugPrint(const std::string what, Log::LOG_TYPE log_type) {
+void Log::DebugPrint(const std::string& what, Log::LOG_TYPE log_type) {
 	if (Log::Get().output_file.is_open()) 
 	{
 		if ((Log::Get().output_file.tellp() / 1000) > 500) {

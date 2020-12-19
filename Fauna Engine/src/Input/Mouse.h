@@ -7,23 +7,29 @@ class Window;
 class Mouse
 {
 public:
-	enum class MouseButton
+	struct MousePos
+	{
+		int x, y;
+	};
+	enum class MouseButton : unsigned char
 	{
 		BUTTON_LEFT = 0,
 		BUTTON_RIGHT,
 		BUTTON_MIDDLE,
 	};
-	struct MousePos
+	enum class LockState : unsigned char
 	{
-		int x, y;
+		Locked = 0,
+		Unlocked,
 	};
 private:
 	MousePos pos;
+	LockState lckState;
 	bool leftButton = false;
 	bool rightButton = false;
 	bool middleButton = false;
-	bool lockToCenter = false;
 	bool isCursorVisible = true;
+	bool isConfined = false;
 	float wheelDelta;
 	std::deque<MouseButton> buffer;
 	static constexpr std::size_t bufferLimit = 52;
@@ -33,10 +39,9 @@ public:
 	Mouse& operator=(const Mouse&) = delete;
 	~Mouse() = default;
 
-	const MousePos& getPos() const;
-	float getWheelDelta();
-
-	bool isButtonPressed(MouseButton button);
+	const MousePos& GetPos() const;
+	float GetWheelDelta();
+	bool IsButtonPressed(MouseButton button);
 
 	void OnMouseMove(int x, int y);
 	void OnLeftPressed(int x, int y);
@@ -51,11 +56,12 @@ public:
 	void Flush();
 public:
 	//setters
-	void Lock() { lockToCenter = true; }
-	void Unlock() { lockToCenter = false; }
+	void SetLockState(Mouse::LockState lckState);
+	void SetConfined(bool state) { this->isConfined = state; }
 	void SetCursorVisibility(bool visible) { this->isCursorVisible = visible; }
 	//getters
-	bool GetLockState() const { return lockToCenter; }
+	LockState GetLockState() const { return lckState; }
+	bool GetConfined() const { return isConfined; }
 	bool GetCursorVisibility() const { return isCursorVisible; }
 	int GetX() const { return pos.x; }
 	int GetY() const { return pos.y; }

@@ -40,14 +40,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
             return -1;
         }
     }
-    catch (const HrException& e)
-    {
-        Log::Message_Box(e);
-        return -1;
-    }
     catch (const std::exception& e)
     {
-        Log::Message_Box(e.what());
+        Log::Message_Box(e);
         return -1;
     }
     catch (...)

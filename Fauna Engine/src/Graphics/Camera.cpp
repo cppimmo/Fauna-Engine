@@ -21,36 +21,19 @@ void Camera::setProjection(float Fov, float aspectRatio, float NearZ, float FarZ
 
 void Camera::Update(float dt, Window& wnd)
 {	
-	const auto currPos = wnd.mouse.getPos();
+	const auto currPos = wnd.mouse.GetPos();
 
-	/*if (currPos.x != lastPos.x || currPos.y != lastPos.y) {
-		yaw += lastPos.x * sensitivity * dt;
-		pitch += lastPos.y * sensitivity * dt;
-		std::clamp<float>(pitch, -pitchClamp, pitchClamp);
-		lastPos = currPos;
-	}*/
-	yaw = currPos.x - lastPos.x * sensitivity * dt;
-	pitch = currPos.y - lastPos.y * sensitivity * dt;
+	yaw += ((currPos.x - lastPos.x) * sensitivity) * dt;
+	pitch += ((currPos.y - lastPos.y) * sensitivity) * dt;
 	this->lastPos = currPos;
-	/*if ((currPos.x > lastPos.x) || (currPos.y > lastPos.y))
-	{
-		yaw += lastPos.x * sensitivity * dt;
-		pitch += lastPos.y * sensitivity * dt;
-		lastPos = currPos;
-	}
-	else if ((currPos.x < lastPos.x) || (currPos.y < lastPos.y))
-	{
-		yaw -= lastPos.x * sensitivity * dt;
-		pitch -= lastPos.y * sensitivity * dt;
-		lastPos = currPos;
-	}
+
 	if (wnd.gamepad.Update())
 	{
 		yaw += wnd.gamepad.getRightStick().x * axisMultiplier * sensitivity * dt;
 		pitch += -(wnd.gamepad.getRightStick().y * axisMultiplier * sensitivity * dt);
 		moveX = wnd.gamepad.getLeftStick().x * speed * dt;
 		moveZ = wnd.gamepad.getLeftStick().y * speed * dt;
-	}*/
+	}
 	std::clamp<float>(pitch, -pitchClamp, pitchClamp);
 
 	//zoom += wnd.mouse.getWheelDelta();
@@ -81,7 +64,7 @@ void Camera::Update(float dt, Window& wnd)
 	
 	if (wnd.kbd.isKeyPressed(VK_SPACE) || wnd.gamepad.isButtonPressed(XINPUT_GAMEPAD_A)) {
 		moveY += speed * dt;
-	} else if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_X) || wnd.gamepad.isButtonPressed(XINPUT_GAMEPAD_B)) {
+	} else if (wnd.kbd.isKeyPressed(Keyboard::KeyCode::VK_Z) || wnd.gamepad.isButtonPressed(XINPUT_GAMEPAD_B)) {
 		moveY -= speed * dt;
 	}
 

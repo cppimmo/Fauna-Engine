@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Win.h"
-#include "Window/Window.h"
 #include "Utility/Error.h"
 #include <string>
 #include <iostream>
@@ -9,6 +8,7 @@
 
 //class HrException;
 //class LuaManager;
+class Window;
 
 class Log 
 {	
@@ -20,11 +20,11 @@ public:
 	};
 public:
 	Log();
-	inline static void Message_Box(std::string what);
-	inline static void Message_Box(std::string what, std::string title);
-	inline static void Message_Box(HRESULT hr, std::string what);
-	inline static void Message_Box(const HrException& e);
-	static void DebugPrint(const std::string what, 
+	static void Message_Box(std::string what);
+	static void Message_Box(std::string what, std::string title);
+	static void Message_Box(HRESULT hr, std::string what);
+	static void Message_Box(const std::exception& e);
+	static void DebugPrint(const std::string& what, 
 		Log::LOG_TYPE log_type = Log::LOG_TYPE::MSG);
 	void FlushLog();
 	inline static Log& Get();

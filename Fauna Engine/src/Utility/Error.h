@@ -5,10 +5,6 @@
 #include <exception>
 #include <comdef.h>
 
-class HrException;
-#define THROW_IF_FAILED(hr, msg) if (FAILED(hr)) throw HrException(hr, msg, __FILE__, __FUNCTION__, __LINE__)
-#define THROW_NORMAL(msg) throw HrException(msg, __FILE__, __FUNCTION__, __LINE__)
-
 class HrException : public std::exception
 {
 public:
@@ -31,3 +27,6 @@ private:
 protected:
 	mutable std::string whatStr;
 };
+
+#define THROW_IF_FAILED(hr, msg) if (FAILED(hr)) throw HrException(hr, msg, __FILE__, __FUNCTION__, __LINE__)
+#define THROW_NORMAL(msg) throw HrException(msg, __FILE__, __FUNCTION__, __LINE__)

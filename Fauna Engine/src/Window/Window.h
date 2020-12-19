@@ -54,12 +54,14 @@ class Window
 	friend class Log;
 public:
 	Window(std::wstring& title, UINT width, UINT height);
+	Window(const Window&) = delete;
+	Window& operator=(const Window&) = delete;
 	virtual ~Window();
 
 	bool Init(HINSTANCE hInstance);
 	void setTitle(LPCWSTR text);
 	Graphics& Gfx() { return *gfx.get(); }
-
+	HWND GetWndHandle() const { return hWnd; }
 	UINT getWidth() const { return width; }
 	UINT getHeight() const { return height; }
 private:

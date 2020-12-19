@@ -5,21 +5,22 @@
 Mouse::Mouse(Window& wnd)
 	: pos{0,0}, wheelDelta(0.0f), wnd(wnd)
 {
+	lckState = LockState::Unlocked;
 }
 
-const Mouse::MousePos& Mouse::getPos() const
+const Mouse::MousePos& Mouse::GetPos() const
 {
 	return pos;
 }
 
-float Mouse::getWheelDelta()
+float Mouse::GetWheelDelta()
 {
 	float localDelta = this->wheelDelta;
 	wheelDelta = 0.0f;
 	return localDelta;
 }
 
-bool Mouse::isButtonPressed(MouseButton button)
+bool Mouse::IsButtonPressed(MouseButton button)
 {
 	switch (button)
 	{
@@ -101,6 +102,11 @@ void Mouse::OnWheelMove(int x, int y, float wheelDelta)
 	UpdateParameters();
 }
 
+void Mouse::SetLockState(Mouse::LockState lckState)
+{
+	this->lckState = lckState;
+}
+
 void Mouse::UpdateBuffer(MouseButton button)
 {
 	if (buffer.size() <= bufferLimit)
@@ -121,9 +127,12 @@ void Mouse::Flush()
 
 void Mouse::UpdateParameters()
 {
-	if (lockToCenter)
+	if (lckState == LockState::Locked)
 	{
-		::SetCursorPos(wnd.getWidth() / 2, wnd.getHeight() / 2);
+		RECT rect;
+		GetClientRect(wnd.GetWndHandle(), &rect);
+		MapWindowPoints(wnd.GetWndHandle(), nullptr, reinterpret_cast<POINT*>(&rect), 2);
+		ClipCursor(&rect);
 	}
 	::ShowCursor(isCursorVisible);
 }

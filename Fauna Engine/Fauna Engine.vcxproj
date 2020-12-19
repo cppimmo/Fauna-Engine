@@ -164,6 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedModel.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="src\Utility\LuaManager.cpp" />
     <ClCompile Include="src\Graphics\Shader\ComputeShader.cpp" />
     <ClCompile Include="src\Graphics\IndexBuffer.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="lua535\include\lua.hpp" />
     <ClInclude Include="lua535\include\luaconf.h" />
     <ClInclude Include="lua535\include\lualib.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="src\Utility\LuaManager.h" />
     <ClInclude Include="src\Graphics\Shader\ComputeShader.h" />
     <ClInclude Include="src\Graphics\ConstantBufferTypes.h" />
