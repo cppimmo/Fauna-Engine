@@ -133,6 +133,10 @@ LRESULT Window::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
     {
         Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
         unsigned char keycode = static_cast<unsigned char>(wParam);
+        if (keycode == VK_ESCAPE)
+        {
+            PostQuitMessage(0);
+        }
         if (window->kbd.getAutoRepeatKeys())
         {
             window->kbd.OnKeyPressed(keycode);

@@ -154,7 +154,7 @@ bool AppWindow::Init(HINSTANCE hInst)
 
 	modelThread.join();
 	texThread.join();
-	//Window::mouse.Lock();
+	Window::mouse.SetLockState(Mouse::LockState::Locked);
 	return true;
 }
 

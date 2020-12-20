@@ -128,11 +128,19 @@ void Mouse::Flush()
 void Mouse::UpdateParameters()
 {
 	if (lckState == LockState::Locked)
-	{
+	{	
 		RECT rect;
 		GetClientRect(wnd.GetWndHandle(), &rect);
-		MapWindowPoints(wnd.GetWndHandle(), nullptr, reinterpret_cast<POINT*>(&rect), 2);
-		ClipCursor(&rect);
+		POINT pp;
+		ClientToScreen(wnd.GetWndHandle(), &pp);
+		//pp.x += (rect.left - rect.right) / 2;
+		//pp.y += (rect.top - rect.bottom) / 2;
+		SetCursorPos(pp.x, pp.y);
+		//SetCursorPos(0, 0);
+		//RECT rect;
+		//GetClientRect(wnd.GetWndHandle(), &rect);
+		//MapWindowPoints(wnd.GetWndHandle(), nullptr, reinterpret_cast<POINT*>(&rect), 2);
+		//ClipCursor(&rect);
 	}
 	::ShowCursor(isCursorVisible);
 }
