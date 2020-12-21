@@ -9,7 +9,7 @@
 
 using namespace DirectX;
 
-bool SkySphere::Init(Graphics& gfx, std::wstring& filePath) try 
+bool SkySphere::Init(Graphics& gfx, std::wstring& filePath) 
 {
 	HRESULT hr = S_OK;
 	this->pContext = gfx.getContext();
@@ -176,9 +176,6 @@ bool SkySphere::Init(Graphics& gfx, std::wstring& filePath) try
 	if (!cubeMap.Load(gfx, filePath))
 		THROW_NORMAL("Failed to load cubemap texture");
 	return true;
-} catch (const HrException& e) {
-	Log::Message_Box(e);
-	return false;
 }
 
 void SkySphere::Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps)

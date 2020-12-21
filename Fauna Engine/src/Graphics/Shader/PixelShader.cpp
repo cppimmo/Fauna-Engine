@@ -9,24 +9,16 @@
 
 bool PixelShader::Init(Graphics& gfx, std::wstring filePath)
 {
-	try
-	{
-		HRESULT hr = S_OK;
+	HRESULT hr = S_OK;
 
-		hr = D3DReadFileToBlob(filePath.c_str(), &pBlob);
-		std::wstring errMsg = L"Pixel shader could not be loaded at: ";
-		errMsg += filePath;
-		THROW_IF_FAILED(hr, wstring_to_string(errMsg));
+	hr = D3DReadFileToBlob(filePath.c_str(), &pBlob);
+	std::wstring errMsg = L"Pixel shader could not be loaded at: ";
+	errMsg += filePath;
+	THROW_IF_FAILED(hr, wstring_to_string(errMsg));
 
-		hr = gfx.getDevice()->CreatePixelShader(pBlob->GetBufferPointer(),
-			pBlob->GetBufferSize(), nullptr, &pPixelShader);
-		THROW_IF_FAILED(hr, "Pixel shader failed to create");
-	}
-	catch (const HrException& e)
-	{
-		Log::Message_Box(e);
-		return false;
-	}
+	hr = gfx.getDevice()->CreatePixelShader(pBlob->GetBufferPointer(),
+		pBlob->GetBufferSize(), nullptr, &pPixelShader);
+	THROW_IF_FAILED(hr, "Pixel shader failed to create");
 	return true;
 }
 

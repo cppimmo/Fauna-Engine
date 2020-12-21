@@ -14,20 +14,39 @@
 #pragma comment(lib, "mfplat.lib")
 #pragma comment(lib, "mfuuid")
 
-class AudioDevice
+namespace Fuana
 {
-public:
+	class AudioEngine
+	{
+	public:
+		AudioEngine();
+		AudioEngine(const AudioEngine&) = delete;
+		AudioEngine& operator=(const AudioEngine&) = delete;
 
-private:
-};
 
-class AudioListener
-{
-public:
+	private:
+		Microsoft::WRL::ComPtr<IXAudio2> pAudio = nullptr;
+	};
 
-private:
+	class AudioListener
+	{
+	public:
 
-};
+	private:
+		IXAudio2MasteringVoice* pEffectMasterVoice = nullptr;
+		IXAudio2MasteringVoice* pMusicMasterVoice = nullptr;
+	};
+
+	class AudioEffect
+	{
+	public:
+
+		void UpdatePosition();
+	private:
+		IXAudio2SourceVoice* pSourceVoice = nullptr;
+	};
+}
+
 
 class SoundEffect;
 

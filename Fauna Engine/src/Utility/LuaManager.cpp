@@ -32,7 +32,7 @@ bool LuaManager::Check(int result, int stackLoc)
 	if (result != LUA_OK)
 	{
 		std::string errormsg = lua_tostring(this->lua_state, stackLoc);
-		Log::Get().DebugPrint(errormsg);
+		Fuana::Log::Get().DebugPrint(errormsg);
 		return false;
 	}
 	return true;

@@ -68,7 +68,7 @@ public:
 		D3D11_MAPPED_SUBRESOURCE msr = {};
 		HRESULT hr = gfx.getContext()->Map(pBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
 		if (FAILED(hr)) {
-			Log::Message_Box(hr, "Failed to map constant buffer.");
+			Fuana::Log::Message_Box(hr, "Failed to map constant buffer.");
 			return false;
 		}
 		memcpy(msr.pData, &data, sizeof(C));

@@ -81,7 +81,7 @@ bool Window::Init(HINSTANCE hInstance)
         THROW_NORMAL("audio engine creation failed");
     }*/
     this->initialized = true;
-    Log::Get().SetWindowPointer(this);
+    Fuana::Log::Get().SetWindowPointer(this);
     return true;
 }
     

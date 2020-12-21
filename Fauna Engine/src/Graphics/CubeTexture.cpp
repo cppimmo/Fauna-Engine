@@ -7,7 +7,7 @@
 
 using namespace DirectX;
 
-bool CubeTexture::Load(Graphics& gfx, std::wstring& filePath) try 
+bool CubeTexture::Load(Graphics& gfx, std::wstring& filePath) 
 {
 	HRESULT hr = S_OK;
 
@@ -27,7 +27,4 @@ bool CubeTexture::Load(Graphics& gfx, std::wstring& filePath) try
 	THROW_IF_FAILED(hr, "Failed to load cubemap texture.");
 
 	return true;
-} catch (const HrException& e) {
-	Log::Message_Box(e);
-	return false;
 }

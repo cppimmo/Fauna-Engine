@@ -31,13 +31,13 @@ void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices)
 	box.CreateFromPoints(box, vertices.size(), &vertices[0].pos, sizeof(Vertex));
 
 	hr = vertexBuffer.Init(gfx, vertices.data(), vertices.size());
-	Log::Message_Box(hr, "Vertex buffer initialization failed");
+	Fuana::Log::Message_Box(hr, "Vertex buffer initialization failed");
 
 	hr = vsCBuffer.Init(gfx);
-	Log::Message_Box(hr, "const buffer init failed");
+	Fuana::Log::Message_Box(hr, "const buffer init failed");
 
 	hr = psCBuffer.Init(gfx);
-	Log::Message_Box(hr, "const buffer init failed");
+	Fuana::Log::Message_Box(hr, "const buffer init failed");
 }
 
 void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
@@ -61,16 +61,16 @@ void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices, std::vector<DWO
 	box.CreateFromPoints(box, vertices.size(), &vertices[0].pos, sizeof(Vertex));
 
 	hr = vertexBuffer.Init(gfx, vertices.data(), vertices.size());
-	Log::Message_Box(hr, "Vertex buffer init failed");
+	Fuana::Log::Message_Box(hr, "Vertex buffer init failed");
 
 	hr = indexBuffer.Init(gfx, indices.data(), indices.size());
-	Log::Message_Box(hr, "Index buffer init failed");
+	Fuana::Log::Message_Box(hr, "Index buffer init failed");
 
 	hr = vsCBuffer.Init(gfx);
-	Log::Message_Box(hr, "const buffer init failed");
+	Fuana::Log::Message_Box(hr, "const buffer init failed");
 
 	hr = psCBuffer.Init(gfx);
-	Log::Message_Box(hr, "const buffer init faield");
+	Fuana::Log::Message_Box(hr, "const buffer init faield");
 }
 
 bool Model::isColliding(Model& model)

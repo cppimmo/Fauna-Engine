@@ -16,38 +16,44 @@
 #include "Utility/Error.h"
 #include <fstream>
 #include <exception>
-#include <string>
+#include <string>'
+#include "Utility/Timer.h"
 
 bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& height, bool& isVysnc);
+
+
 
 int WINAPI WinMain(HINSTANCE hInstance,   
     HINSTANCE hPrevInstance,
     LPSTR lpCmdLine,
     int nShowCmd)
 {
+    using namespace Fuana;
     try 
     {
         std::wstring title = L"D3D Application";
         AppWindow app(title, 800, 600);
-
+        Fuana::Log::DebugPrint("Initialization started...");
+        Timer clock;
         if (app.Init(hInstance))
         {
+            Fuana::Log::DebugPrint("Initlization complete: " + std::to_string(clock.getElapsed()));
             return app.Run();
         }
         else
         {
-            Log::Message_Box("Application launch failed");
+            Fuana::Log::Message_Box("Application launch failed");
             return -1;
         }
     }
     catch (const std::exception& e)
     {
-        Log::Message_Box(e);
+        Fuana::Log::Message_Box(e);
         return -1;
     }
     catch (...)
     {
-        Log::Message_Box("Unknown exception. Exiting...");
+        Fuana::Log::Message_Box("Unknown exception. Exiting...");
         return -1;
     }
 }
@@ -99,7 +105,7 @@ bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& he
     }
     catch (const std::exception& e)
     {
-        Log::Message_Box(e.what());
+        Fuana::Log::Message_Box(e.what());
         return false;
     }
     return true;
