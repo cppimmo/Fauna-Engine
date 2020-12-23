@@ -305,8 +305,14 @@ void Model3D::Bind(Graphics& gfx, VertexShader& vs, PixelShader& ps, Texture& te
 
 void Model3D::Draw(Graphics& gfx, Camera& camera)
 {
+	const float x = XMVectorGetX(camera.getPosition());
+	const float y = XMVectorGetY(camera.getPosition());
+	const float z = XMVectorGetZ(camera.getPosition());
+	XMFLOAT3 tempVec = { x,y,z };
+	psCBuffer.data.camPos = tempVec;
+
 	XMMATRIX scale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
-	XMMATRIX rotation = XMMatrixRotationAxis(XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f), 0.0f);
+	XMMATRIX rotation = XMMatrixRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), XMConvertToRadians(0.0f));
 	XMMATRIX transform = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
 
 	XMMATRIX world = scale * rotation * transform;
@@ -314,13 +320,11 @@ void Model3D::Draw(Graphics& gfx, Camera& camera)
 	vsCBuffer.data.WVP = XMMatrixTranspose(world * camera.getView() * camera.getProjection());
 	vsCBuffer.Bind(gfx);
 	vsCBuffer.Update(gfx);
-	vsCBuffer.Unbind(gfx);
 
 	for (std::size_t i = 0; i < meshes.size(); i++)
 	{
 		meshes[i].Bind();
 		meshes[i].Draw();
-		meshes[i].Unbind();
 	}
 }
 

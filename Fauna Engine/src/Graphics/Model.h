@@ -20,10 +20,9 @@
 class Model
 {
 public:
-	Model();
+	Model() = default;
 	Model(const Model&) = delete;
 	Model& operator=(const Model&) = delete;
-	~Model();
 
 	void Create(Graphics& gfx, std::vector<Vertex>& vertices);
 	void Create(Graphics& gfx, std::vector<Vertex>& vertices, 
@@ -67,6 +66,7 @@ private:
 class Model
 {
 public:
+	Model();
 
 private:
 

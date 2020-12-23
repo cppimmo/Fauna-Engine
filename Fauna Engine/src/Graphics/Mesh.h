@@ -31,6 +31,7 @@ public:
 private:
 	Transform transform;
 	VSConstantBuffer<CB_WVP> vsCBuffer;
+	PSConstantBuffer<CB_CamPos> psCBuffer;
 private:	
 	bool Load(Graphics& gfx, const std::string& filePath);	
 	void processNode(Graphics& gfx, aiNode* pNode, const aiScene* pScene);

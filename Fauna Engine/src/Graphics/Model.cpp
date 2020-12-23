@@ -5,13 +5,6 @@
 using namespace DirectX;
 
 #ifdef RAW_MDL
-Model::Model()
-{
-}
-
-Model::~Model()
-{
-}
 
 void Model::Create(Graphics& gfx, std::vector<Vertex>& vertices)
 {
@@ -179,9 +172,9 @@ void Model::setScale(float x, float y, float z)
 
 void Model::Draw(Graphics& gfx, Camera& camera)
 {
-	float x = XMVectorGetX(camera.getPosition());
-	float y = XMVectorGetY(camera.getPosition());
-	float z = XMVectorGetZ(camera.getPosition());
+	const float x = XMVectorGetX(camera.getPosition());
+	const float y = XMVectorGetY(camera.getPosition());
+	const float z = XMVectorGetZ(camera.getPosition());
 	XMFLOAT3 tempVec = {x,y,z};
 	psCBuffer.data.camPos = tempVec;
 

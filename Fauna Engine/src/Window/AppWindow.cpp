@@ -134,7 +134,7 @@ bool AppWindow::Init(HINSTANCE hInst)
 		};*/
 		dorito->Create(Window::Gfx(), vertices);
 		box->Create(Window::Gfx(), boxVertices);
-		//smallGear->Init(Window::Gfx(), "res/8gear.obj");
+		smallGear->Init(Window::Gfx(), "res/8gear.obj");
 		//largeGear->Init(Window::Gfx(), "res/20gear.obj");
 		std::wstring str = L"res/img/skymap.dds";
 		sky->Init(Window::Gfx(), str);
@@ -154,7 +154,7 @@ bool AppWindow::Init(HINSTANCE hInst)
 
 	modelThread.join();
 	texThread.join();
-	Window::mouse.SetLockState(Mouse::LockState::Locked);
+	//Window::mouse.SetLockState(Mouse::LockState::Locked);
 	return true;
 }
 
@@ -239,6 +239,10 @@ void AppWindow::Draw()
 	box->Bind(Gfx(), Gfx().vertexShader, Gfx().pixelShader, dxTex);
 	box->Draw(Gfx(), camera);
 	box->Unbind(Gfx());
+	
+	smallGear->Bind(Gfx(), Gfx().vertexShader, Gfx().pixelShader, dxTex);
+	smallGear->Draw(Gfx(), camera);
+	smallGear->Unbind(Gfx());
 
 	Gfx().setSkyboxState(true);
 	//Gfx().setWireframe(true);
