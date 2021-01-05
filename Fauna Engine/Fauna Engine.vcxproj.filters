@@ -47,6 +47,7 @@
     <ClCompile Include="src\Utility\Log.cpp" />
     <ClCompile Include="src\Utility\LuaManager.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="src\Graphics\GeometryGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
@@ -105,6 +106,7 @@
     <ClInclude Include="src\Utility\Log.h" />
     <ClInclude Include="src\Utility\LuaManager.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="src\Graphics\GeometryGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Fauna Engine.rc" />
