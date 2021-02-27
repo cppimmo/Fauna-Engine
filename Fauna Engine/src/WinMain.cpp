@@ -21,41 +21,52 @@
 
 bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& height, bool& isVysnc);
 
-
-
 int WINAPI WinMain(HINSTANCE hInstance,   
     HINSTANCE hPrevInstance,
     LPSTR lpCmdLine,
     int nShowCmd)
 {
+#ifdef _DEBUG
+	{
+		int dbg_flag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
+		// perform memory leak check before application exit in _DEBUG releases
+		dbg_flag |= _CRTDBG_LEAK_CHECK_DF;
+		_CrtSetDbgFlag(dbg_flag);
+	}
+#endif	
+	int return_code = 0;
     using namespace Fuana;
     try 
     {
         std::wstring title = L"D3D Application";
         AppWindow app(title, 800, 600);
-        Fuana::Log::DebugPrint("Initialization started...");
+        Log::DebugPrint("Initialization started...");
         Timer clock;
         if (app.Init(hInstance))
         {
-            Fuana::Log::DebugPrint("Initlization complete: " + std::to_string(clock.getElapsed()));
-            return app.Run();
+            Log::DebugPrint("Initlization complete: " + std::to_string(clock.getElapsed()));
+            return_code = app.Run();
         }
         else
         {
-            Fuana::Log::Message_Box("Application launch failed");
-            return -1;
+            Log::Message_Box("Application launch failed");
+            return_code = -1;
         }
     }
     catch (const std::exception& e)
     {
-        Fuana::Log::Message_Box(e);
-        return -1;
+        Log::Message_Box(e);
+        return_code = -1;
     }
     catch (...)
     {
-        Fuana::Log::Message_Box("Unknown exception. Exiting...");
-        return -1;
+        Log::Message_Box("Unknown exception. Exiting...");
+        return_code = -1;
     }
+#ifdef _DEBUG
+	_CrtDumpMemoryLeaks();
+#endif
+	return return_code;
 }
 
 bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& height, bool& isVysnc)
