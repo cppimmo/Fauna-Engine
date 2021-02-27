@@ -1,14 +1,15 @@
 /*****************Fauna Engine - V1.0 ********************
-//ABOUT: Fauna Engine is a game engine under development
-//using the DirectX 11 API
-//AUTHOR: ImmortalityBH
-//FEATURES:
-//TODO: name engine and keep adding to abstractions,
-//skybox, assimp, xaudio2, imgui, text drawing, color shaders,
-//lighting, animation, blending states for alpha transparency,
-//frustum culling, transform.h changes, abstract vertex and index
-//buffers, load config function in window class
-//DONE: imgui,
+* ABOUT: Fauna Engine is a game engine under development
+* using the DirectX 11 API, DirectXTK, LUA 5.1, Imgui, XAudio2,
+* Assimp, 
+* AUTHOR: Brian Hoffpauir(cppimmo)
+* FEATURES:
+* TODO: name engine and keep adding to abstractions,
+* skybox, assimp, xaudio2, imgui, text drawing, color shaders,
+* lighting, animation, blending states for alpha transparency,
+* frustum culling, transform.h changes, abstract vertex and index
+* buffers, use lua for configuration of options
+* DONE: imgui,
 *********************************************************/
 
 #include "Window/AppWindow.h"
@@ -16,7 +17,7 @@
 #include "Utility/Error.h"
 #include <fstream>
 #include <exception>
-#include <string>'
+#include <string>
 #include "Utility/Timer.h"
 
 bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& height, bool& isVysnc);
