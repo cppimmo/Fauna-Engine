@@ -1,33 +1,27 @@
 #include "Utility/LuaManager.h"
 #include "Utility/Log.h"
 
-LuaManager::LuaManager()
+Fauna::LuaManager::LuaManager()
 {
 	lua_state = luaL_newstate();
 }
 
-LuaManager::~LuaManager()
+Fuana::LuaManager::~LuaManager()
 {
 	lua_close(this->lua_state);
 }
 
-LuaManager& LuaManager::Get()
-{
-	static LuaManager instance;
-	return instance;
-}
-
-int LuaManager::GetGlobal(const std::string& name)
+int Fuana::LuaManager::GetGlobal(const std::string& name)
 {
 	return 0;
 }
 
-int LuaManager::DoFile(const std::string& file_path)
+int Fauna::LuaManager::DoFile(const std::string& file_path)
 {
 	return luaL_dofile(GetState(), file_path.c_str());
 }
 
-bool LuaManager::Check(int result, int stackLoc)
+bool Fauna::LuaManager::Check(int result, int stackLoc)
 {
 	if (result != LUA_OK)
 	{
@@ -38,12 +32,12 @@ bool LuaManager::Check(int result, int stackLoc)
 	return true;
 }
 
-int LuaManager::Pop(int stackLoc)
+int Fauna::LuaManager::Pop(int stackLoc)
 {
 	return 0;
 }
 
-int LuaManager::IsTable(int stackLoc)
+int Fauna::LuaManager::IsTable(int stackLoc)
 {
 	return 0;
 }
