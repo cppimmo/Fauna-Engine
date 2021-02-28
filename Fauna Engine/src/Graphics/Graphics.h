@@ -32,20 +32,20 @@ public:
 
 	bool Init(bool isFullscreen, bool isVsync, unsigned int width, unsigned int height, HWND hWnd);
 
-	void onSize(unsigned int newWidth, unsigned int newHeight);
-	void setFullscreen(bool fullscreen, unsigned int widhth, unsigned int height);
-	bool getFullscreen() const { return isFullscreen; }
-	void setWireframe(bool value);
-	void setBlendState(bool value);
-	void setSkyboxState(bool value);
-	void setDrawMode(D3D11_PRIMITIVE_TOPOLOGY mode);
-	bool isWireframe() const { return isWireframeEnabled; }
+	void OnSize(unsigned int newWidth, unsigned int newHeight);
+	void SetFullscreen(bool fullscreen, unsigned int widhth, unsigned int height);
+	bool GetFullscreen() const { return isFullscreen; }
+	void SetWireframe(bool value);
+	void SetBlendState(bool value);
+	void SetSkyboxState(bool value);
+	void SetDrawMode(D3D11_PRIMITIVE_TOPOLOGY mode);
+	bool IsWireframe() const { return isWireframeEnabled; }
 	void Begin(float r, float g, float b);
 	void End();
 
-	auto getDevice() const -> ID3D11Device*;
-	auto getContext() const -> ID3D11DeviceContext*;
-	auto getSamplerState() const -> ID3D11SamplerState* const*;
+	auto GetDevice() const -> ID3D11Device*;
+	auto GetContext() const -> ID3D11DeviceContext*;
+	auto GetSamplerState() const -> ID3D11SamplerState* const*;
 public:
 	VertexShader vertexShader;
 	PixelShader pixelShader;

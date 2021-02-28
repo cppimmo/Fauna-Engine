@@ -192,7 +192,7 @@ bool Graphics::Init(bool isFullscreen, bool isVsync, unsigned int width,
 	return true;
 }
 
-void Graphics::onSize(unsigned int newWidth, unsigned int newHeight)
+void Graphics::OnSize(unsigned int newWidth, unsigned int newHeight)
 {
 	pRenderTarget.Reset();
 	pDepthStencilView.Reset();
@@ -233,14 +233,14 @@ void Graphics::onSize(unsigned int newWidth, unsigned int newHeight)
 	pContext->RSSetViewports(1, &viewport);
 }
 
-void Graphics::setFullscreen(bool fullscreen, unsigned int width, unsigned int height)
+void Graphics::SetFullscreen(bool fullscreen, unsigned int width, unsigned int height)
 {
 	//onSize(width, height);
 	this->isFullscreen = fullscreen;
 	pSwapChain->SetFullscreenState(fullscreen, nullptr);
 }
 
-void Graphics::setWireframe(bool value)
+void Graphics::SetWireframe(bool value)
 {
 	isWireframeEnabled = value;
 	if (value)
@@ -249,7 +249,7 @@ void Graphics::setWireframe(bool value)
 		pContext->RSSetState(nullptr);
 }
 
-void Graphics::setBlendState(bool value)
+void Graphics::SetBlendState(bool value)
 {
 	if (value)
 	{
@@ -262,7 +262,7 @@ void Graphics::setBlendState(bool value)
 	}
 }
 
-void Graphics::setSkyboxState(bool value)
+void Graphics::SetSkyboxState(bool value)
 {
 	if (value)
 	{
@@ -276,7 +276,7 @@ void Graphics::setSkyboxState(bool value)
 	}	
 }
 
-void Graphics::setDrawMode(D3D11_PRIMITIVE_TOPOLOGY mode)
+void Graphics::SetDrawMode(D3D11_PRIMITIVE_TOPOLOGY mode)
 {
 	pContext->IASetPrimitiveTopology(mode);
 }
@@ -293,17 +293,17 @@ void Graphics::End()
 	pSwapChain->Present(isVsync, 0u);
 }
 
-auto Graphics::getDevice() const -> ID3D11Device*
+auto Graphics::GetDevice() const -> ID3D11Device*
 {
 	return this->pDevice.Get();
 }
 
-auto Graphics::getContext() const -> ID3D11DeviceContext*
+auto Graphics::GetContext() const -> ID3D11DeviceContext*
 {
 	return this->pContext.Get();
 }
 
-auto Graphics::getSamplerState() const -> ID3D11SamplerState* const*
+auto Graphics::GetSamplerState() const -> ID3D11SamplerState* const*
 {
 	return this->pSamplerState.GetAddressOf();
 }
