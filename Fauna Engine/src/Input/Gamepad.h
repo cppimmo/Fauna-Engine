@@ -10,17 +10,7 @@ class Gamepad
     {
         float x;
         float y;
-    } leftStick, rightStick;
-private:
-    UINT controllerID;
-    XINPUT_STATE state;
-    XINPUT_VIBRATION vibration;
-    //XINPUT_BATTERY_INFORMATION battery;//not used in v1.4
-
-    const float maxValue = 1.0f;
-    float leftTrigger, rightTrigger;
-    float deadzoneX, deadzoneY;
-    float ApplyDeadzone(float value, float maxValue, float deadzone);
+    };
 public:
     Gamepad(UINT id);
     Gamepad(UINT id, float deadzoneX, float deadzoneY);
@@ -38,4 +28,16 @@ public:
     const StickPos getRightStick() const;
     const float getLeftTrigger() const;
     const float getRightTrigger() const;
+private:
+    float ApplyDeadzone(float value, float maxValue, float deadzone);
+private:
+    UINT controllerID;
+    XINPUT_STATE state;
+    XINPUT_VIBRATION vibration;
+    //XINPUT_BATTERY_INFORMATION battery;//not used in v1.4
+
+    const float maxValue = 1.0f;
+    float leftTrigger, rightTrigger;
+    StickPos leftStick, rightStick;
+    float deadzoneX, deadzoneY;
 };
