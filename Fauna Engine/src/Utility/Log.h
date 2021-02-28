@@ -18,8 +18,9 @@ namespace Fuana
 		friend class Window;
 	public:
 		static enum class LOG_TYPE : uint32_t {
-			ERR = 0,
-			MSG = 1,
+			ERROR = 0,
+			EVENT = 1,
+			MESSAGE = 2,
 		};
 	public:
 		Log();
@@ -43,5 +44,3 @@ namespace Fuana
 	};
 
 }
-
-

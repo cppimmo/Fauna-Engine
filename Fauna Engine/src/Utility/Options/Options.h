@@ -16,12 +16,9 @@ namespace Fuana
 			uint32_t width;
 			uint32_t height;
 		};
-		class GfxConfig
+		struct GfxConfig
 		{
-		public:
-		
-		private:
-		
+			
 		};
 	public:
 		static bool LoadOptions(const std::string& config_file, Options& option_cfg);
