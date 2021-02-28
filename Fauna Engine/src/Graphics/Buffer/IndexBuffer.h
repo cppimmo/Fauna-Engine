@@ -39,7 +39,7 @@ public:
 		D3D11_SUBRESOURCE_DATA sd = {};
 		sd.pSysMem = data;
 
-		HRESULT hr = gfx.getDevice()->CreateBuffer(&ibd, &sd, pBuffer.GetAddressOf());
+		HRESULT hr = gfx.GetDevice()->CreateBuffer(&ibd, &sd, pBuffer.GetAddressOf());
 		return hr;
 	}
 	void Bind(Graphics& gfx) override

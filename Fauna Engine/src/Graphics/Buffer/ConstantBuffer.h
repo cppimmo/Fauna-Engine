@@ -41,7 +41,7 @@ public:
 		cbd.ByteWidth = static_cast<UINT>(sizeof(C) + (16 - (sizeof(C) % 16)));
 		cbd.StructureByteStride = 0;
 
-		HRESULT hr = gfx.getDevice()->CreateBuffer(&cbd, nullptr, pBuffer.GetAddressOf());
+		HRESULT hr = gfx.GetDevice()->CreateBuffer(&cbd, nullptr, pBuffer.GetAddressOf());
 		return hr;
 	}
 	HRESULT Init(Graphics& gfx, C* initialData)
@@ -60,7 +60,7 @@ public:
 		D3D11_SUBRESOURCE_DATA sd = {};
 		sd.pSysMem = data;
 
-		HRESULT hr = gfx.getDevice()->CreateBuffer(&cbd, data, pBuffer.GetAddressOf());
+		HRESULT hr = gfx.GetDevice()->CreateBuffer(&cbd, data, pBuffer.GetAddressOf());
 		return hr;
 	}
 	bool Update(Graphics& gfx)
