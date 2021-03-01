@@ -2,131 +2,137 @@
 
 #include <d3d11.h>
 #include <wrl.h>
-#include "Graphics/ConstantBufferTypes.h"
+#include "Graphics/Buffer/ConstantBufferTypes.h"
 
 #include "Utility/Log.h"
 #include "Graphics/Bindable.h"
 
-template<class C>//vertex shader
-class VSConstantBuffer;
-template<class C> 
-class PSConstantBuffer;
-template<class C>
-class HSConstantBuffer;
-template<class C>
-class DSConstantBuffer;
-template<class C>
-class GSConstantBuffer;
+template<typename BufferType>
+class Fauna::ConstantBuffer;
+template<typename BufferType>//vertex shader
+class Fauna::VSConstantBuffer;
+template<typename BufferType>
+class Fauna::PSConstantBuffer;
+template<typename BufferType>
+class Fauna::HSConstantBuffer;
+template<typename BufferType>
+class Fauna::DSConstantBuffer;
+template<typename BufferType>
+class Fauna::GSConstantBuffer;
 
-template<class C>
-class ConstantBuffer : public Bindable
+namespace Fauna
 {
-public:
-	ConstantBuffer() = default;
-	ConstantBuffer(const ConstantBuffer<C>&) = delete;
-	ConstantBuffer& operator=(const ConstantBuffer<C>&) = delete;
-	~ConstantBuffer() = default;
-	C data;
-
-	HRESULT Init(Graphics& gfx)
+	template<typename BufferType>
+	class ConstantBuffer : public Bindable
 	{
-		if (pBuffer != nullptr)
-			pBuffer.Reset();
+	public:
+		ConstantBuffer() = default;
+		ConstantBuffer(const ConstantBuffer<BufferType>&) = delete;
+		ConstantBuffer& operator=(const ConstantBuffer<BufferType>&) = delete;
+		~ConstantBuffer() = default;
+		BufferType data;
 
-		D3D11_BUFFER_DESC cbd = {};
-		cbd.Usage = D3D11_USAGE_DYNAMIC;
-		cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		cbd.MiscFlags = 0;
-		cbd.ByteWidth = static_cast<UINT>(sizeof(C) + (16 - (sizeof(C) % 16)));
-		cbd.StructureByteStride = 0;
+		HRESULT Init(Graphics& gfx)
+		{
+			if (pBuffer != nullptr)
+				pBuffer.Reset();
 
-		HRESULT hr = gfx.GetDevice()->CreateBuffer(&cbd, nullptr, pBuffer.GetAddressOf());
-		return hr;
-	}
-	HRESULT Init(Graphics& gfx, C* initialData)
-	{
-		if (pBuffer != nullptr)
-			pBuffer.Reset();
+			D3D11_BUFFER_DESC cbd = {};
+			cbd.Usage = D3D11_USAGE_DYNAMIC;
+			cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			cbd.MiscFlags = 0;
+			cbd.ByteWidth = static_cast<UINT>(sizeof(BufferType) + (16 - (sizeof(C) % 16)));
+			cbd.StructureByteStride = 0;
 
-		D3D11_BUFFER_DESC cbd = {};
-		cbd.Usage = D3D11_USAGE_DYNAMIC;
-		cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		cbd.MiscFlags = 0;
-		cbd.ByteWidth = static_cast<UINT>(sizeof(C) + (16 - (sizeof(C) % 16)));
-		cbd.StructureByteStride = 0;
-
-		D3D11_SUBRESOURCE_DATA sd = {};
-		sd.pSysMem = data;
-
-		HRESULT hr = gfx.GetDevice()->CreateBuffer(&cbd, data, pBuffer.GetAddressOf());
-		return hr;
-	}
-	bool Update(Graphics& gfx)
-	{
-		D3D11_MAPPED_SUBRESOURCE msr = {};
-		HRESULT hr = gfx.getContext()->Map(pBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
-		if (FAILED(hr)) {
-			Fuana::Log::Message_Box(hr, "Failed to map constant buffer.");
-			return false;
+			HRESULT hr = gfx.GetDevice()->CreateBuffer(&cbd, nullptr, pBuffer.GetAddressOf());
+			return hr;
 		}
-		memcpy(msr.pData, &data, sizeof(C));
-		gfx.getContext()->Unmap(pBuffer.Get(), 0);
-		return true;
-	}
-	ID3D11Buffer* getBuffer() const { return pBuffer.Get(); }
-protected:
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pBuffer = nullptr;
-};
+		HRESULT Init(Graphics& gfx, BufferType* initialData)
+		{
+			if (pBuffer != nullptr)
+				pBuffer.Reset();
 
-//Constantbuffer types listed in order of occurence in graphics pipeline
-template<class C>//vertex shader
-class VSConstantBuffer : public ConstantBuffer<C>
-{
-public:
-	void Bind(Graphics& gfx) override
-	{
-		gfx.getContext()->VSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
-	}
-};
+			D3D11_BUFFER_DESC cbd = {};
+			cbd.Usage = D3D11_USAGE_DYNAMIC;
+			cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			cbd.MiscFlags = 0;
+			cbd.ByteWidth = static_cast<UINT>(sizeof(BufferType) + (16 - (sizeof(BufferType) % 16)));
+			cbd.StructureByteStride = 0;
 
-template<class C>//hull shader 
-class HSConstantBuffer : public ConstantBuffer<C>
-{
-public:
-	void Bind(Graphics& gfx) override
-	{
-		gfx.getContext()->HSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
-	}
-};
+			D3D11_SUBRESOURCE_DATA sd = {};
+			sd.pSysMem = data;
 
-template<class C>//domain shader
-class DSConstantBuffer : public ConstantBuffer<C>
-{
-public:
-	void Bind(Graphics& gfx) override
-	{
-		gfx.getContext()->DSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
-	}
-};
+			HRESULT hr = gfx.GetDevice()->CreateBuffer(&cbd, data, pBuffer.GetAddressOf());
+			return hr;
+		}
+		bool Update(Graphics& gfx)
+		{
+			D3D11_MAPPED_SUBRESOURCE msr = {};
+			HRESULT hr = gfx.getContext()->Map(pBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+			if (FAILED(hr)) {
+				Fuana::Log::Message_Box(hr, "Failed to map constant buffer.");
+				return false;
+			}
+			memcpy(msr.pData, &data, sizeof(BufferType));
+			gfx.getContext()->Unmap(pBuffer.Get(), 0);
+			return true;
+		}
+		ID3D11Buffer* getBuffer() const { return pBuffer.Get(); }
+	protected:
+		Microsoft::WRL::ComPtr<ID3D11Buffer> pBuffer = nullptr;
+	};
 
-template<class C>//geometry shader
-class GSConstantBuffer : public ConstantBuffer<C>
-{
-public:
-	void Bind(Graphics& gfx) override
+	//Constantbuffer types listed in order of occurence in graphics pipeline
+	template<typename BufferType>//vertex shader
+	class VSConstantBuffer : public ConstantBuffer<BufferType>
 	{
-		gfx.getContext()->GSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
-	}
-};
+	public:
+		void Bind(Graphics& gfx) override
+		{
+			gfx.GetContext()->VSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
+		}
+	};
 
-template<class C>//pixel shader
-class PSConstantBuffer : public ConstantBuffer<C>
-{
-public:
-	void Bind(Graphics& gfx) override
+	template<typename BufferType>//hull shader 
+	class HSConstantBuffer : public ConstantBuffer<BufferType>
 	{
-		gfx.getContext()->PSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
-	}
-};
+	public:
+		void Bind(Graphics& gfx) override
+		{
+			gfx.GetContext()->HSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
+		}
+	};
+
+	template<typename BufferType>//domain shader
+	class DSConstantBuffer : public ConstantBuffer<BufferType>
+	{
+	public:
+		void Bind(Graphics& gfx) override
+		{
+			gfx.GetContext()->DSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
+		}
+	};
+
+	template<typename BufferType>//geometry shader
+	class GSConstantBuffer : public ConstantBuffer<BufferType>
+	{
+	public:
+		void Bind(Graphics& gfx) override
+		{
+			gfx.GetContext()->GSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
+		}
+	};
+
+	template<typename BufferType>//pixel shader
+	class PSConstantBuffer : public ConstantBuffer<BufferType>
+	{
+	public:
+		void Bind(Graphics& gfx) override
+		{
+			gfx.GetContext()->PSSetConstantBuffers(0, 1, this->pBuffer.GetAddressOf());
+		}
+	};
+
+}

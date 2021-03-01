@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Graphics/Graphics.h"
-#include "Graphics/VertexBuffer.h"
-#include <Graphics/IndexBuffer.h>
-#include "Graphics/ConstantBuffer.h"
+#include "Graphics/Buffer/VertexBuffer.h"
+#include "Graphics/Buffer/IndexBuffer.h"
+#include "Graphics/Buffer/ConstantBuffer.h"
 #include "Graphics/Texture.h"
 #include "Graphics/Camera.h"
 #include "Component/Transform.h"

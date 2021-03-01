@@ -224,7 +224,7 @@ bool Model3D::Init(Graphics& gfx, const std::string& filePath)
 	}
 	catch (const HrException& e)
 	{
-		Fuana::Log::Message_Box(e);
+		Fauna::Log::Message_Box(e);
 		return false;
 	}
 	return true;

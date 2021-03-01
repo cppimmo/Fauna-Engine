@@ -14,7 +14,7 @@
 #pragma comment(lib, "mfplat.lib")
 #pragma comment(lib, "mfuuid")
 
-namespace Fuana
+namespace Fauna
 {
 	class AudioEngine
 	{

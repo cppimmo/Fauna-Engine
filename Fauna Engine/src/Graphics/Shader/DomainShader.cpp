@@ -22,15 +22,15 @@ bool DomainShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 
 void DomainShader::Bind(Graphics& gfx)
 {
-	gfx.getContext()->DSSetShader(pDomainShader.Get(), nullptr, NULL);
+	gfx.GetContext()->DSSetShader(pDomainShader.Get(), nullptr, NULL);
 }
 
 void DomainShader::SetShaderResources(Graphics& gfx, UINT startSlot, UINT numViews, ID3D11ShaderResourceView* const* pViews)
 {
-	gfx.getContext()->DSSetShaderResources(startSlot, numViews, pViews);
+	gfx.GetContext()->DSSetShaderResources(startSlot, numViews, pViews);
 }
 
 void DomainShader::SetSamplers(Graphics& gfx, UINT startSlot, UINT numSamplers, ID3D11SamplerState* const* pSamplers)
 {
-	gfx.getContext()->DSSetSamplers(startSlot, numSamplers, pSamplers);
+	gfx.GetContext()->DSSetSamplers(startSlot, numSamplers, pSamplers);
 }

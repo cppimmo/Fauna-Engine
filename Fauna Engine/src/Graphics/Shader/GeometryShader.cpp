@@ -3,7 +3,7 @@
 #include "Utility/Log.h"
 #include "Utility/Util.h"
 #include "Graphics/Graphics.h"
-#include <Utility\Error.h>
+#include "Utility/Error.h"
 
 bool GeometryShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 {
@@ -22,15 +22,15 @@ bool GeometryShader::Init(ID3D11Device* pDevice, std::wstring& filePath)
 
 void GeometryShader::Bind(Graphics& gfx)
 {
-	gfx.getContext()->GSSetShader(pGeometryShader.Get(), nullptr, NULL);
+	gfx.GetContext()->GSSetShader(pGeometryShader.Get(), nullptr, NULL);
 }
 
 void GeometryShader::SetShaderResources(Graphics& gfx, UINT startSlot, UINT numViews, ID3D11ShaderResourceView* const* pViews)
 {
-	gfx.getContext()->GSSetShaderResources(startSlot, numViews, pViews);
+	gfx.GetContext()->GSSetShaderResources(startSlot, numViews, pViews);
 }
 
 void GeometryShader::SetSamplers(Graphics& gfx, UINT startSlot, UINT numSamplers, ID3D11SamplerState* const* pSamplers)
 {
-	gfx.getContext()->GSSetSamplers(startSlot, numSamplers, pSamplers);
+	gfx.GetContext()->GSSetSamplers(startSlot, numSamplers, pSamplers);
 }

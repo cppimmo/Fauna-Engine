@@ -11,7 +11,7 @@ extern "C"
 // LuaManager is a singlton that holds a single
 // luaState for use when loading scripts. It
 // may be useful to have more than one for multithreading.
-namespace Fuana
+namespace Fauna
 {
 	
 	class LuaManager

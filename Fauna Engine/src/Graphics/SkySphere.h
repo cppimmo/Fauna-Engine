@@ -3,9 +3,9 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include "Graphics/Graphics.h"
-#include "Graphics/VertexBuffer.h"
-#include "Graphics/IndexBuffer.h"
-#include "Graphics/ConstantBuffer.h"
+#include "Graphics/Buffer/VertexBuffer.h"
+#include "Graphics/Buffer/IndexBuffer.h"
+#include "Graphics/Buffer/ConstantBuffer.h"
 #include "Graphics/Shader/VertexShader.h"
 #include "Graphics/Shader/PixelShader.h"
 #include "Graphics/VertexTypes.h"

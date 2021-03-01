@@ -10,7 +10,7 @@
 //class LuaManager;
 class Window;
 
-namespace Fuana
+namespace Fauna
 {
 
 	class Log 
@@ -18,9 +18,9 @@ namespace Fuana
 		friend class Window;
 	public:
 		static enum class LOG_TYPE : uint32_t {
-			ERROR = 0,
-			EVENT = 1,
-			MESSAGE = 2,
+			ERR = 0, // error
+			EVT = 1, // event
+			MSG = 2, // message
 		};
 	public:
 		Log();

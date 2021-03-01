@@ -81,7 +81,7 @@ bool Window::Init(HINSTANCE hInstance)
         THROW_NORMAL("audio engine creation failed");
     }*/
     this->initialized = true;
-    Fuana::Log::Get().SetWindowPointer(this);
+    Fauna::Log::Get().SetWindowPointer(this);
     return true;
 }
     
@@ -120,7 +120,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
                 str.append(L", Height:" + std::to_wstring(newHeight));
                 OutputDebugStringW(str.c_str());
                 window->setTitle(str.c_str());
-                if (window->Gfx().getDevice() != nullptr)
+                if (window->Gfx().GetDevice() != nullptr)
                 {
                     window->Gfx().onSize(newWidth, newHeight);
                 }

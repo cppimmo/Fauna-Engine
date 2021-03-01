@@ -36,7 +36,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	}
 #endif	
 	int return_code = 0;
-    using namespace Fuana;
+    using namespace Fauna;
     try 
     {
         std::wstring title = L"D3D Application";
@@ -117,7 +117,7 @@ bool load_config(const char* filePath, bool& isFullscreen, UINT& width, UINT& he
     }
     catch (const std::exception& e)
     {
-        Fuana::Log::Message_Box(e.what());
+        Fauna::Log::Message_Box(e.what());
         return false;
     }
     return true;

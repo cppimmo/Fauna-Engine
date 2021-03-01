@@ -3,8 +3,8 @@
 #include "Utility/Log.h"
 #include "Utility/Util.h"
 #include "Graphics/Graphics.h"
-#include "Graphics/Texture.h"
-#include "Graphics/CubeTexture.h"
+#include "Graphics/Texture/Texture.h"
+#include "Graphics/Texture/CubeTexture.h"
 #include <Utility\Error.h>
 
 bool PixelShader::Init(Graphics& gfx, std::wstring filePath)
